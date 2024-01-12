@@ -83,7 +83,7 @@ public class RobotContainer {
         .whileTrue(new RunCommand(
             () -> m_robotDrive.drive(
                 0,
-                 ((Math.sqrt(SmartDashboard.getNumber("Limelight tx", 0))/10)+0.3),
+                 (((SmartDashboard.getNumber("Limelight tx", 0))/20)),
                  0, 
                  false, 
                  false, 
