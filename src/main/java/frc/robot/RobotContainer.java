@@ -56,7 +56,7 @@ public class RobotContainer {
                 -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
                 m_driverController.getAButton(),
-                true, true),
+                true, true, false),
             m_robotDrive));
   }
 
@@ -83,11 +83,12 @@ public class RobotContainer {
         .whileTrue(new RunCommand(
             () -> m_robotDrive.drive(
                 0,
-                 (((SmartDashboard.getNumber("Limelight tx", 0))/20)),
+                 0,
                  0, 
                  false, 
                  false, 
-                 false), 
+                 false,
+                 true), 
             m_robotDrive));
   }
 
@@ -134,6 +135,6 @@ public class RobotContainer {
     m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
 
     // Run path following command, then stop at the end.
-    return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false, false, false));
+    return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false, false, false, false));
   }
 }
