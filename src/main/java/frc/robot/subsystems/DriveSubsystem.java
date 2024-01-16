@@ -14,13 +14,12 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.util.WPIUtilJNI;
-import edu.wpi.first.wpilibj.ADIS16470_IMU;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
 import frc.utils.SwerveUtils;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DriveSubsystem extends SubsystemBase {
   // Create MAXSwerveModules
@@ -110,6 +109,36 @@ public class DriveSubsystem extends SubsystemBase {
         pose);
   }
 
+
+
+  // Track method math for robot line up
+  public double track_robot(double tx){
+    //x speed, y speed, rot speed
+    double res_speed;
+
+    //Math here
+    if (Math.abs(tx) > 0.5){
+      //* x robot Line up
+      res_speed = tx/50;
+      return res_speed;
+    }
+    else{
+      res_speed = 0.0;
+      return res_speed;
+    }
+  }
+
+
+  // Track math for arm angle
+  public Double[] track_arm(double ty, double ta){
+    // ty, ta
+    Double[] res = new Double[2];
+    
+
+    return res;
+  }
+
+
   /**
    * Method to drive the robot using joystick info.
    *
@@ -120,14 +149,23 @@ public class DriveSubsystem extends SubsystemBase {
    *                      field.
    * @param rateLimit     Whether to enable rate limiting for smoother control.
    */
-  public void drive(double xSpeed, double ySpeed, double rot, boolean resetGyro, boolean fieldRelative, boolean rateLimit) {
-    
+
+  public void drive(double xSpeed, double ySpeed, double rot, boolean resetGyro, boolean fieldRelative, boolean rateLimit, boolean trackRobot) {
+
     double xSpeedCommanded;
     double ySpeedCommanded;
+
+    //Gryo reset
     SmartDashboard.putNumber("GyroHeading", m_gyro.getAngle());
-    if(resetGyro){
+    if (resetGyro){
       m_gyro.reset();
     }
+
+    //Track method call
+    if (trackRobot){
+      ySpeed = track_robot(SmartDashboard.getNumber("Limelight tx", 0));
+    }
+
 
     if (rateLimit) {
       // Convert XY to polar for rate limiting
@@ -176,15 +214,14 @@ public class DriveSubsystem extends SubsystemBase {
       ySpeedCommanded = ySpeed;
       m_currentRotation = rot;
     }
-
     // Convert the commanded speeds into the correct units for the drivetrain
     double xSpeedDelivered = xSpeedCommanded * DriveConstants.kMaxSpeedMetersPerSecond;
     double ySpeedDelivered = ySpeedCommanded * DriveConstants.kMaxSpeedMetersPerSecond;
     double rotDelivered = m_currentRotation * DriveConstants.kMaxAngularSpeed;
- 
+      
     var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
-        fieldRelative
-            ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered, Rotation2d.fromDegrees(m_gyro.getAngle()))
+        fieldRelative 
+            ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered, Rotation2d.fromDegrees(-m_gyro.getAngle()))
             : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered));
     SwerveDriveKinematics.desaturateWheelSpeeds(
         swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
