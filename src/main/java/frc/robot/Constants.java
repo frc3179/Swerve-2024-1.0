@@ -126,6 +126,13 @@ public final class Constants {
     public static final double kArmDeadband = 0.05;
   }
 
+  public static final class ArmConstants {
+    public static final int kUpDownMotorPort = 5;
+    public static final int kLeftShootMotorPort = 9;
+    public static final int kRightShootMotorPort = 10;
+    public static final int kIntakeMotorPort = 67;
+  }
+
 
   public static final class AutoConstants {
     public static final double kMaxSpeedMetersPerSecond = 3;
