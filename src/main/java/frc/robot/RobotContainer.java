@@ -60,7 +60,10 @@ public class RobotContainer {
                 -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
                 m_driverController.getAButton(),
-                true, true, false),
+                true, 
+                true, 
+                false,
+                (Math.abs(m_driverController.getLeftTriggerAxis())>=0.31)),
             m_robotDrive));
   }
 
@@ -92,7 +95,8 @@ public class RobotContainer {
                  false, 
                  false, 
                  false,
-                 true), 
+                 true,
+                 false), 
             m_robotDrive));
   }
 
