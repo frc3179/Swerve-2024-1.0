@@ -8,14 +8,19 @@ import frc.robot.Constants.ArmConstants;
 
 public class ArmSubsystem {
     // motor controllers for each arm ellement
-    public final CANSparkMax upDown = new CANSparkMax(ArmConstants.kUpDownMotorPort, MotorType.kBrushless);
+    public final CANSparkMax LupDown = new CANSparkMax(ArmConstants.kUpDownMotorPort, MotorType.kBrushless);
+    public final CANSparkMax RupDown = new CANSparkMax(ArmConstants.kUpDownMotorPort, MotorType.kBrushless);
     public final CANSparkMax lShoot = new CANSparkMax(ArmConstants.kLeftShootMotorPort, MotorType.kBrushless);
     public final CANSparkMax rShoot = new CANSparkMax(ArmConstants.kRightShootMotorPort, MotorType.kBrushless);
     public final CANSparkMax intake = new CANSparkMax(ArmConstants.kIntakeMotorPort, MotorType.kBrushless);
+    
+    // TODO Invert
+    
 
     // group of the shooting motors
-    //TODO invert one of the shooting motors so it does not break
     public final MotorControllerGroup shoot = new MotorControllerGroup(lShoot, rShoot);
+    public final MotorControllerGroup upDown = new MotorControllerGroup(LupDown, RupDown);
+
 
 
     public void armMove(double upDownSpeed, double shootSpeed, double intakeSpeed){
@@ -23,4 +28,5 @@ public class ArmSubsystem {
         this.shoot.set(shootSpeed);
         this.intake.set(intakeSpeed);
     }
+    
 }

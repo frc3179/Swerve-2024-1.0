@@ -127,8 +127,8 @@ public final class Constants {
   }
 
   public static final class ArmConstants {
-    public static final int kUpDownMotorPort = 5;
-    public static final int kLeftShootMotorPort = 9;
+    public static final int kUpDownMotorPort = 50;
+    public static final int kLeftShootMotorPort = 90;
     public static final int kRightShootMotorPort = 10;
     public static final int kIntakeMotorPort = 67;
   }

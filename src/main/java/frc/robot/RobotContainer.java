@@ -61,9 +61,9 @@ public class RobotContainer {
                 -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
                 m_driverController.getAButton(),
                 true, 
-                true, 
+                !(Math.abs(m_driverController.getRightTriggerAxis())>=0.36), //rate limit
                 false,
-                (Math.abs(m_driverController.getLeftTriggerAxis())>=0.31)),
+                (Math.abs(m_driverController.getLeftTriggerAxis())>=0.31)), //half speed
             m_robotDrive));
   }
 
@@ -106,6 +106,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return m_pickauto.run();
+    return m_pickauto.run(m_robotDrive);
   }
 }
