@@ -150,7 +150,7 @@ public class DriveSubsystem extends SubsystemBase {
    * @param rateLimit     Whether to enable rate limiting for smoother control.
    */
 
-  public void drive(double xSpeed, double ySpeed, double rot, boolean resetGyro, boolean fieldRelative, boolean rateLimit, boolean trackRobot) {
+  public void drive(double xSpeed, double ySpeed, double rot, boolean resetGyro, boolean fieldRelative, boolean rateLimit, boolean trackRobot, boolean halfSpeed) {
 
     double xSpeedCommanded;
     double ySpeedCommanded;
@@ -164,6 +164,12 @@ public class DriveSubsystem extends SubsystemBase {
     //Track method call
     if (trackRobot){
       ySpeed = track_robot(SmartDashboard.getNumber("Limelight tx", 0));
+    }
+
+    //half the input speed
+    if (halfSpeed){
+      xSpeed /= 2;
+      ySpeed /= 2;
     }
 
 
