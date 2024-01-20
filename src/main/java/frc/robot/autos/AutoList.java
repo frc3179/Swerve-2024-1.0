@@ -18,9 +18,9 @@ import frc.robot.subsystems.DriveSubsystem;
 
 public class AutoList {
 
-    public final DriveSubsystem m_robotDrive = new DriveSubsystem();
+    public Command autotest(DriveSubsystem m_robotDrive){
+        
 
-    public Command autotest(){
         // Create config for trajectory
         TrajectoryConfig config = new TrajectoryConfig(
             AutoConstants.kMaxSpeedMetersPerSecond,

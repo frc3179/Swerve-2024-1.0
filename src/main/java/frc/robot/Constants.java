@@ -11,6 +11,8 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.I2C.Port;
 
 
 /**
@@ -37,9 +39,9 @@ public final class Constants {
     public static final double kRotationalSlewRate = 2.0; // percent per second (1 = 100%)
 
     // Chassis configuration
-    public static final double kTrackWidth = Units.inchesToMeters(22.88);
+    public static final double kTrackWidth = Units.inchesToMeters(28.5);
     // Distance between centers of right and left wheels on robot
-    public static final double kWheelBase = Units.inchesToMeters(19.5);
+    public static final double kWheelBase = Units.inchesToMeters(24.5);
     // Distance between front and back wheels on robot
     public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
         new Translation2d(kWheelBase / 2, kTrackWidth / 2),
@@ -127,10 +129,15 @@ public final class Constants {
   }
 
   public static final class ArmConstants {
-    public static final int kUpDownMotorPort = 5;
-    public static final int kLeftShootMotorPort = 9;
+    public static final int kLUpDownMotorPort = 50;
+    public static final int kRUpDownMotorPort = 99;
+    public static final int kLeftShootMotorPort = 90;
     public static final int kRightShootMotorPort = 10;
     public static final int kIntakeMotorPort = 67;
+  }
+
+  public static final class ColorSensorConstants {
+    public static final I2C.Port kColorSensorPort = I2C.Port.kOnboard;
   }
 
 
