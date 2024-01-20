@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -52,9 +53,12 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Limelight ta", NetworkTableInstance.getDefault().getTable("limelight").getEntry("ta").getDouble(0));
 
     //color sensor values
-    SmartDashboard.putNumber("Color Red", RobotContainer.m_colorSensor.red());
-    SmartDashboard.putNumber("Color Green", RobotContainer.m_colorSensor.green());
-    SmartDashboard.putNumber("Color Blue", RobotContainer.m_colorSensor.blue());
+    Color detectedColor = RobotContainer.m_colorSensor.getColor();
+    double IR = RobotContainer.m_colorSensor.getIR();
+    SmartDashboard.putNumber("Color Red", detectedColor.red);
+    SmartDashboard.putNumber("Color Green", detectedColor.green);
+    SmartDashboard.putNumber("Color Blue", detectedColor.blue);
+    SmartDashboard.putNumber("IR", IR);
 
     CommandScheduler.getInstance().run();
   }

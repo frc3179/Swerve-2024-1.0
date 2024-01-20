@@ -4,6 +4,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ArmConstants;
@@ -17,7 +18,7 @@ public class ArmSubsystem extends SubsystemBase{
     public final CANSparkMax intake = new CANSparkMax(ArmConstants.kIntakeMotorPort, MotorType.kBrushless);
     
     // TODO Invert
-    
+    // TODO use .follow instead of MotorControllerGroup
 
     // group of the shooting motors
     public final MotorControllerGroup shoot = new MotorControllerGroup(lShoot, rShoot);
@@ -41,9 +42,18 @@ public class ArmSubsystem extends SubsystemBase{
         else if (intake){
             outintake = 1.0; //default commands
         }
-        
+
+        outintake = intakeCheck(SmartDashboard.getNumber("IR", 0.0), outintake);
 
         armMove(upDownSpeed, outshoot, outintake);
+    }
+
+    public double intakeCheck(double IR, double initSpeed){
+        if(IR > 20.0){
+            return 0.0;
+        }
+
+        return initSpeed;
     }
     
 }
