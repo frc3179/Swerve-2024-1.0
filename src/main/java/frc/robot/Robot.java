@@ -51,6 +51,11 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Limelight ty", NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0));
     SmartDashboard.putNumber("Limelight ta", NetworkTableInstance.getDefault().getTable("limelight").getEntry("ta").getDouble(0));
 
+    //color sensor values
+    SmartDashboard.putNumber("Color Red", RobotContainer.m_colorSensor.red());
+    SmartDashboard.putNumber("Color Green", RobotContainer.m_colorSensor.green());
+    SmartDashboard.putNumber("Color Blue", RobotContainer.m_colorSensor.blue());
+
     CommandScheduler.getInstance().run();
   }
 
