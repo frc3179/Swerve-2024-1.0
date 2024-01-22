@@ -110,6 +110,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return m_pickauto.run(m_robotDrive);
+    return m_pickauto.run(m_robotDrive, m_ArmMove);
   }
 }

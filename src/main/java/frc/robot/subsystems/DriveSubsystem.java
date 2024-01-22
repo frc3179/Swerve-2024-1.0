@@ -156,7 +156,7 @@ public class DriveSubsystem extends SubsystemBase {
     double ySpeedCommanded;
 
     //Gryo reset
-    SmartDashboard.putNumber("GyroHeading", m_gyro.getAngle());
+    SmartDashboard.putNumber("GyroHeading", m_gyro.getAngle()); 
     if (resetGyro){
       m_gyro.reset();
     }
