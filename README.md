@@ -1,14 +1,14 @@
 # Overview
-2024 frc season code for team 3179. This is our repo that we use to keep our code. It will never be uptodate until we are at competition.
+2024 frc season code for team 3179. This is our repo that we use to keep our code. It will never be up-tod-ate until we are at competition.
 
 # Requirements
     *Swerve
-    *Quokkas like intake (Props to them for the design ides for or intake)
+    *Quokkas intake idea (Props to them for the design ideas for or intake)
     *Color/IR sensor (can remove this)
 
 # Use
     *Go to Constants.java and edit all the port constants
-        *Swerve Module Ports (not the math) (Props to Rev for the base code)
+        *Swerve Module Ports (don't the math) (Props to Rev for the base code)
         *Arm ports
         *Color Sensor ports
         *Controller Ports
