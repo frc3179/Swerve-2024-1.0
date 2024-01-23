@@ -60,7 +60,7 @@ public final class Constants {
     public static final int kFrontRightDrivingCanId = 5;
     public static final int kRearRightDrivingCanId = 7;
 
-    
+
     public static final int kFrontLeftTurningCanId = 2;
     public static final int kRearLeftTurningCanId = 4;
     public static final int kFrontRightTurningCanId = 6;
@@ -129,11 +129,11 @@ public final class Constants {
   }
 
   public static final class ArmConstants {
-    public static final int kLUpDownMotorPort = 50;
-    public static final int kRUpDownMotorPort = 99;
-    public static final int kLeftShootMotorPort = 90;
-    public static final int kRightShootMotorPort = 10;
-    public static final int kIntakeMotorPort = 67;
+    public static final int kLUpDownMotorPort = 9;
+    public static final int kRUpDownMotorPort = 10;
+    public static final int kLeftShootMotorPort = 11;
+    public static final int kRightShootMotorPort = 12;
+    public static final int kIntakeMotorPort = 13;
   }
 
   public static final class ColorSensorConstants {

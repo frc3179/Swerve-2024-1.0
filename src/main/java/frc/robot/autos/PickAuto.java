@@ -19,7 +19,7 @@ public class PickAuto {
         }
         
         //default
-        return m_autoList.autotest(m_robotDrive, m_ArmMove);
+        return AutoList.Autotest.autotest(m_robotDrive, m_ArmMove);
     }
 }
 

@@ -20,32 +20,37 @@ import frc.robot.subsystems.DriveSubsystem;
 
 public class AutoList {
     // Create config for trajectory
-    public TrajectoryConfig config = new TrajectoryConfig(
+    public static TrajectoryConfig config = new TrajectoryConfig(
         AutoConstants.kMaxSpeedMetersPerSecond,
         AutoConstants.kMaxAccelerationMetersPerSecondSquared)
         // Add kinematics to ensure max speed is actually obeyed
         .setKinematics(DriveConstants.kDriveKinematics);
 
 
-    public Command autotest(DriveSubsystem m_robotDrive, ArmSubsystem m_ArmMove){
+    public static class Autotest{ //Default Auto
 
-        // An example trajectory to follow. All units in meters.
-        Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
-            // Start at the origin facing the +X direction
-            new Pose2d(0, 0, new Rotation2d(0)),
-            // Pass through these two interior waypoints, making an 's' curve path
-            List.of(
-                new Translation2d(1, 1), 
-                new Translation2d(2, -1)),
-            // End 3 meters straight ahead of where we started, facing forward
-            new Pose2d(3, 0, new Rotation2d(0)),
+        public static void armD(ArmSubsystem m_ArmMove){
+            // put arm1 stuff here to run inbetween driving
+        }
+
+        public static Command autotest(DriveSubsystem m_robotDrive, ArmSubsystem m_ArmMove){
+            // An example trajectory to follow. All units in meters.
+            Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
+                // Start at the origin facing the +X direction
+                new Pose2d(0, 0, new Rotation2d(0)),
+                
+                List.of(
+                    new Translation2d(1, 1), 
+                    new Translation2d(2, -1)),
+                // End 3 meters straight ahead of where we started, facing forward
+                new Pose2d(3, 0, new Rotation2d(0)),
             config);
 
-        var thetaController = new ProfiledPIDController(
+            var thetaController = new ProfiledPIDController(
             AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
-        thetaController.enableContinuousInput(-Math.PI, Math.PI);
+            thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
-        SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
+            SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
             exampleTrajectory,
             m_robotDrive::getPose, // Functional interface to feed supplier
             DriveConstants.kDriveKinematics,
@@ -60,14 +65,45 @@ public class AutoList {
         // Reset odometry to the starting pose of the trajectory.
         m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
 
+
+
+        //Arm
+        
+
+
         // Run path following command, then stop at the end.
         return Commands.runOnce(
             () -> m_robotDrive.drive(0, 0, 0, false, false, false, false, false), m_robotDrive)
             .andThen(Commands.runOnce(() ->m_ArmMove.armMove(0, 0, 0), m_ArmMove))
             .andThen(swerveControllerCommand)
-            .andThen(/*next (arm) */)
+            .andThen()
             .andThen(/*next */)
             .andThen(Commands.runOnce(() -> m_robotDrive.drive(0, 0, 0, false, false, false, false, false), m_robotDrive))
             .andThen(Commands.runOnce(() -> m_ArmMove.armMove(0, 0, 0), m_ArmMove));
+
+        }
+        
+    }
+
+    public static class Auto1{ //Auto1
+
+        public static void arm1(ArmSubsystem m_ArmMove){
+
+        }
+
+        public static Command auto1(DriveSubsystem m_robotDrive, ArmSubsystem m_ArmMove){
+            Trajectory drive1 = TrajectoryGenerator.generateTrajectory(
+                // Start at the origin facing the +X direction
+                new Pose2d(0, 0, new Rotation2d(0)),
+                
+                List.of(
+                    new Translation2d(1, 1), 
+                    new Translation2d(2, -1)),
+                // End 3 meters straight ahead of where we started, facing forward
+                new Pose2d(3, 0, new Rotation2d(0)),
+            config);
+
+            return Commands.runOnce(() -> m_robotDrive.drive(0, 0, 0, false, false, false, false, false), m_robotDrive);
+        }
     }
 }
