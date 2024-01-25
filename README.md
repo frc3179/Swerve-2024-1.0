@@ -14,4 +14,7 @@
       * Controller Ports
    * Go to RobotContainer.java and edit the type of controllers you have
 
+# License
+We do not make any promices on how well or if this will work. We only provide the code as reference or a templete.
+
 ## If you have any problems feel free to open an issue and we will try to solve it as soon as we can
