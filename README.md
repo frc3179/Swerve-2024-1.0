@@ -1,5 +1,6 @@
 
-![alt text](https://github.com/frc3179/Swerve-2024-1.0/blob/main/Logo.png?raw=true)
+![Untitled presentation](https://github.com/frc3179/Swerve-2024-1.0/assets/139302646/c8c31628-eaf4-48db-9615-9dfa2b373268)
+
 
 # Overview
 2024 frc season code for team 3179. This is our repo that we use to keep our code. It will never be up-to-date until we are at competition.
