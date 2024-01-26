@@ -1,8 +1,11 @@
 package frc.robot.subsystems;
 
+
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -23,6 +26,8 @@ public class ArmSubsystem extends SubsystemBase{
     public final MotorControllerGroup shoot = new MotorControllerGroup(lShoot, rShoot);
     public final MotorControllerGroup upDown = new MotorControllerGroup(LupDown, RupDown);
 
+    // Timer
+    public Timer Armtimer = new Timer();
 
 
     public void armMove(double upDownSpeed, double shootSpeed, double intakeSpeed){
@@ -45,6 +50,18 @@ public class ArmSubsystem extends SubsystemBase{
         outintake = intakeCheck(SmartDashboard.getNumber("IR", 0.0), outintake);
 
         armMove(upDownSpeed, outshoot, outintake);
+    }
+
+    public void armMoveTime(double upDownSpeed, double shootSpeed, double intakeSpeed, double time){ // I think seconds
+        Armtimer.restart();
+
+        while (Armtimer.get() != time){
+            armMove(upDownSpeed, shootSpeed, intakeSpeed);
+        }
+    }
+
+    public void armMoveAngle(double upDownSpeed, double shootSpeed, double intakeSpeed, double degAngle){
+        // need to test robot first for more math
     }
 
     public double intakeCheck(double IR, double initSpeed){

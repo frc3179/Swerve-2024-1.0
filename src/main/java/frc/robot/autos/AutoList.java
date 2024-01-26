@@ -30,10 +30,6 @@ public class AutoList {
 
     public static class Autotest{ //Default Auto
 
-        public static void armD(ArmSubsystem m_ArmMove){
-            // put armtest stuff here to run inbetween driving
-        }
-
         public static Command autotest(DriveSubsystem m_robotDrive, ArmSubsystem m_ArmMove){
             // An example trajectory to follow. All units in meters.
             Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
@@ -66,18 +62,12 @@ public class AutoList {
         // Reset odometry to the starting pose of the trajectory.
         m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
 
-
-
-        //Arm for the method above
-        
-
-
         // Run path following command, then stop at the end.
         return Commands.runOnce(
             () -> m_robotDrive.drive(0, 0, 0, false, false, false, false, false), m_robotDrive)
             .andThen(Commands.runOnce(() ->m_ArmMove.armMove(0, 0, 0), m_ArmMove))
             .andThen(swerveControllerCommand)
-            .andThen()
+            .andThen(() -> m_ArmMove.armMoveTime(0, 0, 1, 5))
             .andThen(/*next */)
             .andThen(Commands.runOnce(() -> m_robotDrive.drive(0, 0, 0, false, false, false, false, false), m_robotDrive))
             .andThen(Commands.runOnce(() -> m_ArmMove.armMove(0, 0, 0), m_ArmMove));
@@ -87,10 +77,6 @@ public class AutoList {
     }
 
     public static class Auto1{ //Auto1
-
-        public static void arm1(ArmSubsystem m_ArmMove){
-
-        }
 
         public static Command auto1(DriveSubsystem m_robotDrive, ArmSubsystem m_ArmMove){
             Trajectory driveJSON = GetTrajectory.get("C:\\Users\\tamal\\OneDrive\\Desktop\\Swerve-2024-1.0\\src\\main\\deploy\\paths\\Test.wpilib.json");
@@ -115,7 +101,7 @@ public class AutoList {
                 () -> m_robotDrive.drive(0, 0, 0, false, false, false, false, false), m_robotDrive)
                 .andThen(Commands.runOnce(() ->m_ArmMove.armMove(0, 0, 0), m_ArmMove))
                 .andThen(swerveControllerCommand)
-                .andThen()
+                .andThen(() -> m_ArmMove.armMoveTime(0, 0, 1, 5))
                 .andThen(/*next */)
                 .andThen(Commands.runOnce(() -> m_robotDrive.drive(0, 0, 0, false, false, false, false, false), m_robotDrive))
                 .andThen(Commands.runOnce(() -> m_ArmMove.armMove(0, 0, 0), m_ArmMove));
