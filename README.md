@@ -7,21 +7,21 @@
 
 # Requirements
    * Swerve
-   * Quokkas intake idea (Props to them for the design ideas for or intake)
+   * Quokkas intake idea (Props to them for the design ideas for our intake)
    * Color/IR sensor (can remove this)
 
 # Use
    * Go to Constants.java and edit all the port constants
-      * Swerve Module Ports (don't the math) (Props to Rev for the base code)
+      * Swerve Module Ports (do not change the math) (Props to Rev for the base code)
       * Arm ports
       * Color Sensor ports
       * Controller Ports
    * Go to RobotContainer.java 
       * Edit the type of controllers you have
       * Edit button number for different commands
-      * Changed the commands as nessary
+      * Changed the commands as necessary
 
 # License
-We do not make any promices on how well or if this will work. We only provide the code as reference or a templete.
+We do not make any promises on how well or if this will work. We only provide the code as reference or a template.
 
-## If you have any problems feel free to open an issue and we will try to solve it as soon as we can
+## If you have any problems feel free to open an issue or pull request and we will try to solve it or merge the pull request
