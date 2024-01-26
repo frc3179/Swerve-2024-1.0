@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
+import frc.robot.autos.AutoList;
 import frc.robot.autos.PickAuto;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
@@ -101,6 +102,12 @@ public class RobotContainer {
                  false,
                  true,
                  false), 
+            m_robotDrive));
+
+    // Path Weaver
+    new JoystickButton(m_driverController, 0) //button number needs to be changed
+        .whileTrue(new RunCommand(
+            () -> AutoList.Auto1.auto1(m_robotDrive, m_ArmMove), 
             m_robotDrive));
   }
 

@@ -14,8 +14,7 @@ public class PickAuto {
         String picked = Robot.autoSelectedDashboard;
         switch(picked){
             case Robot.kAuto1:
-                //auto 1
-                break;
+                return AutoList.Auto1.auto1(m_robotDrive, m_ArmMove);
         }
         
         //default

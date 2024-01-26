@@ -16,7 +16,10 @@
       * Arm ports
       * Color Sensor ports
       * Controller Ports
-   * Go to RobotContainer.java and edit the type of controllers you have
+   * Go to RobotContainer.java 
+      * Edit the type of controllers you have
+      * Edit button number for different commands
+      * Changed the commands as nessary
 
 # License
 We do not make any promices on how well or if this will work. We only provide the code as reference or a templete.

@@ -17,6 +17,7 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.GetTrajectory;
 
 public class AutoList {
     // Create config for trajectory
@@ -30,7 +31,7 @@ public class AutoList {
     public static class Autotest{ //Default Auto
 
         public static void armD(ArmSubsystem m_ArmMove){
-            // put arm1 stuff here to run inbetween driving
+            // put armtest stuff here to run inbetween driving
         }
 
         public static Command autotest(DriveSubsystem m_robotDrive, ArmSubsystem m_ArmMove){
@@ -67,7 +68,7 @@ public class AutoList {
 
 
 
-        //Arm
+        //Arm for the method above
         
 
 
@@ -92,23 +93,14 @@ public class AutoList {
         }
 
         public static Command auto1(DriveSubsystem m_robotDrive, ArmSubsystem m_ArmMove){
-            Trajectory drive1 = TrajectoryGenerator.generateTrajectory(
-                // Start at the origin facing the +X direction
-                new Pose2d(0, 0, new Rotation2d(0)),
-                
-                List.of(
-                    new Translation2d(1, 1), 
-                    new Translation2d(2, -1)),
-                // End 3 meters straight ahead of where we started, facing forward
-                new Pose2d(3, 0, new Rotation2d(0)),
-            config);
+            Trajectory driveJSON = GetTrajectory.get("C:\\Users\\tamal\\OneDrive\\Desktop\\Swerve-2024-1.0\\src\\main\\deploy\\paths\\Test.wpilib.json");
 
             var thetaController = new ProfiledPIDController(
             AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
             thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
             SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
-            drive1,
+            driveJSON,
             m_robotDrive::getPose, // Functional interface to feed supplier
             DriveConstants.kDriveKinematics,
 
@@ -119,10 +111,14 @@ public class AutoList {
             m_robotDrive::setModuleStates,
             m_robotDrive);
 
-        // Reset odometry to the starting pose of the trajectory.
-        m_robotDrive.resetOdometry(drive1.getInitialPose());
-
-            return Commands.runOnce(() -> m_robotDrive.drive(0, 0, 0, false, false, false, false, false), m_robotDrive);
+            return Commands.runOnce(
+                () -> m_robotDrive.drive(0, 0, 0, false, false, false, false, false), m_robotDrive)
+                .andThen(Commands.runOnce(() ->m_ArmMove.armMove(0, 0, 0), m_ArmMove))
+                .andThen(swerveControllerCommand)
+                .andThen()
+                .andThen(/*next */)
+                .andThen(Commands.runOnce(() -> m_robotDrive.drive(0, 0, 0, false, false, false, false, false), m_robotDrive))
+                .andThen(Commands.runOnce(() -> m_ArmMove.armMove(0, 0, 0), m_ArmMove));
         }
     }
 }
