@@ -22,6 +22,7 @@ public class ArmSubsystem extends SubsystemBase{
     
     // TODO Invert
     // TODO use .follow() instead of MotorControllerGroup
+    
 
     // group of the shooting motors
     public final MotorControllerGroup shoot = new MotorControllerGroup(lShoot, rShoot);
