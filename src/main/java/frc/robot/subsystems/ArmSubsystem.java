@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-
-
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -14,20 +12,12 @@ import frc.robot.Constants.ArmConstants;
 
 public class ArmSubsystem extends SubsystemBase{
     // motor controllers for each arm ellement
-    public final CANSparkMax LupDown = new CANSparkMax(ArmConstants.kLUpDownMotorPort, MotorType.kBrushless);
-    public final static CANSparkMax RupDown = new CANSparkMax(ArmConstants.kRUpDownMotorPort, MotorType.kBrushless);
-    public final CANSparkMax lShoot = new CANSparkMax(ArmConstants.kLeftShootMotorPort, MotorType.kBrushless);
-    public final CANSparkMax rShoot = new CANSparkMax(ArmConstants.kRightShootMotorPort, MotorType.kBrushless);
-    public final CANSparkMax intake = new CANSparkMax(ArmConstants.kIntakeMotorPort, MotorType.kBrushless);
+    public CANSparkMax LupDown = new CANSparkMax(ArmConstants.kLUpDownMotorPort, MotorType.kBrushless);
+    public static CANSparkMax RupDown = new CANSparkMax(ArmConstants.kRUpDownMotorPort, MotorType.kBrushless);
+    public CANSparkMax lShoot = new CANSparkMax(ArmConstants.kLeftShootMotorPort, MotorType.kBrushless);
+    public CANSparkMax rShoot = new CANSparkMax(ArmConstants.kRightShootMotorPort, MotorType.kBrushless);
+    public CANSparkMax intake = new CANSparkMax(ArmConstants.kIntakeMotorPort, MotorType.kBrushless);
     
-    // TODO Invert
-    // TODO use .follow() instead of MotorControllerGroup
-    
-
-    // group of the shooting motors
-    public final MotorControllerGroup shoot = new MotorControllerGroup(lShoot, rShoot);
-    public final MotorControllerGroup upDown = new MotorControllerGroup(LupDown, RupDown);
-
     //Encoder
     public final static AbsoluteEncoder upDownEncoder = (AbsoluteEncoder) RupDown.getEncoder();
 
@@ -36,8 +26,11 @@ public class ArmSubsystem extends SubsystemBase{
 
 
     public void armMove(double upDownSpeed, double shootSpeed, double intakeSpeed){
-        upDown.set(upDownSpeed);
-        shoot.set(shootSpeed);
+        LupDown.follow(RupDown, true);
+        lShoot.follow(rShoot, true);
+
+        RupDown.set(upDownSpeed);
+        rShoot.set(shootSpeed);
         intake.set(intakeSpeed);
     }
 
@@ -91,5 +84,4 @@ public class ArmSubsystem extends SubsystemBase{
         return 0.0;
     }
 
-    
 }
