@@ -96,6 +96,7 @@ public class AutoList {
             thetaController,
             m_robotDrive::setModuleStates,
             m_robotDrive);
+            
 
             return Commands.runOnce(
                 () -> m_robotDrive.drive(0, 0, 0, false, false, false, false, false), m_robotDrive)
