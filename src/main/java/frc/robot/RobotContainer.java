@@ -105,7 +105,7 @@ public class RobotContainer {
             m_robotDrive));
 
     // Path Weaver
-    new JoystickButton(m_driverController, 0) //button number needs to be changed
+    new JoystickButton(m_driverController, 1) //button number needs to be changed
         .whileTrue(new RunCommand(
             () -> AutoList.Auto1.auto1(m_robotDrive, m_ArmMove), 
             m_robotDrive));
