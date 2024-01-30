@@ -134,6 +134,8 @@ public final class Constants {
     public static final int kLeftShootMotorPort = 11;
     public static final int kRightShootMotorPort = 12;
     public static final int kIntakeMotorPort = 13;
+
+    public static final int kRotationOffsetTrack = 5;
   }
 
   public static final class ColorSensorConstants {

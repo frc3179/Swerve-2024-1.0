@@ -78,6 +78,7 @@ public class Robot extends TimedRobot {
     //Arm Encoder
     SmartDashboard.putNumber("Arm Encoder", ArmSubsystem.upDownEncoder.getPosition());
 
+
     CommandScheduler.getInstance().run();
   }
 

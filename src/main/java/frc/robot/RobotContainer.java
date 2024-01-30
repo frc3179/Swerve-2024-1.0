@@ -12,6 +12,9 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.Commands.JoysticArm;
+import frc.robot.Commands.Shoot;
+import frc.robot.Commands.TrackArm;
 import frc.robot.Constants.OIConstants;
 import frc.robot.autos.AutoList;
 import frc.robot.autos.PickAuto;
@@ -63,13 +66,12 @@ public class RobotContainer {
                 (Math.abs(m_driverController.getLeftTriggerAxis())>=0.31)), //half speed
             m_robotDrive));
     
+
     m_ArmMove.setDefaultCommand(
-      new RunCommand(
-        () -> m_ArmMove.joysticMove(
-          m_armController.getRawAxis(1), //updown
-          m_armController.getRawButton(0), //shoot
-          m_armController.getRawButton(1)), //intake
-        m_ArmMove));
+      new JoysticArm(m_ArmMove, () -> m_armController.getRawAxis(1), () ->  m_armController.getRawButton(1))
+    );
+
+    
   }
 
   /**
@@ -90,7 +92,7 @@ public class RobotContainer {
             m_robotDrive));
     
 
-    // Track
+    // Track robot
     new JoystickButton(m_driverController, 4)
         .whileTrue(new RunCommand(
             () -> m_robotDrive.drive(
@@ -105,10 +107,16 @@ public class RobotContainer {
             m_robotDrive));
 
     // Path Weaver
-    new JoystickButton(m_driverController, 1) //button number needs to be changed
+    new JoystickButton(m_driverController, 5) //left bumper
         .whileTrue(new RunCommand(
             () -> AutoList.Auto1.auto1(m_robotDrive, m_ArmMove), 
             m_robotDrive));
+    
+    // shoot
+    new JoystickButton(m_armController, 0).onTrue(new Shoot(m_ArmMove, 1));
+
+    // track arm
+    new JoystickButton(m_armController, 2).whileTrue(new TrackArm(m_ArmMove)); //can edit this
   }
 
   /**
