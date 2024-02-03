@@ -6,9 +6,12 @@ package frc.robot;
 
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.ArmSubsystem;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -21,6 +24,13 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
 
+
+  //auto choser
+  public static final String kDefaultAuto = "Default";
+  public static final String kAuto1 = "Auto 1";
+  public static String autoSelectedDashboard;
+  private final SendableChooser<String> m_chooser = new SendableChooser<>();
+
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -29,6 +39,12 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
+
+    m_chooser.setDefaultOption("Default", kDefaultAuto);
+    m_chooser.addOption("Auto 1", kAuto1);
+    SmartDashboard.putData("Auto picker", m_chooser);
+
+
     m_robotContainer = new RobotContainer();
   }
 
@@ -51,6 +67,18 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Limelight ty", NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0));
     SmartDashboard.putNumber("Limelight ta", NetworkTableInstance.getDefault().getTable("limelight").getEntry("ta").getDouble(0));
 
+    //color sensor values
+    Color detectedColor = RobotContainer.m_colorSensor.getColor();
+    double IR = RobotContainer.m_colorSensor.getIR();
+    SmartDashboard.putNumber("Color Red", detectedColor.red);
+    SmartDashboard.putNumber("Color Green", detectedColor.green);
+    SmartDashboard.putNumber("Color Blue", detectedColor.blue);
+    SmartDashboard.putNumber("IR", IR);
+
+    //Arm Encoder
+    //SmartDashboard.putNumber("Arm Encoder", ArmSubsystem.upDownEncoder.getPosition());
+
+
     CommandScheduler.getInstance().run();
   }
 
@@ -65,13 +93,6 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-
-    /*
-     * String autoSelected = SmartDashboard.getString("Auto Selector",
-     * "Default"); switch(autoSelected) { case "My Auto": autonomousCommand
-     * = new MyAutoCommand(); break; case "Default Auto": default:
-     * autonomousCommand = new ExampleCommand(); break; }
-     */
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {

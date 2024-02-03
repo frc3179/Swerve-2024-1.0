@@ -4,28 +4,23 @@
 
 package frc.robot;
 
-import java.util.List;
+import com.revrobotics.ColorSensorV3;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.Constants.AutoConstants;
-import frc.robot.Constants.DriveConstants;
+import frc.robot.Commands.JoysticArm;
+import frc.robot.Commands.MoveArm;
+import frc.robot.Commands.Shoot;
+//import frc.robot.Commands.TrackArm;
 import frc.robot.Constants.OIConstants;
-import frc.robot.subsystems.DriveSubsystem;
+//import frc.robot.autos.AutoList;
 import frc.robot.autos.PickAuto;
+import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.DriveSubsystem;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -36,12 +31,18 @@ import frc.robot.autos.PickAuto;
 public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  private final ArmSubsystem m_ArmMove = new ArmSubsystem();
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+  Joystick m_armController = new Joystick(OIConstants.kArmControllerPort);
 
   //auto object
   PickAuto m_pickauto = new PickAuto();
+
+  //colorsensor object
+  final static ColorSensorV3 m_colorSensor = new ColorSensorV3(Constants.ColorSensorConstants.kColorSensorPort);
+  
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -61,10 +62,17 @@ public class RobotContainer {
                 -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
                 m_driverController.getAButton(),
                 true, 
-                true, 
+                !(Math.abs(m_driverController.getRightTriggerAxis())>=0.36), //rate limit
                 false,
-                (Math.abs(m_driverController.getLeftTriggerAxis())>=0.31)),
+                (Math.abs(m_driverController.getLeftTriggerAxis())>=0.31)), //half speed
             m_robotDrive));
+    
+
+    m_ArmMove.setDefaultCommand(
+      new JoysticArm(m_ArmMove, () -> m_armController.getRawAxis(1), () ->  m_armController.getRawButton(2), () -> m_armController.getRawButton(6))
+    );
+
+    
   }
 
   /**
@@ -85,7 +93,7 @@ public class RobotContainer {
             m_robotDrive));
     
 
-
+    // Track robot
     new JoystickButton(m_driverController, 4)
         .whileTrue(new RunCommand(
             () -> m_robotDrive.drive(
@@ -98,6 +106,19 @@ public class RobotContainer {
                  true,
                  false), 
             m_robotDrive));
+
+    // Path Weaver
+    /*new JoystickButton(m_driverController, 5) //left bumper
+        .whileTrue(new RunCommand(
+            () -> AutoList.Auto1.auto1(m_robotDrive, m_ArmMove), 
+            m_robotDrive));*/
+    
+    // shoot
+    new JoystickButton(m_armController, 1).whileTrue(new Shoot(m_ArmMove, 1));
+
+
+    // track arm
+    //new JoystickButton(m_armController, 2).whileTrue(new TrackArm(m_ArmMove)); //can edit this
   }
 
   /**
@@ -106,6 +127,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return m_pickauto.run();
+    return m_pickauto.run(m_robotDrive, m_ArmMove);
   }
 }
