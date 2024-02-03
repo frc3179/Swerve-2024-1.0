@@ -69,7 +69,7 @@ public class RobotContainer {
     
 
     m_ArmMove.setDefaultCommand(
-      new JoysticArm(m_ArmMove, () -> m_armController.getRawAxis(1), () ->  m_armController.getRawButton(2), () -> m_armController.getRawButton(6))
+      new JoysticArm(m_ArmMove, () -> m_armController.getRawAxis(1), () ->  m_armController.getRawButton(2), () -> m_armController.getRawButton(9))
     );
 
     
@@ -114,7 +114,7 @@ public class RobotContainer {
             m_robotDrive));*/
     
     // shoot
-    new JoystickButton(m_armController, 1).whileTrue(new Shoot(m_ArmMove, 1));
+    new JoystickButton(m_armController, 1).whileTrue(new Shoot(m_ArmMove, 1, 0.5));
 
 
     // track arm

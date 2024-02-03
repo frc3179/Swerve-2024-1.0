@@ -23,22 +23,22 @@ import frc.utils.SwerveUtils;
 
 public class DriveSubsystem extends SubsystemBase {
   // Create MAXSwerveModules
-  private final MAXSwerveModule m_frontLeft = new MAXSwerveModule(
+  public final MAXSwerveModule m_frontLeft = new MAXSwerveModule(
       DriveConstants.kFrontLeftDrivingCanId,
       DriveConstants.kFrontLeftTurningCanId,
       DriveConstants.kFrontLeftChassisAngularOffset);
 
-  private final MAXSwerveModule m_frontRight = new MAXSwerveModule(
+  public final MAXSwerveModule m_frontRight = new MAXSwerveModule(
       DriveConstants.kFrontRightDrivingCanId,
       DriveConstants.kFrontRightTurningCanId,
       DriveConstants.kFrontRightChassisAngularOffset);
 
-  private final MAXSwerveModule m_rearLeft = new MAXSwerveModule(
+  public final MAXSwerveModule m_rearLeft = new MAXSwerveModule(
       DriveConstants.kRearLeftDrivingCanId,
       DriveConstants.kRearLeftTurningCanId,
       DriveConstants.kBackLeftChassisAngularOffset);
 
-  private final MAXSwerveModule m_rearRight = new MAXSwerveModule(
+  public final MAXSwerveModule m_rearRight = new MAXSwerveModule(
       DriveConstants.kRearRightDrivingCanId,
       DriveConstants.kRearRightTurningCanId,
       DriveConstants.kBackRightChassisAngularOffset);
@@ -140,7 +140,7 @@ public class DriveSubsystem extends SubsystemBase {
    * @param rateLimit     Whether to enable rate limiting for smoother control.
    */
 
-  public void drive(double xSpeed, double ySpeed, double rot, boolean resetGyro, boolean fieldRelative, boolean rateLimit, boolean trackRobot, boolean halfSpeed) {
+  public void drive(double xSpeed, double ySpeed, double rot, boolean resetGyro, boolean fieldRelative, boolean rateLimit, boolean trackRobot, boolean slowForJD) {
 
     double xSpeedCommanded;
     double ySpeedCommanded;
@@ -151,15 +151,16 @@ public class DriveSubsystem extends SubsystemBase {
       m_gyro.reset();
     }
 
-    //Track method call
+    //Track method call this is for the x of the robot tracking
     if (trackRobot){
       ySpeed = track_robot(SmartDashboard.getNumber("Limelight tx", 0));
     }
 
-    //half the input speed
-    if (halfSpeed){
-      xSpeed /= 2;
-      ySpeed /= 2;
+    //half the input speed for each direction includding the turn 
+    if (slowForJD){
+      xSpeed /= 4;
+      ySpeed /= 4;
+      rot /= 4;
     }
 
 

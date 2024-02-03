@@ -28,8 +28,8 @@ public class ArmSubsystem extends SubsystemBase{
         LupDown.follow(RupDown, true);
 
         RupDown.set(upDownSpeed);
-        rShoot.set(-shootSpeed);
-        lShoot.set(shootSpeed);
+        rShoot.set(shootSpeed);
+        lShoot.set(-shootSpeed);
         intake.set(intakeSpeed);
     }
 

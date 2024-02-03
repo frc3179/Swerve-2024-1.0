@@ -20,7 +20,7 @@ public class PickAuto {
         
         //default
         //return AutoList.Autotest.autotest(m_robotDrive, m_ArmMove);
-        return new SequentialCommandGroup(new Shoot(m_ArmMove, 0.5));
+        return new SequentialCommandGroup(new Shoot(m_ArmMove, 0.5, 0.5));
     }
 }
 
