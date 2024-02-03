@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.ArmSubsystem;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -74,6 +75,10 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Color Blue", detectedColor.blue);
     SmartDashboard.putNumber("IR", IR);
 
+    //Arm Encoder
+    //SmartDashboard.putNumber("Arm Encoder", ArmSubsystem.upDownEncoder.getPosition());
+
+
     CommandScheduler.getInstance().run();
   }
 
@@ -88,13 +93,6 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-
-    /*
-     * String autoSelected = SmartDashboard.getString("Auto Selector",
-     * "Default"); switch(autoSelected) { case "My Auto": autonomousCommand
-     * = new MyAutoCommand(); break; case "Default Auto": default:
-     * autonomousCommand = new ExampleCommand(); break; }
-     */
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {

@@ -129,16 +129,6 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
 
-  // Track math for arm angle
-  public Double[] track_arm(double ty, double ta){
-    // ty, ta
-    Double[] res = new Double[2];
-    
-
-    return res;
-  }
-
-
   /**
    * Method to drive the robot using joystick info.
    *

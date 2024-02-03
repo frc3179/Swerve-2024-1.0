@@ -1,4 +1,4 @@
-package frc.robot.autos;
+/*package frc.robot.autos;
 
 import java.util.List;
 
@@ -12,9 +12,15 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Commands.ArmMoveAngle;
+import frc.robot.Commands.MoveArm;
+import frc.robot.Commands.Shoot;
+import frc.robot.Commands.TrackArm;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.GetTrajectory;
@@ -39,8 +45,8 @@ public class AutoList {
                 List.of(
                     new Translation2d(1, 1), 
                     new Translation2d(2, -1)),
-                // End 3 meters straight ahead of where we started, facing forward
-                new Pose2d(3, 0, new Rotation2d(0)),
+
+                    new Pose2d(3, 0, new Rotation2d(0)),
             config);
 
             var thetaController = new ProfiledPIDController(
@@ -68,7 +74,7 @@ public class AutoList {
             .andThen(Commands.runOnce(() ->m_ArmMove.armMove(0, 0, 0), m_ArmMove))
             .andThen(swerveControllerCommand)
             .andThen(() -> m_ArmMove.armMoveTime(0, 0, 1, 5))
-            .andThen(/*next */)
+            .andThen(/*next )
             .andThen(Commands.runOnce(() -> m_robotDrive.drive(0, 0, 0, false, false, false, false, false), m_robotDrive))
             .andThen(Commands.runOnce(() -> m_ArmMove.armMove(0, 0, 0), m_ArmMove));
 
@@ -79,33 +85,82 @@ public class AutoList {
     public static class Auto1{ //Auto1
 
         public static Command auto1(DriveSubsystem m_robotDrive, ArmSubsystem m_ArmMove){
-            Trajectory driveJSON = GetTrajectory.get("C:\\Users\\tamal\\OneDrive\\Desktop\\Swerve-2024-1.0\\src\\main\\deploy\\paths\\Test.wpilib.json");
+            Trajectory drive1JSON = GetTrajectory.get("C:\\Users\\tamal\\OneDrive\\Desktop\\Swerve-2024-1.0\\src\\main\\deploy\\paths\\output\\Blue-Middle-1-2.wpilib.json");
+            Trajectory drive2JSON = GetTrajectory.get("C:\\Users\\tamal\\OneDrive\\Desktop\\Swerve-2024-1.0\\src\\main\\deploy\\paths\\output\\Blue-_-1-2-2-1.wpilib.json");
+            Trajectory drive2backJSON = GetTrajectory.get("C:\\Users\\tamal\\OneDrive\\Desktop\\Swerve-2024-1.0\\src\\main\\deploy\\paths\\output\\Blue-_-1-2-2-1-Back.wpilib.json");
 
             var thetaController = new ProfiledPIDController(
             AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
             thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
-            SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
-            driveJSON,
+            SwerveControllerCommand drive1 = new SwerveControllerCommand(
+            drive1JSON,
             m_robotDrive::getPose, // Functional interface to feed supplier
             DriveConstants.kDriveKinematics,
-
             // Position controllers
             new PIDController(AutoConstants.kPXController, 0, 0),
             new PIDController(AutoConstants.kPYController, 0, 0),
             thetaController,
             m_robotDrive::setModuleStates,
             m_robotDrive);
-            
 
-            return Commands.runOnce(
-                () -> m_robotDrive.drive(0, 0, 0, false, false, false, false, false), m_robotDrive)
-                .andThen(Commands.runOnce(() ->m_ArmMove.armMove(0, 0, 0), m_ArmMove))
-                .andThen(swerveControllerCommand)
-                .andThen(() -> m_ArmMove.armMoveTime(0, 0, 1, 5))
-                .andThen(/*next */)
-                .andThen(Commands.runOnce(() -> m_robotDrive.drive(0, 0, 0, false, false, false, false, false), m_robotDrive))
-                .andThen(Commands.runOnce(() -> m_ArmMove.armMove(0, 0, 0), m_ArmMove));
+
+            SwerveControllerCommand drive2 = new SwerveControllerCommand(
+            drive2JSON,
+            m_robotDrive::getPose, // Functional interface to feed supplier
+            DriveConstants.kDriveKinematics,
+            // Position controllers
+            new PIDController(AutoConstants.kPXController, 0, 0),
+            new PIDController(AutoConstants.kPYController, 0, 0),
+            thetaController,
+            m_robotDrive::setModuleStates,
+            m_robotDrive);
+
+
+            SwerveControllerCommand drive2back = new SwerveControllerCommand(
+            drive2backJSON,
+            m_robotDrive::getPose, // Functional interface to feed supplier
+            DriveConstants.kDriveKinematics,
+            // Position controllers
+            new PIDController(AutoConstants.kPXController, 0, 0),
+            new PIDController(AutoConstants.kPYController, 0, 0),
+            thetaController,
+            m_robotDrive::setModuleStates,
+            m_robotDrive);
+
+
+            return new SequentialCommandGroup( 
+                new MoveArm(m_ArmMove,0,0),
+                new Shoot(m_ArmMove,0),
+                //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                new Shoot(m_ArmMove, 1), //shoot preloaded note
+
+                new ParallelCommandGroup(
+                    drive1,
+                    new ArmMoveAngle(m_ArmMove, 0), 
+                    new MoveArm(m_ArmMove, 0, 1)
+                ), //dirve course 1 and reset arm position and intake note
+
+                new TrackArm(m_ArmMove), //track for arm angle
+                new Shoot(m_ArmMove, 1), //shoot
+
+                new ParallelCommandGroup(
+                    drive2, 
+                    new ArmMoveAngle(m_ArmMove, 0), 
+                    new MoveArm(m_ArmMove, 0, 1)
+                ), //drive course 2 and reset arm position and intake note
+
+                drive2back, //drive back from course 2
+                new TrackArm(m_ArmMove),
+                new Shoot(m_ArmMove, 1),
+
+                //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                new Shoot(m_ArmMove, 0),
+                new MoveArm(m_ArmMove, 0, 0),
+                new Shoot(m_ArmMove, 0)
+            );
         }
     }
 }
+*/
