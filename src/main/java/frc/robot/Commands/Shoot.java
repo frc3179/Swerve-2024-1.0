@@ -17,15 +17,15 @@ public class Shoot extends CommandBase{
     @Override
     public void initialize(){
         m_ArmSubsystem.armMove(0, 0, 0); //reset
-        m_ArmSubsystem.armMove(0, speed, 0); //speed up
     }
 
     @Override
     public void execute(){
-        m_ArmSubsystem.armMove(0, speed, 0); //continue speed
-        m_ArmSubsystem.armMove(0, speed, 1); //feed the shotters could be negative
+        //m_ArmSubsystem.armMove(0, speed, 0); //continue speed
+        
+        m_ArmSubsystem.armMove(0, speed, -1); //feed the shotters could be negative
     }
-
+    
     @Override
     public void end(boolean interrupted){
         m_ArmSubsystem.armMove(0, 0, 0);
@@ -33,6 +33,6 @@ public class Shoot extends CommandBase{
 
     @Override
     public boolean isFinished(){
-        return true;
+        return false;
     }
 }

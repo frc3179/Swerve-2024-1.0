@@ -11,11 +11,13 @@ public class JoysticArm extends CommandBase{
     private final ArmSubsystem m_ArmSubsystem;
     private final Supplier<Double> upDownSpeed;
     private Supplier<Boolean> intakespeed;
+    private Supplier<Boolean> invertintake;
 
-    public JoysticArm(ArmSubsystem m_ArmSubsystem, Supplier<Double> upDownSpeed, Supplier<Boolean> intakespeed){
+    public JoysticArm(ArmSubsystem m_ArmSubsystem, Supplier<Double> upDownSpeed, Supplier<Boolean> intakespeed, Supplier<Boolean> invertintake){
         this.m_ArmSubsystem = m_ArmSubsystem;
         this.intakespeed = intakespeed;
         this.upDownSpeed = upDownSpeed;
+        this.invertintake = invertintake;
         addRequirements(m_ArmSubsystem);
     }
 
@@ -28,7 +30,8 @@ public class JoysticArm extends CommandBase{
     public void execute(){
         double intakeSpeed = intakespeed.get() ? 1:0;
         intakeSpeed = m_ArmSubsystem.intakeCheck(SmartDashboard.getNumber("IR", 0.0), intakeSpeed);
-        m_ArmSubsystem.armMove(upDownSpeed.get(), 0, intakeSpeed);
+        double invert = invertintake.get() ? 1:-1;
+        m_ArmSubsystem.armMove(upDownSpeed.get(), 0, invert*intakeSpeed);
     }
 
     @Override

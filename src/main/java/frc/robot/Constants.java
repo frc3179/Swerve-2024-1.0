@@ -125,7 +125,7 @@ public final class Constants {
     public static final double kDriveDeadband = 0.1;
 
     public static final int kArmControllerPort = 1;
-    public static final double kArmDeadband = 0.05;
+    public static final double kArmDeadband = 0.1;
   }
 
   public static final class ArmConstants {
@@ -133,7 +133,7 @@ public final class Constants {
     public static final int kRUpDownMotorPort = 10;
     public static final int kLeftShootMotorPort = 11;
     public static final int kRightShootMotorPort = 12;
-    public static final int kIntakeMotorPort = 13;
+    public static final int kIntakeMotorPort = 0;
 
     public static final int kRotationOffsetTrack = 5;
   }

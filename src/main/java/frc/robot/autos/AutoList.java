@@ -1,4 +1,4 @@
-package frc.robot.autos;
+/*package frc.robot.autos;
 
 import java.util.List;
 
@@ -74,7 +74,7 @@ public class AutoList {
             .andThen(Commands.runOnce(() ->m_ArmMove.armMove(0, 0, 0), m_ArmMove))
             .andThen(swerveControllerCommand)
             .andThen(() -> m_ArmMove.armMoveTime(0, 0, 1, 5))
-            .andThen(/*next */)
+            .andThen(/*next )
             .andThen(Commands.runOnce(() -> m_robotDrive.drive(0, 0, 0, false, false, false, false, false), m_robotDrive))
             .andThen(Commands.runOnce(() -> m_ArmMove.armMove(0, 0, 0), m_ArmMove));
 
@@ -163,3 +163,4 @@ public class AutoList {
         }
     }
 }
+*/

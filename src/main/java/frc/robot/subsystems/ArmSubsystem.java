@@ -1,10 +1,10 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ArmConstants;
@@ -15,10 +15,10 @@ public class ArmSubsystem extends SubsystemBase{
     public CANSparkMax RupDown = new CANSparkMax(ArmConstants.kRUpDownMotorPort, MotorType.kBrushless);
     public CANSparkMax lShoot = new CANSparkMax(ArmConstants.kLeftShootMotorPort, MotorType.kBrushless);
     public CANSparkMax rShoot = new CANSparkMax(ArmConstants.kRightShootMotorPort, MotorType.kBrushless);
-    public CANSparkMax intake = new CANSparkMax(ArmConstants.kIntakeMotorPort, MotorType.kBrushless);
+    public Spark intake = new Spark(ArmConstants.kIntakeMotorPort);
     
     //Encoder
-    public final static AbsoluteEncoder upDownEncoder = (AbsoluteEncoder) LupDown.getEncoder();
+    //public final static AbsoluteEncoder upDownEncoder = (AbsoluteEncoder) LupDown.getEncoder();
 
     // Timer
     public Timer Armtimer = new Timer();
@@ -26,10 +26,10 @@ public class ArmSubsystem extends SubsystemBase{
 
     public void armMove(double upDownSpeed, double shootSpeed, double intakeSpeed){
         LupDown.follow(RupDown, true);
-        lShoot.follow(rShoot, true);
 
         RupDown.set(upDownSpeed);
-        rShoot.set(shootSpeed);
+        rShoot.set(-shootSpeed);
+        lShoot.set(shootSpeed);
         intake.set(intakeSpeed);
     }
 
@@ -41,12 +41,12 @@ public class ArmSubsystem extends SubsystemBase{
         }
     }
 
-    public boolean armMoveRotations(double rotations){
+    /*public boolean armMoveRotations(double rotations){
         while(upDownEncoder.getPosition() > rotations+ArmConstants.kRotationOffsetTrack || upDownEncoder.getPosition() < rotations-ArmConstants.kRotationOffsetTrack){
             armMove(Math.abs((rotations-upDownEncoder.getPosition())), 0, 0);
         }
         return true;
-    }
+    }*/
 
     public double intakeCheck(double IR, double initSpeed){
         if(IR > 20.0){
