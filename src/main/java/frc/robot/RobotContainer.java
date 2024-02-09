@@ -13,11 +13,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Commands.JoysticArm;
-import frc.robot.Commands.MoveArm;
 import frc.robot.Commands.Shoot;
-//import frc.robot.Commands.TrackArm;
+import frc.robot.Commands.TrackArm;
 import frc.robot.Constants.OIConstants;
-//import frc.robot.autos.AutoList;
+import frc.robot.autos.AutoList;
 import frc.robot.autos.PickAuto;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
@@ -63,7 +62,7 @@ public class RobotContainer {
                 m_driverController.getAButton(),
                 true, 
                 !(Math.abs(m_driverController.getRightTriggerAxis())>=0.36), //rate limit
-                false,
+                m_driverController.getRawButton(4),
                 (Math.abs(m_driverController.getLeftTriggerAxis())>=0.31)), //half speed
             m_robotDrive));
     
@@ -92,33 +91,16 @@ public class RobotContainer {
             () -> m_robotDrive.setX(),
             m_robotDrive));
     
-
-    // Track robot
-    new JoystickButton(m_driverController, 4)
-        .whileTrue(new RunCommand(
-            () -> m_robotDrive.drive(
-                0,
-                 0,
-                 0, 
-                 false, 
-                 false, 
-                 false,
-                 true,
-                 false), 
-            m_robotDrive));
-
     // Path Weaver
-    /*new JoystickButton(m_driverController, 5) //left bumper
+    new JoystickButton(m_driverController, 5) //left bumper
         .whileTrue(new RunCommand(
             () -> AutoList.Auto1.auto1(m_robotDrive, m_ArmMove), 
-            m_robotDrive));*/
+            m_robotDrive));
     
     // shoot
-    new JoystickButton(m_armController, 1).whileTrue(new Shoot(m_ArmMove, 1, 0.5));
-
-
+    new JoystickButton(m_armController, 1).onTrue(new Shoot(m_ArmMove, 1, 0.5)); //button placeholder
     // track arm
-    //new JoystickButton(m_armController, 2).whileTrue(new TrackArm(m_ArmMove)); //can edit this
+    new JoystickButton(m_armController, 4).onTrue(new TrackArm(m_ArmMove)); //can edit this (BUTTON)
   }
 
   /**

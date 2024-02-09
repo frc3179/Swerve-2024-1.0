@@ -119,7 +119,7 @@ public class DriveSubsystem extends SubsystemBase {
     //Math here
     if (Math.abs(tx) > 0.5){
       //* x robot Line up
-      res_speed = tx/50;
+      res_speed = tx; //TODO change this to make it for rotation not line up direction to make work
       return res_speed;
     }
     else{
@@ -153,7 +153,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     //Track method call this is for the x of the robot tracking
     if (trackRobot){
-      ySpeed = track_robot(SmartDashboard.getNumber("Limelight tx", 0));
+      rot = track_robot(SmartDashboard.getNumber("Limelight tx", 0));
     }
 
     //half the input speed for each direction includding the turn 

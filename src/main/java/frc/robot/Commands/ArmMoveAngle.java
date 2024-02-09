@@ -1,4 +1,4 @@
-/*package frc.robot.Commands;
+package frc.robot.Commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ArmSubsystem;
@@ -22,7 +22,7 @@ public class ArmMoveAngle extends CommandBase{
 
     @Override
     public void execute(){
-        this.done = m_ArmSubsystem.armMoveRotations(m_ArmSubsystem.angleToRotations(angle));
+        m_ArmSubsystem.armMoveRotations(m_ArmSubsystem.angleToRotations(angle));
     }
 
     @Override
@@ -32,7 +32,6 @@ public class ArmMoveAngle extends CommandBase{
 
     @Override
     public boolean isFinished(){
-        return done;
+        return true;
     }
 }
-*/

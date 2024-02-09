@@ -2,7 +2,6 @@ package frc.robot.Commands;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.subsystems.ArmSubsystem;
 
 public class Shoot extends CommandBase{
@@ -30,9 +29,10 @@ public class Shoot extends CommandBase{
 
     @Override
     public void execute(){
-        
-        
-        m_ArmSubsystem.armMove(0, speed, -1); //feed the shotters could be negative
+        aTimer.restart();
+        while(aTimer.get() < 0.25){
+            m_ArmSubsystem.armMove(0, speed, -1);
+        }
     }
     
     @Override
@@ -42,6 +42,6 @@ public class Shoot extends CommandBase{
 
     @Override
     public boolean isFinished(){
-        return false;
+        return true;
     }
 }

@@ -1,4 +1,4 @@
-/*package frc.robot.autos;
+package frc.robot.autos;
 
 import java.util.List;
 
@@ -74,7 +74,7 @@ public class AutoList {
             .andThen(Commands.runOnce(() ->m_ArmMove.armMove(0, 0, 0), m_ArmMove))
             .andThen(swerveControllerCommand)
             .andThen(() -> m_ArmMove.armMoveTime(0, 0, 1, 5))
-            .andThen(/*next )
+            .andThen(/*next */)
             .andThen(Commands.runOnce(() -> m_robotDrive.drive(0, 0, 0, false, false, false, false, false), m_robotDrive))
             .andThen(Commands.runOnce(() -> m_ArmMove.armMove(0, 0, 0), m_ArmMove));
 
@@ -131,10 +131,10 @@ public class AutoList {
 
             return new SequentialCommandGroup( 
                 new MoveArm(m_ArmMove,0,0),
-                new Shoot(m_ArmMove,0),
+                new Shoot(m_ArmMove,0,0.5),
                 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-                new Shoot(m_ArmMove, 1), //shoot preloaded note
+                new Shoot(m_ArmMove, 1, 0.5), //shoot preloaded note
 
                 new ParallelCommandGroup(
                     drive1,
@@ -143,7 +143,7 @@ public class AutoList {
                 ), //dirve course 1 and reset arm position and intake note
 
                 new TrackArm(m_ArmMove), //track for arm angle
-                new Shoot(m_ArmMove, 1), //shoot
+                new Shoot(m_ArmMove, 1, 0.5), //shoot
 
                 new ParallelCommandGroup(
                     drive2, 
@@ -153,14 +153,13 @@ public class AutoList {
 
                 drive2back, //drive back from course 2
                 new TrackArm(m_ArmMove),
-                new Shoot(m_ArmMove, 1),
+                new Shoot(m_ArmMove, 1, 0.5),
 
                 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                new Shoot(m_ArmMove, 0),
+                new Shoot(m_ArmMove, 0, 0.5),
                 new MoveArm(m_ArmMove, 0, 0),
-                new Shoot(m_ArmMove, 0)
+                new Shoot(m_ArmMove, 0, 0.5)
             );
         }
     }
 }
-*/

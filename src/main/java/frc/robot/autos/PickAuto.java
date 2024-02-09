@@ -1,11 +1,9 @@
 package frc.robot.autos;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.Robot;
-import frc.robot.Commands.Shoot;
 
 public class PickAuto {
 
@@ -15,12 +13,11 @@ public class PickAuto {
         String picked = Robot.autoSelectedDashboard;
         switch(picked){
             case Robot.kAuto1:
-                //return AutoList.Auto1.auto1(m_robotDrive, m_ArmMove);
+                return AutoList.Auto1.auto1(m_robotDrive, m_ArmMove);
         }
         
         //default
-        //return AutoList.Autotest.autotest(m_robotDrive, m_ArmMove);
-        return new SequentialCommandGroup(new Shoot(m_ArmMove, 0.5, 0.5));
+        return AutoList.Autotest.autotest(m_robotDrive, m_ArmMove);
     }
 }
 
