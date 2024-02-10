@@ -1,7 +1,5 @@
 package frc.robot.Commands;
 
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -28,7 +26,9 @@ public class RobotRotAngle extends CommandBase{
 
     @Override
     public void execute(){
-        
+        while (1 < this.angle){
+            m_DriveSubsystem.drive(0, 0, 0.5, false, true, true, false, false);
+        }
     }
     
     @Override

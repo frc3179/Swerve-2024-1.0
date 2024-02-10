@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import java.util.function.Supplier;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -51,19 +53,29 @@ public class ArmSubsystem extends SubsystemBase{
         return initSpeed;
     }
     
-    public void armMoveRotations(double rotations){
-        while(upDownEncoder.getDistance() > rotations+ArmConstants.kRotationOffsetTrack || upDownEncoder.getDistance() < rotations-ArmConstants.kRotationOffsetTrack){
-            armMove(Math.abs((rotations-upDownEncoder.getDistance())), 0, 0);
+    public void armMoveRotations(double rotations, Supplier<Double> encoder){
+        while(encoder.get() > rotations+ArmConstants.kRotationOffsetTrack || encoder.get() < rotations-ArmConstants.kRotationOffsetTrack){
+            if(rotations > encoder.get()){
+                armMove(-0.5, 0, 0);
+            }
+            else if(rotations < encoder.get()){
+                armMove(0.5, 0, 0);
+            }
         }
     }
 
     public double angleToRotations(double degAngle){
-        return degAngle/1.3;
+        return degAngle*0.0304;
     }
 
     public double limelightToAngle(){
         double limelightY = SmartDashboard.getNumber("Limelight ty", 0.0);
-        return limelightY/10;
+        double opposite = 1.177925;
+        double ajacent = (6.3384*Math.log(14.0331-(0.14686*limelightY)))-13.1394;
+
+        double result = Math.atan(opposite/ajacent);
+
+        return result;
     }
 
 }

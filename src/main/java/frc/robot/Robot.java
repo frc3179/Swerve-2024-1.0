@@ -4,6 +4,9 @@
 
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.cscore.VideoMode.PixelFormat;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -44,6 +47,12 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("Auto 1", kAuto1);
     SmartDashboard.putData("Auto picker", m_chooser);
 
+    //other camera
+    UsbCamera camera = CameraServer.startAutomaticCapture();
+    camera.setVideoMode(PixelFormat.kMJPEG, 180, 180, 30);
+
+
+
 
     m_robotContainer = new RobotContainer();
   }
@@ -77,6 +86,9 @@ public class Robot extends TimedRobot {
 
     //Arm Encoder
     SmartDashboard.putNumber("Arm Encoder", ArmSubsystem.upDownEncoder.getDistance());
+
+    //Other camera
+
 
 
     CommandScheduler.getInstance().run();

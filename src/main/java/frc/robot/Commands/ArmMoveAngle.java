@@ -22,7 +22,7 @@ public class ArmMoveAngle extends CommandBase{
 
     @Override
     public void execute(){
-        m_ArmSubsystem.armMoveRotations(m_ArmSubsystem.angleToRotations(angle));
+        m_ArmSubsystem.armMoveRotations(m_ArmSubsystem.angleToRotations(angle), ()->m_ArmSubsystem.upDownEncoder.getDistance());
     }
 
     @Override
