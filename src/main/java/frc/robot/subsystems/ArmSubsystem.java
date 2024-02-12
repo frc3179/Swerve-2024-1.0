@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ArmConstants;
+import frc.robot.Constants.TrackingConstants;
 
 public class ArmSubsystem extends SubsystemBase{
     // motor controllers for each arm ellement
@@ -54,7 +55,7 @@ public class ArmSubsystem extends SubsystemBase{
     }
     
     public void armMoveRotations(double rotations, Supplier<Double> encoder){
-        while(encoder.get() > rotations+ArmConstants.kRotationOffsetTrack || encoder.get() < rotations-ArmConstants.kRotationOffsetTrack){
+        while(encoder.get() > rotations+TrackingConstants.kRotationOffsetTrack || encoder.get() < rotations-TrackingConstants.kRotationOffsetTrack){
             if(rotations > encoder.get()){
                 armMove(-0.5, 0, 0);
             }
@@ -65,15 +66,19 @@ public class ArmSubsystem extends SubsystemBase{
     }
 
     public double angleToRotations(double degAngle){
-        return degAngle*0.0304;
+        return degAngle*(TrackingConstants.kArmRotationsPer90*2);
     }
 
     public double limelightToAngle(){
         double limelightY = SmartDashboard.getNumber("Limelight ty", 0.0);
-        double opposite = 1.177925;
+        double opposite = 1.4732;
         double ajacent = (6.3384*Math.log(14.0331-(0.14686*limelightY)))-13.1394;
+        SmartDashboard.putNumber("Distance", ajacent);
 
         double result = Math.atan(opposite/ajacent);
+        SmartDashboard.putNumber("Angle;laksdkdjf", result);
+
+        result = (result+90)-180;
 
         return result;
     }
