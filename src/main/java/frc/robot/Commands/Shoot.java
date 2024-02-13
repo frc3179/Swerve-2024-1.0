@@ -30,7 +30,7 @@ public class Shoot extends CommandBase{
     @Override
     public void execute(){
         aTimer.restart();
-        while(aTimer.get() < 0.4){
+        while(aTimer.get() < 1){
             m_ArmSubsystem.armMove(0, speed, -1);
         }
     }

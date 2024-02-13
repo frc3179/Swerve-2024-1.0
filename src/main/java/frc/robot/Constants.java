@@ -125,7 +125,7 @@ public final class Constants {
     public static final double kDriveDeadband = 0.1;
 
     public static final int kArmControllerPort = 1;
-    public static final double kArmDeadband = 0.15;
+    public static final double kArmDeadband = 0.2;
   }
 
   public static final class ArmConstants {
@@ -140,8 +140,7 @@ public final class Constants {
   
   public static final class TrackingConstants {
     public static final double kRotationOffsetTrack = 0.005;
-    public static final double kArmAngleOffset = 0;
-    public static final double kArmRotationsPer90 = 0;
+    public static final double kArmAngleToHypot = 45;
   }
 
   public static final class ColorSensorConstants {

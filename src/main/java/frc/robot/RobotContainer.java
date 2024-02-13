@@ -11,11 +11,12 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.Constants.OIConstants;
 import frc.robot.Commands.JoysticArm;
 import frc.robot.Commands.Shoot;
 import frc.robot.Commands.TrackArm;
-import frc.robot.Constants.OIConstants;
 import frc.robot.autos.AutoList;
 import frc.robot.autos.PickAuto;
 import frc.robot.subsystems.ArmSubsystem;
@@ -100,7 +101,7 @@ public class RobotContainer {
     // shoot
     new JoystickButton(m_armController, 1).onTrue(new Shoot(m_ArmMove, 1, 0.5)); //button placeholder
     // track arm
-    new JoystickButton(m_armController, 11).onTrue(new TrackArm(m_ArmMove)); //can edit this (BUTTON)
+    new JoystickButton(m_armController, 11).onTrue(new SequentialCommandGroup(new TrackArm(m_ArmMove), new Shoot(m_ArmMove, 1, 0.5))); //can edit this (BUTTON)
   }
 
   /**

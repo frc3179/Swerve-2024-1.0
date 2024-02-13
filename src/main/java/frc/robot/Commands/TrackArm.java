@@ -29,6 +29,8 @@ public class TrackArm extends CommandBase{
     public void execute(){
         SmartDashboard.putNumber("Goal value", rotations);
         m_ArmSubsystem.armMoveRotations(rotations, ()->m_ArmSubsystem.upDownEncoder.getDistance());
+
+        
     }
     
     @Override
