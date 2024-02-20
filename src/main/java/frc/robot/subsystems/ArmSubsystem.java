@@ -66,22 +66,22 @@ public class ArmSubsystem extends SubsystemBase{
     }
 
     public double angleToRotations(double degAngle){
-        return -0.0000175696*(degAngle*degAngle)+0.000870624*degAngle+0.301081;
+        double ans = (TrackingConstants.kEncoderTo90Deg/90)*degAngle;
+        return 0.378-ans;
     }
 
     public double limelightToAngle(){
         double limelightY = SmartDashboard.getNumber("Limelight ty", 0.0);
         double opposite = 1.4732;
-        double ajacent = (6.3384*Math.log(14.0331-(0.14686*limelightY)))-13.1394;
+        double ajacent = (0.00425644*(limelightY*limelightY))-(0.188139*limelightY)+3.49207; // get distance function
         ajacent += 0.1524;
         SmartDashboard.putNumber("Distance", ajacent);
 
         double result = Math.atan(opposite/ajacent);
         result *= 180;
         
-        double ArmAng = 180-(result+TrackingConstants.kArmAngleToHypot);
-        ArmAng += 5;
-        
+        double ArmAng = (180-(result+TrackingConstants.kArmAngleToHypot));
+
         SmartDashboard.putNumber("Angle", ArmAng);
         return ArmAng;
     }

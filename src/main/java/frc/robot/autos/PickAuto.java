@@ -10,7 +10,7 @@ public class PickAuto {
     //public final AutoList m_autoList = new AutoList();
 
     public Command run(DriveSubsystem m_robotDrive, ArmSubsystem m_ArmMove){
-        String picked = Robot.autoSelectedDashboard;
+        String picked = Robot.m_chooser.getSelected();
         switch(picked){
             case Robot.kAuto1:
                 return AutoList.Auto1.auto1(m_robotDrive, m_ArmMove);

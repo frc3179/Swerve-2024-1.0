@@ -137,10 +137,16 @@ public final class Constants {
 
     public static final int kArmEncoderPort = 0;
   }
+
+  public static final class ClimbingConstants {
+    public static final int kLeftClimbPort = 13;
+    public static final int kRightClimbPort = 14;
+  }
   
   public static final class TrackingConstants {
-    public static final double kRotationOffsetTrack = 0.005;
-    public static final double kArmAngleToHypot = 45;
+    public static final double kRotationOffsetTrack = 0.0005;
+    public static final double kEncoderTo90Deg = 0.1334;
+    public static final double kArmAngleToHypot = 27;
   }
 
   public static final class ColorSensorConstants {

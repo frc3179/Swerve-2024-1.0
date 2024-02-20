@@ -131,28 +131,30 @@ public class AutoList {
 
             return new SequentialCommandGroup( 
                 new MoveArm(m_ArmMove,0,0),
-                new Shoot(m_ArmMove,0,0.5),
+                new Shoot(m_ArmMove,1,0.5),
                 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
                 new Shoot(m_ArmMove, 1, 0.5), //shoot preloaded note
 
                 new ParallelCommandGroup(
                     drive1,
-                    new ArmMoveAngle(m_ArmMove, 0), 
-                    new MoveArm(m_ArmMove, 0, 1)
+                    new ArmMoveAngle(m_ArmMove, 0)
                 ), //dirve course 1 and reset arm position and intake note
+                    
+                new MoveArm(m_ArmMove, 0, 1),
 
-                new TrackArm(m_ArmMove), //track for arm angle
+                new TrackArm(m_ArmMove, m_robotDrive), //track for arm angle
                 new Shoot(m_ArmMove, 1, 0.5), //shoot
 
                 new ParallelCommandGroup(
                     drive2, 
-                    new ArmMoveAngle(m_ArmMove, 0), 
-                    new MoveArm(m_ArmMove, 0, 1)
+                    new ArmMoveAngle(m_ArmMove, 0)
                 ), //drive course 2 and reset arm position and intake note
+                    
+                new MoveArm(m_ArmMove, 0, 1),
 
-                drive2back, //drive back from course 2
-                new TrackArm(m_ArmMove),
+                //drive2back, //drive back from course 2
+                new TrackArm(m_ArmMove, m_robotDrive),
                 new Shoot(m_ArmMove, 1, 0.5),
 
                 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

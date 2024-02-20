@@ -20,7 +20,9 @@ import frc.robot.Commands.TrackArm;
 import frc.robot.autos.AutoList;
 import frc.robot.autos.PickAuto;
 import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ClimbingSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.Commands.*;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -32,6 +34,7 @@ public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final ArmSubsystem m_ArmMove = new ArmSubsystem();
+  private final ClimbingSubsystem m_climber = new ClimbingSubsystem();
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -69,7 +72,14 @@ public class RobotContainer {
     
 
     m_ArmMove.setDefaultCommand(
-      new JoysticArm(m_ArmMove, () -> m_armController.getRawAxis(1), () ->  m_armController.getRawButton(2), () -> m_armController.getRawButton(9))
+      new JoysticArm(
+        m_ArmMove, 
+        m_climber, 
+        () -> m_armController.getRawAxis(1), 
+        () ->  m_armController.getRawButton(2), 
+        () -> m_armController.getRawButton(9), 
+        () -> m_armController.getRawButton(7), 
+        () -> m_armController.getRawButton(8))
     );
 
     
@@ -101,7 +111,7 @@ public class RobotContainer {
     // shoot
     new JoystickButton(m_armController, 1).onTrue(new Shoot(m_ArmMove, 1, 0.5)); //button placeholder
     // track arm
-    new JoystickButton(m_armController, 11).onTrue(new SequentialCommandGroup(new TrackArm(m_ArmMove), new Shoot(m_ArmMove, 1, 0.5))); //can edit this (BUTTON)
+    new JoystickButton(m_armController, 11).onTrue(new SequentialCommandGroup(new TrackArm(m_ArmMove, m_robotDrive), new Shoot(m_ArmMove, 1, 0.5))); //can edit this (BUTTON)
   }
 
   /**

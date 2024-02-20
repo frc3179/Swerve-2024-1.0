@@ -32,7 +32,7 @@ public class Robot extends TimedRobot {
   public static final String kDefaultAuto = "Default";
   public static final String kAuto1 = "Auto 1";
   public static String autoSelectedDashboard;
-  private final SendableChooser<String> m_chooser = new SendableChooser<>();
+  public final static SendableChooser<String> m_chooser = new SendableChooser<>();
 
   /**
    * This function is run when the robot is first started up and should be used for any
