@@ -144,9 +144,9 @@ public final class Constants {
   }
   
   public static final class TrackingConstants {
-    public static final double kRotationOffsetTrack = 0.0005;
+    public static final double kRotationOffsetTrack = 0.0004;
     public static final double kEncoderTo90Deg = 0.1334;
-    public static final double kArmAngleToHypot = 27;
+    public static final double kArmAngleToHypot = 15;
   }
 
   public static final class ColorSensorConstants {

@@ -35,7 +35,7 @@ public class JoysticArm extends CommandBase{
 
     @Override
     public void execute(){
-        double intakeSpeed = intakespeed.get() ? 0.6:0;
+        double intakeSpeed = intakespeed.get() ? 0.45:0;
         intakeSpeed = m_ArmSubsystem.intakeCheck(SmartDashboard.getNumber("IR", 0.0), intakeSpeed);
         double invert = invertintake.get() ? 1:-1;
         m_ArmSubsystem.armMove(upDownSpeed.get(), 0, invert*intakeSpeed);

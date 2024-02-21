@@ -111,7 +111,7 @@ public class RobotContainer {
     // shoot
     new JoystickButton(m_armController, 1).onTrue(new Shoot(m_ArmMove, 1, 0.5)); //button placeholder
     // track arm
-    new JoystickButton(m_armController, 11).onTrue(new SequentialCommandGroup(new TrackArm(m_ArmMove, m_robotDrive), new Shoot(m_ArmMove, 1, 0.5))); //can edit this (BUTTON)
+    new JoystickButton(m_armController, 11).onTrue(new SequentialCommandGroup(new TrackArm(m_ArmMove, m_robotDrive), new Shoot(m_ArmMove, 1, 1))); //can edit this (BUTTON)
   }
 
   /**
