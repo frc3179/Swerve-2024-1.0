@@ -87,9 +87,8 @@ public class Robot extends TimedRobot {
     //Arm Encoder
     SmartDashboard.putNumber("Arm Encoder", ArmSubsystem.upDownEncoder.getDistance());
 
-    //Other camera
-
-
+    //Tracking values (updated in ArmSubsystem.java)
+    ArmSubsystem.limelightToAngle(NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0));
 
     CommandScheduler.getInstance().run();
   }

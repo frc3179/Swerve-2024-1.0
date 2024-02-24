@@ -10,6 +10,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -17,7 +18,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.Commands.ArmMoveAngle;
+import frc.robot.Commands.ArmMoveRotations;
 import frc.robot.Commands.MoveArm;
 import frc.robot.Commands.Shoot;
 import frc.robot.Commands.TrackArm;
@@ -138,23 +139,23 @@ public class AutoList {
 
                 new ParallelCommandGroup(
                     drive1,
-                    new ArmMoveAngle(m_ArmMove, 0)
+                    new ArmMoveRotations(m_ArmMove, m_robotDrive, 0)
                 ), //dirve course 1 and reset arm position and intake note
                     
                 new MoveArm(m_ArmMove, 0, 1),
 
-                new TrackArm(m_ArmMove, m_robotDrive), //track for arm angle
+                new TrackArm(m_ArmMove, m_robotDrive, () -> NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0)), //track for arm angle
                 new Shoot(m_ArmMove, 1, 0.5), //shoot
 
                 new ParallelCommandGroup(
                     drive2, 
-                    new ArmMoveAngle(m_ArmMove, 0)
+                    new ArmMoveRotations(m_ArmMove, m_robotDrive, 0)
                 ), //drive course 2 and reset arm position and intake note
                     
                 new MoveArm(m_ArmMove, 0, 1),
 
                 //drive2back, //drive back from course 2
-                new TrackArm(m_ArmMove, m_robotDrive),
+                new TrackArm(m_ArmMove, m_robotDrive, () -> NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0)),
                 new Shoot(m_ArmMove, 1, 0.5),
 
                 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

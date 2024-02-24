@@ -154,6 +154,9 @@ public class DriveSubsystem extends SubsystemBase {
     //Track method call this is for the x of the robot tracking
     if (trackRobot){
       rot = track_robot(SmartDashboard.getNumber("Limelight tx", 0));
+      if(Math.abs(SmartDashboard.getNumber("Limelight tx", 0)) < 1){
+        SmartDashboard.putBoolean("Robot Track", true);
+      }
     }
 
     //half the input speed for each direction includding the turn 
@@ -274,6 +277,18 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public double getHeading() {
     return Rotation2d.fromDegrees(m_gyro.getAngle()).getDegrees();
+  }
+
+  /**
+   * <summary>
+   * Gets the gryo angle. 
+   * This is only for using gryo values in commands so m_gryo does not have to be public.
+   * </summary>
+   * 
+   * @return the gryo angle values in degrees
+  */
+  public double getGyroAngle() {
+    return m_gyro.getAngle();
   }
 
   /**

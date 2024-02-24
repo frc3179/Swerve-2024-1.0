@@ -1,46 +1,44 @@
 package frc.robot.Commands;
 
-import java.util.function.Supplier;
-
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 
-public class TrackArm extends CommandBase{
+public class WaitSec extends CommandBase{
 
     ArmSubsystem m_ArmSubsystem;
     DriveSubsystem m_DriveSubsystem;
-    double rotations;
-    Supplier<Double> limeLightY;
+    double waitSec;
+    Timer wTimer = new Timer();
 
-    public TrackArm(ArmSubsystem m_ArmSubsystem, DriveSubsystem m_DirveSubsystem, Supplier<Double> limeLightY){
+    public WaitSec(ArmSubsystem m_ArmSubsystem, DriveSubsystem m_DirveSubsystem, double waitSec){
         this.m_ArmSubsystem = m_ArmSubsystem;
         this.m_DriveSubsystem = m_DirveSubsystem;
-        this.limeLightY = limeLightY;
+        this.waitSec = waitSec;
         addRequirements(m_ArmSubsystem, m_DirveSubsystem);
     }
 
     @Override
     public void initialize(){
-        m_ArmSubsystem.armMove(0, 0, 0); //reset
+        m_ArmSubsystem.armMove(0, 0, 0);
         m_DriveSubsystem.drive(0, 0, 0, false, false, false, false, false);
-        SmartDashboard.putBoolean("Done Track", false);
-        this.rotations = m_ArmSubsystem.angleToRotations(m_ArmSubsystem.limelightToAngle(limeLightY.get()));
+        this.wTimer.restart();
+        SmartDashboard.putBoolean("Wait finsihed", false);
     }
 
     @Override
     public void execute(){
-        SmartDashboard.putNumber("Goal value", rotations);
-        m_ArmSubsystem.armMoveRotations(rotations, ()->m_ArmSubsystem.upDownEncoder.getDistance());
-
-        
+        while(this.wTimer.get() < this.waitSec){
+            SmartDashboard.putBoolean("Wait finsihed", false);
+        }
+        SmartDashboard.putBoolean("Wait finsihed", true);
     }
     
     @Override
     public void end(boolean interrupted){
-        SmartDashboard.putBoolean("Done Track", true);
-        m_ArmSubsystem.armMove(0, 0, 0); //reset
+        m_ArmSubsystem.armMove(0, 0, 0);
         m_DriveSubsystem.drive(0, 0, 0, false, false, false, false, false);
     }
 

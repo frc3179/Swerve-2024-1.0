@@ -4,6 +4,7 @@ import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimbingSubsystem;
 
@@ -38,8 +39,8 @@ public class JoysticArm extends CommandBase{
         double intakeSpeed = intakespeed.get() ? 0.45:0;
         intakeSpeed = m_ArmSubsystem.intakeCheck(SmartDashboard.getNumber("IR", 0.0), intakeSpeed);
         double invert = invertintake.get() ? 1:-1;
-        m_ArmSubsystem.armMove(upDownSpeed.get(), 0, invert*intakeSpeed);
-
+        m_ArmSubsystem.armMove(Math.abs(upDownSpeed.get())>OIConstants.kArmDeadband? upDownSpeed.get() : 0, 0, invert*intakeSpeed);
+        
         //climb
         double dClimbSpeed = ((climberInvert.get() ? -1:1)*(climberSpeed.get() ? -1:0));
         m_climber.climbMove(dClimbSpeed);

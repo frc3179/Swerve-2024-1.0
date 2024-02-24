@@ -125,7 +125,7 @@ public final class Constants {
     public static final double kDriveDeadband = 0.1;
 
     public static final int kArmControllerPort = 1;
-    public static final double kArmDeadband = 0.2;
+    public static final double kArmDeadband = 0.19;
   }
 
   public static final class ArmConstants {
@@ -146,7 +146,9 @@ public final class Constants {
   public static final class TrackingConstants {
     public static final double kRotationOffsetTrack = 0.0004;
     public static final double kEncoderTo90Deg = 0.1334;
-    public static final double kArmAngleToHypot = 15;
+    public static final double kCenterOfAprilTagMeters = 2; //*NOTE: Our mesurments could be incorrect.
+    public static final double kHeightOfLensOfLimeLight = 0.265;
+    public static final double kArmZeroEncoderValue = 0.378;
   }
 
   public static final class ColorSensorConstants {
