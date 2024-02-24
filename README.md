@@ -29,4 +29,4 @@
 # License
 We do not make any promises on how well or if this will work. We only provide the code as reference or a template.
 
-## If you have any problems feel free to open an issue or pull request and we will try to solve it or merge the pull request
+## If you have any problems feel free to open an issue or pull request by creating a fork and we will try to solve it or merge the pull request

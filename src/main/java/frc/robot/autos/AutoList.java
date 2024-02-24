@@ -86,9 +86,9 @@ public class AutoList {
     public static class Auto1{ //Auto1
 
         public static Command auto1(DriveSubsystem m_robotDrive, ArmSubsystem m_ArmMove){
-            Trajectory drive1JSON = GetTrajectory.get("C:\\Users\\tamal\\OneDrive\\Desktop\\Swerve-2024-1.0\\src\\main\\deploy\\paths\\output\\Blue-Middle-1-2.wpilib.json");
-            Trajectory drive2JSON = GetTrajectory.get("C:\\Users\\tamal\\OneDrive\\Desktop\\Swerve-2024-1.0\\src\\main\\deploy\\paths\\output\\Blue-_-1-2-2-1.wpilib.json");
-            Trajectory drive2backJSON = GetTrajectory.get("C:\\Users\\tamal\\OneDrive\\Desktop\\Swerve-2024-1.0\\src\\main\\deploy\\paths\\output\\Blue-_-1-2-2-1-Back.wpilib.json");
+            Trajectory drive1JSON = GetTrajectory.get("C:/Users/tamal/OneDrive/Desktop/Swerve-2024-1.0/src/main/deploy/paths/output/Blue-Middle-1-2.wpilib.json");
+            Trajectory drive2JSON = GetTrajectory.get("C:/Users/tamal/OneDrive/Desktop/Swerve-2024-1.0/src/main/deploy/paths/output/Blue-_-1-2-2-1.wpilib.json");
+            Trajectory drive2backJSON = GetTrajectory.get("C:/Users/tamal/OneDrive/Desktop/Swerve-2024-1.0/src/main/deploy/paths/output/Blue-_-1-2-2-1-Back.wpilib.json");
 
             var thetaController = new ProfiledPIDController(
             AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
@@ -130,7 +130,7 @@ public class AutoList {
             m_robotDrive);
 
 
-            return new SequentialCommandGroup( 
+            return new SequentialCommandGroup(
                 new MoveArm(m_ArmMove,0,0),
                 new Shoot(m_ArmMove,1,0.5),
                 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -138,9 +138,9 @@ public class AutoList {
                 new Shoot(m_ArmMove, 1, 0.5), //shoot preloaded note
 
                 new ParallelCommandGroup(
-                    drive1,
-                    new ArmMoveRotations(m_ArmMove, m_robotDrive, 0)
-                ), //dirve course 1 and reset arm position and intake note
+                    drive1
+                    ), //dirve course 1 and reset arm position and intake note
+                new ArmMoveRotations(m_ArmMove, m_robotDrive, 0.37),
                     
                 new MoveArm(m_ArmMove, 0, 1),
 
@@ -148,10 +148,10 @@ public class AutoList {
                 new Shoot(m_ArmMove, 1, 0.5), //shoot
 
                 new ParallelCommandGroup(
-                    drive2, 
-                    new ArmMoveRotations(m_ArmMove, m_robotDrive, 0)
+                    drive2
                 ), //drive course 2 and reset arm position and intake note
                     
+                new ArmMoveRotations(m_ArmMove, m_robotDrive, 0.37),
                 new MoveArm(m_ArmMove, 0, 1),
 
                 //drive2back, //drive back from course 2

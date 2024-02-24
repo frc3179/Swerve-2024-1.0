@@ -17,8 +17,16 @@ public class JoysticArm extends CommandBase{
     private Supplier<Boolean> invertintake;
     private Supplier<Boolean> climberSpeed;
     private Supplier<Boolean> climberInvert;
+    
+    public JoysticArm(
+        ArmSubsystem m_ArmSubsystem, 
+        ClimbingSubsystem m_climber, 
+        Supplier<Double> upDownSpeed, 
+        Supplier<Boolean> intakespeed, 
+        Supplier<Boolean> invertintake, 
+        Supplier<Boolean> climbSpeed, 
+        Supplier<Boolean> climbInvert){
 
-    public JoysticArm(ArmSubsystem m_ArmSubsystem, ClimbingSubsystem m_climber, Supplier<Double> upDownSpeed, Supplier<Boolean> intakespeed, Supplier<Boolean> invertintake, Supplier<Boolean> climbSpeed, Supplier<Boolean> climbInvert){
         this.m_ArmSubsystem = m_ArmSubsystem;
         this.intakespeed = intakespeed;
         this.upDownSpeed = upDownSpeed;
@@ -40,7 +48,7 @@ public class JoysticArm extends CommandBase{
         intakeSpeed = m_ArmSubsystem.intakeCheck(SmartDashboard.getNumber("IR", 0.0), intakeSpeed);
         double invert = invertintake.get() ? 1:-1;
         m_ArmSubsystem.armMove(Math.abs(upDownSpeed.get())>OIConstants.kArmDeadband? upDownSpeed.get() : 0, 0, invert*intakeSpeed);
-        
+
         //climb
         double dClimbSpeed = ((climberInvert.get() ? -1:1)*(climberSpeed.get() ? -1:0));
         m_climber.climbMove(dClimbSpeed);
