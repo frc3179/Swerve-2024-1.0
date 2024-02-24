@@ -119,7 +119,7 @@ public class ArmSubsystem extends SubsystemBase{
      * In simple, it takes an encoder value and moves the arm to that value.
      * </summary>
      */
-    public void armMoveRotations(double rotations, Supplier<Double> encoder){
+    /* public void armMoveRotations(double rotations, Supplier<Double> encoder){
         while(encoder.get() > rotations+TrackingConstants.kRotationOffsetTrack || encoder.get() < rotations-TrackingConstants.kRotationOffsetTrack){
             if(rotations > encoder.get()){
                 armMove(-0.3, 0, 0);
@@ -128,7 +128,7 @@ public class ArmSubsystem extends SubsystemBase{
                 armMove(0.3, 0, 0);
             }
         }
-    }
+    } */
 
     /*
      * <summary>
@@ -141,7 +141,7 @@ public class ArmSubsystem extends SubsystemBase{
      */
     public double angleToRotations(double degAngle){
         double ans = (TrackingConstants.kEncoderTo90Deg/90)*degAngle;
-        return (TrackingConstants.kArmZeroEncoderValue-ans)+((ans)/10)+0.02;
+        return (TrackingConstants.kArmZeroEncoderValue-ans)+(SmartDashboard.getNumber("Distance", 0)/100)+0.01;
     }
 
     /*

@@ -113,7 +113,7 @@ public class RobotContainer {
     // track arm
     new JoystickButton(m_armController, 11).onTrue(
       new SequentialCommandGroup(
-        new TrackArm(m_ArmMove, m_robotDrive, () -> NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0)), 
+        new TrackArm(m_ArmMove, m_robotDrive, () -> NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0), () -> ArmSubsystem.upDownEncoder.get()), 
         new Shoot(m_ArmMove, m_robotDrive, 1, 1),
         new WaitSec(m_ArmMove, m_robotDrive, 0.5)
         )

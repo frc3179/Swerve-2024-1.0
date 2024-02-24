@@ -4,6 +4,7 @@ import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.TrackingConstants;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 
@@ -13,11 +14,13 @@ public class TrackArm extends Command{
     DriveSubsystem m_DriveSubsystem;
     double rotations;
     Supplier<Double> limeLightY;
+    Supplier<Double> encoder;
 
-    public TrackArm(ArmSubsystem m_ArmSubsystem, DriveSubsystem m_DirveSubsystem, Supplier<Double> limeLightY){
+    public TrackArm(ArmSubsystem m_ArmSubsystem, DriveSubsystem m_DirveSubsystem, Supplier<Double> limeLightY, Supplier<Double> encoder){
         this.m_ArmSubsystem = m_ArmSubsystem;
         this.m_DriveSubsystem = m_DirveSubsystem;
         this.limeLightY = limeLightY;
+        this.encoder = encoder;
         addRequirements(m_ArmSubsystem, m_DirveSubsystem);
     }
 
@@ -32,9 +35,12 @@ public class TrackArm extends Command{
     @Override
     public void execute(){
         SmartDashboard.putNumber("Goal value", rotations);
-        m_ArmSubsystem.armMoveRotations(rotations, ()->m_ArmSubsystem.upDownEncoder.getDistance());
 
-        
+        if(this.encoder.get() > this.rotations){
+            m_ArmSubsystem.armMove(this.rotations, 0, 0);
+        } else if(this.encoder.get() < this.rotations){
+            m_ArmSubsystem.armMove(-this.rotations, 0, 0);
+        }
     }
     
     @Override
@@ -46,6 +52,9 @@ public class TrackArm extends Command{
 
     @Override
     public boolean isFinished(){
-        return true;
+        if(this.encoder.get() < this.rotations+TrackingConstants.kRotationOffsetTrack && this.encoder.get() > this.rotations-TrackingConstants.kRotationOffsetTrack){
+            return true;
+        }
+        return false;
     }
 }

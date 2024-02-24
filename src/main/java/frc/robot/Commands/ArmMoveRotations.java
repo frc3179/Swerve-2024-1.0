@@ -26,7 +26,7 @@ public class ArmMoveRotations extends Command{
 
     @Override
     public void execute(){
-        m_ArmSubsystem.armMoveRotations(this.angle, ()->m_ArmSubsystem.upDownEncoder.getDistance());
+        //m_ArmSubsystem.armMoveRotations(this.angle, ()->m_ArmSubsystem.upDownEncoder.getDistance());
     }
 
     @Override

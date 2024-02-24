@@ -135,7 +135,7 @@ public class AutoList {
                 new MoveArm(m_ArmMove,0,0),
                 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-                new TrackArm(m_ArmMove, m_robotDrive, ()->NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0)),
+                new TrackArm(m_ArmMove, m_robotDrive, ()->NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0), () -> ArmSubsystem.upDownEncoder.get()),
                 new WaitSec(m_ArmMove, m_robotDrive, 0.5),
                 new Shoot(m_ArmMove, m_robotDrive ,1, 1), //shoot preloaded note
 
@@ -146,7 +146,7 @@ public class AutoList {
                     
                 new MoveArm(m_ArmMove, 0, 1),
 
-                new TrackArm(m_ArmMove, m_robotDrive, () -> NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0)), //track for arm angle
+                new TrackArm(m_ArmMove, m_robotDrive, () -> NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0), () -> ArmSubsystem.upDownEncoder.get()), //track for arm angle
                 new Shoot(m_ArmMove, m_robotDrive, 1, 0.5), //shoot
 
                 new ParallelCommandGroup(
@@ -157,7 +157,7 @@ public class AutoList {
                 new MoveArm(m_ArmMove, 0, 1),
 
                 //drive2back, //drive back from course 2
-                new TrackArm(m_ArmMove, m_robotDrive, () -> NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0)),
+                new TrackArm(m_ArmMove, m_robotDrive, () -> NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0), () -> ArmSubsystem.upDownEncoder.get()),
                 new Shoot(m_ArmMove, m_robotDrive, 1, 0.5),
 
                 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
