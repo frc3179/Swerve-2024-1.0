@@ -3,11 +3,11 @@ package frc.robot.Commands;
 import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 
-public class TrackRobot extends CommandBase{
+public class TrackRobot extends Command{
 
     DriveSubsystem m_DriveSubsystem;
     ArmSubsystem m_ArmSubsystem;

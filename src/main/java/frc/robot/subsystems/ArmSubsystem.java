@@ -3,7 +3,7 @@ package frc.robot.subsystems;
 import java.util.function.Supplier;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.Timer;
@@ -141,7 +141,7 @@ public class ArmSubsystem extends SubsystemBase{
      */
     public double angleToRotations(double degAngle){
         double ans = (TrackingConstants.kEncoderTo90Deg/90)*degAngle;
-        return (TrackingConstants.kArmZeroEncoderValue-ans)+0.04; //*NOTE: 0.04 is just a simple ofset
+        return (TrackingConstants.kArmZeroEncoderValue-ans)+((ans)/10)+0.02;
     }
 
     /*

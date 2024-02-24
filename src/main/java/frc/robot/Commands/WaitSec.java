@@ -2,11 +2,11 @@ package frc.robot.Commands;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 
-public class WaitSec extends CommandBase{
+public class WaitSec extends Command{
 
     ArmSubsystem m_ArmSubsystem;
     DriveSubsystem m_DriveSubsystem;

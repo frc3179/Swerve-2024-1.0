@@ -3,12 +3,12 @@ package frc.robot.Commands;
 import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimbingSubsystem;
 
-public class JoysticArm extends CommandBase{
+public class JoysticArm extends Command{
     
     private final ArmSubsystem m_ArmSubsystem;
     private final ClimbingSubsystem m_climber;
@@ -44,7 +44,7 @@ public class JoysticArm extends CommandBase{
 
     @Override
     public void execute(){
-        double intakeSpeed = intakespeed.get() ? 0.45:0;
+        double intakeSpeed = intakespeed.get() ? 0.4:0;
         intakeSpeed = m_ArmSubsystem.intakeCheck(SmartDashboard.getNumber("IR", 0.0), intakeSpeed);
         double invert = invertintake.get() ? 1:-1;
         m_ArmSubsystem.armMove(Math.abs(upDownSpeed.get())>OIConstants.kArmDeadband? upDownSpeed.get() : 0, 0, invert*intakeSpeed);

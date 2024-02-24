@@ -1,10 +1,10 @@
 package frc.robot.Commands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ArmSubsystem;
 
-public class MoveArm extends CommandBase{
+public class MoveArm extends Command{
     
     private final ArmSubsystem m_ArmSubsystem;
     private final double UpDownspeed;

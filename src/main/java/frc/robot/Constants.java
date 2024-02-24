@@ -4,7 +4,7 @@
 
 package frc.robot;
 
-import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkBase.IdleMode;
 
 
 import edu.wpi.first.math.geometry.Translation2d;
@@ -148,7 +148,7 @@ public final class Constants {
     public static final double kEncoderTo90Deg = 0.1334;
     public static final double kCenterOfAprilTagMeters = 2; //*NOTE: Our mesurments could be incorrect.
     public static final double kHeightOfLensOfLimeLight = 0.265;
-    public static final double kArmZeroEncoderValue = 0.378;
+    public static final double kArmZeroEncoderValue = 0.37;
   }
 
   public static final class ColorSensorConstants {

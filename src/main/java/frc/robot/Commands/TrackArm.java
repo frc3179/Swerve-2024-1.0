@@ -3,11 +3,11 @@ package frc.robot.Commands;
 import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 
-public class TrackArm extends CommandBase{
+public class TrackArm extends Command{
 
     ArmSubsystem m_ArmSubsystem;
     DriveSubsystem m_DriveSubsystem;
@@ -26,7 +26,7 @@ public class TrackArm extends CommandBase{
         m_ArmSubsystem.armMove(0, 0, 0); //reset
         m_DriveSubsystem.drive(0, 0, 0, false, false, false, false, false);
         SmartDashboard.putBoolean("Done Track", false);
-        this.rotations = m_ArmSubsystem.angleToRotations(m_ArmSubsystem.limelightToAngle(limeLightY.get()));
+        this.rotations = m_ArmSubsystem.angleToRotations(SmartDashboard.getNumber("Tracking Angle", 0));
     }
 
     @Override

@@ -1,10 +1,10 @@
 package frc.robot.Commands;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 
-public class ArmMoveRotations extends CommandBase{
+public class ArmMoveRotations extends Command{
     
     private final ArmSubsystem m_ArmSubsystem;
     private final DriveSubsystem m_DriveSubsystem;

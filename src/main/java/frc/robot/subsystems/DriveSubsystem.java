@@ -119,7 +119,7 @@ public class DriveSubsystem extends SubsystemBase {
     //Math here
     if (Math.abs(tx) > 0.5){
       //* x robot Line up
-      res_speed = -tx/100; //TODO change this to make it for rotation not line up direction to make work
+      res_speed = -tx/100;
       return res_speed;
     }
     else{

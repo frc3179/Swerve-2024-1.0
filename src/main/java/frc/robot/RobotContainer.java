@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
 import frc.robot.autos.AutoList;
@@ -107,19 +108,19 @@ public class RobotContainer {
             m_robotDrive));
     
     // shoot
-    new JoystickButton(m_armController, 1).onTrue(new Shoot(m_ArmMove, 1, 1)); //button placeholder
+    new JoystickButton(m_armController, 1).onTrue(new Shoot(m_ArmMove, m_robotDrive, 1, 1.5)); //button placeholder
     
     // track arm
     new JoystickButton(m_armController, 11).onTrue(
       new SequentialCommandGroup(
-        new TrackRobot(m_robotDrive, m_ArmMove, () -> Math.abs(NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0))<1),
-        new WaitSec(m_ArmMove, m_robotDrive, 0.2),
         new TrackArm(m_ArmMove, m_robotDrive, () -> NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0)), 
-        new Shoot(m_ArmMove, 1, 1))
+        new Shoot(m_ArmMove, m_robotDrive, 1, 1),
+        new WaitSec(m_ArmMove, m_robotDrive, 0.5)
+        )
     );
 
-    // move arm to 0
-    new JoystickButton(m_armController, 5).onTrue(new ArmMoveRotations(m_ArmMove, m_robotDrive, 0.37));
+    // move arm to auto start
+    new JoystickButton(m_armController, 5).onTrue(new ArmMoveRotations(m_ArmMove, m_robotDrive, 0.177));
   }
 
   /**

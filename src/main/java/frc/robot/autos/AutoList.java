@@ -22,6 +22,7 @@ import frc.robot.Commands.ArmMoveRotations;
 import frc.robot.Commands.MoveArm;
 import frc.robot.Commands.Shoot;
 import frc.robot.Commands.TrackArm;
+import frc.robot.Commands.WaitSec;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.GetTrajectory;
@@ -132,10 +133,11 @@ public class AutoList {
 
             return new SequentialCommandGroup(
                 new MoveArm(m_ArmMove,0,0),
-                new Shoot(m_ArmMove,1,0.5),
                 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-                new Shoot(m_ArmMove, 1, 0.5), //shoot preloaded note
+                new TrackArm(m_ArmMove, m_robotDrive, ()->NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0)),
+                new WaitSec(m_ArmMove, m_robotDrive, 0.5),
+                new Shoot(m_ArmMove, m_robotDrive ,1, 1), //shoot preloaded note
 
                 new ParallelCommandGroup(
                     drive1
@@ -145,7 +147,7 @@ public class AutoList {
                 new MoveArm(m_ArmMove, 0, 1),
 
                 new TrackArm(m_ArmMove, m_robotDrive, () -> NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0)), //track for arm angle
-                new Shoot(m_ArmMove, 1, 0.5), //shoot
+                new Shoot(m_ArmMove, m_robotDrive, 1, 0.5), //shoot
 
                 new ParallelCommandGroup(
                     drive2
@@ -156,12 +158,12 @@ public class AutoList {
 
                 //drive2back, //drive back from course 2
                 new TrackArm(m_ArmMove, m_robotDrive, () -> NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0)),
-                new Shoot(m_ArmMove, 1, 0.5),
+                new Shoot(m_ArmMove, m_robotDrive, 1, 0.5),
 
                 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                new Shoot(m_ArmMove, 0, 0.5),
+                new Shoot(m_ArmMove, m_robotDrive, 0, 0.5),
                 new MoveArm(m_ArmMove, 0, 0),
-                new Shoot(m_ArmMove, 0, 0.5)
+                new Shoot(m_ArmMove, m_robotDrive, 0, 0.5)
             );
         }
     }
