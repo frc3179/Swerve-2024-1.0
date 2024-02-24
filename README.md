@@ -23,7 +23,7 @@
 
 # Summary
    * See the following links to view each file's summary
-      * ![ArmSubsystem](Summaries/ArmSubsystemSummary.md)
+      * [ArmSubsystem](Summaries/ArmSubsystemSummary.md)
       * 
 
 # License
