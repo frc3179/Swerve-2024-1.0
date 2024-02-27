@@ -1,3 +1,4 @@
+
 package frc.robot.Commands;
 
 import java.util.function.Supplier;
@@ -29,9 +30,7 @@ public class TrackRobot extends Command{
 
     @Override
     public void execute(){
-        while(!this.done.get()){
-            m_DriveSubsystem.drive(0, 0, 0, false, false, false, true, false);
-        }
+        m_DriveSubsystem.drive(0, 0, 0, false, false, false, true, false);
     }
     
     @Override
@@ -42,6 +41,9 @@ public class TrackRobot extends Command{
 
     @Override
     public boolean isFinished(){
-        return true;
+        if(this.done.get()){
+            return true;
+        }
+        return false;
     }
 }

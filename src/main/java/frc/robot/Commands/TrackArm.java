@@ -37,9 +37,9 @@ public class TrackArm extends Command{
         SmartDashboard.putNumber("Goal value", rotations);
 
         if(this.encoder.get() > this.rotations){
-            m_ArmSubsystem.armMove(this.rotations, 0, 0);
+            m_ArmSubsystem.armMove(this.encoder.get()/1.5, 0, 0);
         } else if(this.encoder.get() < this.rotations){
-            m_ArmSubsystem.armMove(-this.rotations, 0, 0);
+            m_ArmSubsystem.armMove(-this.encoder.get()/1.5, 0, 0);
         }
     }
     

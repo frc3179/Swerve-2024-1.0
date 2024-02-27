@@ -1,6 +1,9 @@
 package frc.robot.Commands;
 
+import java.util.function.Supplier;
+
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.TrackingConstants;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 
@@ -10,11 +13,13 @@ public class ArmMoveRotations extends Command{
     private final DriveSubsystem m_DriveSubsystem;
     private double angle;
     boolean done;
+    Supplier<Double> encoder;
 
-    public ArmMoveRotations(ArmSubsystem m_ArmSubsystem, DriveSubsystem m_DriveSubsystem, double angle){
+    public ArmMoveRotations(ArmSubsystem m_ArmSubsystem, DriveSubsystem m_DriveSubsystem, double angle, Supplier<Double> encoder){
         this.m_ArmSubsystem = m_ArmSubsystem;
         this.angle = angle;
         this.m_DriveSubsystem = m_DriveSubsystem;
+        this.encoder = encoder;
         addRequirements(m_ArmSubsystem, m_DriveSubsystem);
     }
 
@@ -26,7 +31,11 @@ public class ArmMoveRotations extends Command{
 
     @Override
     public void execute(){
-        //m_ArmSubsystem.armMoveRotations(this.angle, ()->m_ArmSubsystem.upDownEncoder.getDistance());
+        if(this.encoder.get() > this.angle){
+            m_ArmSubsystem.armMove(0.15, 0, 0);
+        } else if(this.encoder.get() < this.angle){
+            m_ArmSubsystem.armMove(-0.15, 0, 0);
+        }
     }
 
     @Override
@@ -37,6 +46,9 @@ public class ArmMoveRotations extends Command{
 
     @Override
     public boolean isFinished(){
-        return true;
+        if(this.encoder.get() < this.angle+TrackingConstants.kRotationOffsetTrack && this.encoder.get() > this.angle-TrackingConstants.kRotationOffsetTrack){
+            return true;
+        }
+        return false;
     }
 }

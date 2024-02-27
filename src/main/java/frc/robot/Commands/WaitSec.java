@@ -1,3 +1,4 @@
+
 package frc.robot.Commands;
 
 import edu.wpi.first.wpilibj.Timer;
@@ -30,9 +31,8 @@ public class WaitSec extends Command{
 
     @Override
     public void execute(){
-        while(this.wTimer.get() < this.waitSec){
-            SmartDashboard.putBoolean("Wait finsihed", false);
-        }
+
+        SmartDashboard.putBoolean("Wait finsihed", false);
         SmartDashboard.putBoolean("Wait finsihed", true);
     }
     
@@ -44,6 +44,9 @@ public class WaitSec extends Command{
 
     @Override
     public boolean isFinished(){
-        return true;
+        if(this.wTimer.get() >= this.waitSec){
+            return true;
+        }
+        return false;
     }
 }

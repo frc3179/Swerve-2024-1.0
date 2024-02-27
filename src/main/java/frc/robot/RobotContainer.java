@@ -108,19 +108,24 @@ public class RobotContainer {
             m_robotDrive));
     
     // shoot
-    new JoystickButton(m_armController, 1).onTrue(new Shoot(m_ArmMove, m_robotDrive, 1, 1.5)); //button placeholder
+    new JoystickButton(m_armController, 1).onTrue(
+      new SequentialCommandGroup(
+        new ShootSpeedUp(m_ArmMove, m_robotDrive, 1, 1),
+        new Shoot(m_ArmMove, m_robotDrive, 1)
+        )
+      ); //button placeholder
     
     // track arm
     new JoystickButton(m_armController, 11).onTrue(
       new SequentialCommandGroup(
-        new TrackArm(m_ArmMove, m_robotDrive, () -> NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0), () -> ArmSubsystem.upDownEncoder.get()), 
-        new Shoot(m_ArmMove, m_robotDrive, 1, 1),
-        new WaitSec(m_ArmMove, m_robotDrive, 0.5)
+        new TrackArm(m_ArmMove, m_robotDrive, () -> NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0), () -> ArmSubsystem.upDownEncoder.get()),
+        new ShootSpeedUp(m_ArmMove, m_robotDrive, 1, 1), 
+        new Shoot(m_ArmMove, m_robotDrive, 1)
         )
     );
 
     // move arm to auto start
-    new JoystickButton(m_armController, 5).onTrue(new ArmMoveRotations(m_ArmMove, m_robotDrive, 0.177));
+    new JoystickButton(m_armController, 5).onTrue(new ArmMoveRotations(m_ArmMove, m_robotDrive, 0.177, ()->ArmSubsystem.upDownEncoder.getDistance()));
   }
 
   /**

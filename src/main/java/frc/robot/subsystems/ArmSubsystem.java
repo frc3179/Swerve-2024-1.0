@@ -82,21 +82,6 @@ public class ArmSubsystem extends SubsystemBase{
 
     /*
      * <summary>
-     * This takes all the same paramaters as the basic moving arm, adding "time" 
-     * (seconds the arm should be using the values provided). It then sends those
-     * values to the basic move arm function until the time is reached. (by the timmer)
-     * In simple, the user selects how many seconds they want the values (arm moving) to be executed for.
-     * </summary>
-     */
-    public void armMoveTime(double upDownSpeed, double shootSpeed, double intakeSpeed, double time){
-        Armtimer.restart();
-
-        while (Armtimer.get() < time){
-            armMove(upDownSpeed, shootSpeed, intakeSpeed);
-        }    }
-
-    /*
-     * <summary>
      * This takes "IR" (the IR value from the color/IR sensor) as a paramater and the "initspeed"
      * (the speed the intake will be at if the note is not intaked far enough)and uses this info 
      * to get if the note is in the intake far enough. It then returns the checked speed. 
@@ -110,25 +95,6 @@ public class ArmSubsystem extends SubsystemBase{
         
         return initSpeed;
     }
-    
-    /*
-     * <summary>
-     * This takes "rotations" (encoder value (name is misleading)) and a supplier double for "encoder" 
-     * (so we can get the most updated encoder value) and moves the arm to the encoder value provided (rotations).
-     * To move the arm we use the basic moving arm function declared at the top of this class.
-     * In simple, it takes an encoder value and moves the arm to that value.
-     * </summary>
-     */
-    /* public void armMoveRotations(double rotations, Supplier<Double> encoder){
-        while(encoder.get() > rotations+TrackingConstants.kRotationOffsetTrack || encoder.get() < rotations-TrackingConstants.kRotationOffsetTrack){
-            if(rotations > encoder.get()){
-                armMove(-0.3, 0, 0);
-            }
-            else if(rotations < encoder.get()){
-                armMove(0.3, 0, 0);
-            }
-        }
-    } */
 
     /*
      * <summary>

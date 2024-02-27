@@ -8,6 +8,7 @@ import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
 //import edu.wpi.first.cscore.VideoMode.PixelFormat;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -51,7 +52,7 @@ public class Robot extends TimedRobot {
     UsbCamera camera = CameraServer.startAutomaticCapture();
     //camera.setVideoMode(PixelFormat.kMJPEG, 180, 180, 30);
 
-
+    
 
 
     m_robotContainer = new RobotContainer();
@@ -89,6 +90,8 @@ public class Robot extends TimedRobot {
 
     //Tracking values (updated in ArmSubsystem.java)
     SmartDashboard.putNumber("Tracking Angle", ArmSubsystem.limelightToAngle(NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0)));
+
+    RobotController.setBrownoutVoltage(5.0);
 
     CommandScheduler.getInstance().run();
   }

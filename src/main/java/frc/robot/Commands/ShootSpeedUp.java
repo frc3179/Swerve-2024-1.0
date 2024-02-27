@@ -1,21 +1,23 @@
 package frc.robot.Commands;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 
-public class Shoot extends Command{
-    
+public class ShootSpeedUp extends Command{
     private final ArmSubsystem m_ArmSubsystem;
     private final DriveSubsystem m_DriveSubsystem;
     private final double speed;
     Timer aTimer = new Timer();
+    private final double waitSeconds;
 
-    public Shoot(ArmSubsystem m_ArmSubsystem, DriveSubsystem m_DriveSubsystem, double speed){
+    public ShootSpeedUp(ArmSubsystem m_ArmSubsystem, DriveSubsystem m_DriveSubsystem, double speed, double waitSeconds){
         this.m_ArmSubsystem = m_ArmSubsystem;
         this.speed = speed;
+        this.waitSeconds = waitSeconds;
         this.m_DriveSubsystem = m_DriveSubsystem;
         addRequirements(m_ArmSubsystem, m_DriveSubsystem);
     }
@@ -29,7 +31,8 @@ public class Shoot extends Command{
 
     @Override
     public void execute(){
-        m_ArmSubsystem.armMove(0, speed, -1);
+        double speedUp = (this.aTimer.get()/waitSeconds)*this.speed;
+        m_ArmSubsystem.armMove(0, speedUp, 0);
 
     }
     
@@ -41,7 +44,7 @@ public class Shoot extends Command{
 
     @Override
     public boolean isFinished(){
-        if(aTimer.get() < 1){
+        if(aTimer.get() < this.waitSeconds){
             return false;
         }
         return true;
