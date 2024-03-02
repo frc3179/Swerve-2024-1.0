@@ -1,4 +1,4 @@
-/*package frc.robot.autos;
+package frc.robot.autos;
 
 import java.util.List;
 
@@ -10,6 +10,8 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -17,13 +19,16 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.Commands.ArmMoveAngle;
+import frc.robot.Commands.ArmMoveRotations;
 import frc.robot.Commands.MoveArm;
 import frc.robot.Commands.Shoot;
+import frc.robot.Commands.ShootSpeedUp;
 import frc.robot.Commands.TrackArm;
+import frc.robot.Commands.WaitSec;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.GetTrajectory;
+import frc.robot.subsystems.TrackingSubsystem;
 
 public class AutoList {
     // Create config for trajectory
@@ -73,8 +78,8 @@ public class AutoList {
             () -> m_robotDrive.drive(0, 0, 0, false, false, false, false, false), m_robotDrive)
             .andThen(Commands.runOnce(() ->m_ArmMove.armMove(0, 0, 0), m_ArmMove))
             .andThen(swerveControllerCommand)
-            .andThen(() -> m_ArmMove.armMoveTime(0, 0, 1, 5))
-            .andThen(/*next )
+            //.andThen(() -> m_ArmMove.armMoveTime(0, 0, 1, 5))
+            .andThen(/*next */)
             .andThen(Commands.runOnce(() -> m_robotDrive.drive(0, 0, 0, false, false, false, false, false), m_robotDrive))
             .andThen(Commands.runOnce(() -> m_ArmMove.armMove(0, 0, 0), m_ArmMove));
 
@@ -84,10 +89,10 @@ public class AutoList {
 
     public static class Auto1{ //Auto1
 
-        public static Command auto1(DriveSubsystem m_robotDrive, ArmSubsystem m_ArmMove){
-            Trajectory drive1JSON = GetTrajectory.get("C:\\Users\\tamal\\OneDrive\\Desktop\\Swerve-2024-1.0\\src\\main\\deploy\\paths\\output\\Blue-Middle-1-2.wpilib.json");
-            Trajectory drive2JSON = GetTrajectory.get("C:\\Users\\tamal\\OneDrive\\Desktop\\Swerve-2024-1.0\\src\\main\\deploy\\paths\\output\\Blue-_-1-2-2-1.wpilib.json");
-            Trajectory drive2backJSON = GetTrajectory.get("C:\\Users\\tamal\\OneDrive\\Desktop\\Swerve-2024-1.0\\src\\main\\deploy\\paths\\output\\Blue-_-1-2-2-1-Back.wpilib.json");
+        public static Command auto1(DriveSubsystem m_robotDrive, ArmSubsystem m_ArmMove, TrackingSubsystem m_TrackingSubsystem){
+            Trajectory drive1JSON = GetTrajectory.get("/home/lvuser/deploy/paths/output/Blue-Middle-1-2.wpilib.json");
+            Trajectory drive2JSON = GetTrajectory.get("/home/lvuser/deploy/paths/output/Blue-_-1-2-2-1.wpilib.json");
+            Trajectory drive2backJSON = GetTrajectory.get("/home/lvuser/deploy/paths/output/Blue-_-1-2-2-1-Back.wpilib.json");
 
             var thetaController = new ProfiledPIDController(
             AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
@@ -129,38 +134,41 @@ public class AutoList {
             m_robotDrive);
 
 
-            return new SequentialCommandGroup( 
+            return new SequentialCommandGroup(
                 new MoveArm(m_ArmMove,0,0),
-                new Shoot(m_ArmMove,0),
                 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-                new Shoot(m_ArmMove, 1), //shoot preloaded note
+                new TrackArm(m_ArmMove, m_robotDrive, m_TrackingSubsystem,()->NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0), () -> ArmSubsystem.upDownEncoder.get()),
+                new WaitSec(m_ArmMove, m_robotDrive, 0.5),
+                new ShootSpeedUp(m_ArmMove, m_robotDrive, 2, 1),
+                new Shoot(m_ArmMove, m_robotDrive , 1), //shoot preloaded note
 
                 new ParallelCommandGroup(
-                    drive1,
-                    new ArmMoveAngle(m_ArmMove, 0), 
-                    new MoveArm(m_ArmMove, 0, 1)
-                ), //dirve course 1 and reset arm position and intake note
+                    drive1
+                    ), //dirve course 1 and reset arm position and intake note
+                new ArmMoveRotations(m_ArmMove, m_robotDrive, 0.37, ()->SmartDashboard.getNumber(null, 0)),
+                    
+                new MoveArm(m_ArmMove, 0, 1),
 
-                new TrackArm(m_ArmMove), //track for arm angle
-                new Shoot(m_ArmMove, 1), //shoot
+                new TrackArm(m_ArmMove, m_robotDrive, m_TrackingSubsystem, () -> NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0), () -> ArmSubsystem.upDownEncoder.get()), //track for arm angle
+                new ShootSpeedUp(m_ArmMove, m_robotDrive, 1, 1),
+                new Shoot(m_ArmMove, m_robotDrive, 1), //shoot
 
                 new ParallelCommandGroup(
-                    drive2, 
-                    new ArmMoveAngle(m_ArmMove, 0), 
-                    new MoveArm(m_ArmMove, 0, 1)
+                    drive2
                 ), //drive course 2 and reset arm position and intake note
+                    
+                new ArmMoveRotations(m_ArmMove, m_robotDrive, 0.37, ()->ArmSubsystem.upDownEncoder.getDistance()),
+                new MoveArm(m_ArmMove, 0, 1),
 
-                drive2back, //drive back from course 2
-                new TrackArm(m_ArmMove),
-                new Shoot(m_ArmMove, 1),
+                //drive2back, //drive back from course 2
+                new TrackArm(m_ArmMove, m_robotDrive, m_TrackingSubsystem, () -> NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0), () -> ArmSubsystem.upDownEncoder.get()),
+                new ShootSpeedUp(m_ArmMove, m_robotDrive, 1, 1),
+                new Shoot(m_ArmMove, m_robotDrive, 1),
 
                 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                new Shoot(m_ArmMove, 0),
-                new MoveArm(m_ArmMove, 0, 0),
-                new Shoot(m_ArmMove, 0)
+                new MoveArm(m_ArmMove, 0, 0)
             );
         }
     }
 }
-*/

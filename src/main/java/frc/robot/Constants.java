@@ -4,7 +4,7 @@
 
 package frc.robot;
 
-import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkBase.IdleMode;
 
 
 import edu.wpi.first.math.geometry.Translation2d;
@@ -125,7 +125,7 @@ public final class Constants {
     public static final double kDriveDeadband = 0.1;
 
     public static final int kArmControllerPort = 1;
-    public static final double kArmDeadband = 0.1;
+    public static final double kArmDeadband = 0.19;
   }
 
   public static final class ArmConstants {
@@ -134,8 +134,21 @@ public final class Constants {
     public static final int kLeftShootMotorPort = 11;
     public static final int kRightShootMotorPort = 12;
     public static final int kIntakeMotorPort = 0;
+    public static final int kArmEncoderPort = 0;
+    public static final double kRestingArmEnc = 0.2; //TODO: Change this
+  }
 
-    public static final int kRotationOffsetTrack = 5;
+  public static final class ClimbingConstants {
+    public static final int kLeftClimbPort = 13;
+    public static final int kRightClimbPort = 14;
+  }
+  
+  public static final class TrackingConstants {
+    public static final double kRotationOffsetTrack = 0.0004;
+    public static final double kEncoderTo90Deg = 0.1334;
+    public static final double kCenterOfAprilTagMeters = 2; //*NOTE: Our mesurments could be incorrect.
+    public static final double kHeightOfLensOfLimeLight = 0.265;
+    public static final double kArmZeroEncoderValue = 0.37;
   }
 
   public static final class ColorSensorConstants {

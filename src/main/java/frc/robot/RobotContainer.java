@@ -7,20 +7,22 @@ package frc.robot;
 import com.revrobotics.ColorSensorV3;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.Commands.JoysticArm;
-import frc.robot.Commands.MoveArm;
-import frc.robot.Commands.Shoot;
-//import frc.robot.Commands.TrackArm;
 import frc.robot.Constants.OIConstants;
-//import frc.robot.autos.AutoList;
+import frc.robot.autos.AutoList;
 import frc.robot.autos.PickAuto;
 import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ClimbingSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.TrackingSubsystem;
+import frc.robot.Commands.*;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -32,6 +34,8 @@ public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final ArmSubsystem m_ArmMove = new ArmSubsystem();
+  private final ClimbingSubsystem m_climber = new ClimbingSubsystem();
+  private final TrackingSubsystem m_TrackingSubsystem = new TrackingSubsystem();
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -60,18 +64,60 @@ public class RobotContainer {
                 -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
-                m_driverController.getAButton(),
-                true, 
+                m_driverController.getRawButton(4),
+                !m_driverController.getRightBumper(), 
                 !(Math.abs(m_driverController.getRightTriggerAxis())>=0.36), //rate limit
-                false,
+                m_driverController.getAButton(),
                 (Math.abs(m_driverController.getLeftTriggerAxis())>=0.31)), //half speed
             m_robotDrive));
     
 
-    m_ArmMove.setDefaultCommand(
-      new JoysticArm(m_ArmMove, () -> m_armController.getRawAxis(1), () ->  m_armController.getRawButton(2), () -> m_armController.getRawButton(6))
-    );
+            /* ArmSubsystem m_ArmSubsystem, 
+        ClimbingSubsystem m_climber, 
+        Supplier<Double> upDownSpeed, 
+        Supplier<Boolean> intakespeed, 
+        Supplier<Boolean> invertintake, 
+        Supplier<Boolean> climbSpeed, 
+        Supplier<Boolean> climbInvert,
+        Supplier<Boolean> OverRideIntakeCheck,
+        //Tracking
+        TrackingSubsystem m_TrackingSubsystem,
+        Supplier<Double> ty,
+        Supplier<Double> encoder,
+        double shootSpeed,
+        Supplier<Boolean> override */
 
+    m_ArmMove.setDefaultCommand(
+      new JoysticArm(
+        m_ArmMove, 
+        m_climber, 
+        () -> m_armController.getRawAxis(1), 
+        () ->  m_armController.getRawButton(2), 
+        () -> m_armController.getRawButton(9), 
+        () -> m_armController.getRawButton(7), 
+        () -> m_armController.getRawButton(8),
+        () -> m_armController.getRawButton(4),
+        () -> m_armController.getRawButton(1),
+        m_TrackingSubsystem,
+        () -> NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0), 
+        () -> ArmSubsystem.upDownEncoder.get(), 
+        1,
+        () -> m_armController.getRawButton(12)
+        
+        )
+    );
+   
+   /*  m_TrackingSubsystem.setDefaultCommand(
+      new DefaultTracking(
+        m_ArmMove, 
+        m_TrackingSubsystem, 
+        () -> NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0), 
+        () -> ArmSubsystem.upDownEncoder.get(), 
+        0.5,
+        () -> m_armController.getRawButton(12)
+        )
+        
+    ); */
     
   }
 
@@ -92,33 +138,26 @@ public class RobotContainer {
             () -> m_robotDrive.setX(),
             m_robotDrive));
     
-
-    // Track robot
-    new JoystickButton(m_driverController, 4)
-        .whileTrue(new RunCommand(
-            () -> m_robotDrive.drive(
-                0,
-                 0,
-                 0, 
-                 false, 
-                 false, 
-                 false,
-                 true,
-                 false), 
-            m_robotDrive));
-
-    // Path Weaver
-    /*new JoystickButton(m_driverController, 5) //left bumper
-        .whileTrue(new RunCommand(
-            () -> AutoList.Auto1.auto1(m_robotDrive, m_ArmMove), 
-            m_robotDrive));*/
-    
     // shoot
-    new JoystickButton(m_armController, 1).whileTrue(new Shoot(m_ArmMove, 1));
-
-
+    /* new JoystickButton(m_armController, 1).onTrue(
+      new Shoot(m_ArmMove, m_robotDrive, 1)
+      ); */
+    
     // track arm
-    //new JoystickButton(m_armController, 2).whileTrue(new TrackArm(m_ArmMove)); //can edit this
+    new JoystickButton(m_armController, 11).onTrue(
+      new SequentialCommandGroup(
+        new TrackArm(m_ArmMove, m_robotDrive, m_TrackingSubsystem,() -> NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0), () -> ArmSubsystem.upDownEncoder.get()),
+        new ShootSpeedUp(m_ArmMove, m_robotDrive, 1, 1)
+        //new Shoot(m_ArmMove, m_robotDrive, 1)
+        )
+    );
+
+    // move arm to auto start
+    new JoystickButton(m_armController, 5).onTrue(new ArmMoveRotations(m_ArmMove, m_robotDrive, 0.177, ()->ArmSubsystem.upDownEncoder.getDistance()));
+    new JoystickButton(m_armController, 3).onTrue(new ArmMoveRotations(m_ArmMove, m_robotDrive, 0.15, ()->ArmSubsystem.upDownEncoder.getDistance()));
+
+    //Joystick button to rotate robot to 180 deg
+    new JoystickButton(m_driverController, 5).onTrue(new RotateRobot(m_robotDrive, 180, 0.2));
   }
 
   /**
@@ -127,6 +166,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return m_pickauto.run(m_robotDrive, m_ArmMove);
+    return m_pickauto.run(m_robotDrive, m_ArmMove, m_TrackingSubsystem);
   }
 }
