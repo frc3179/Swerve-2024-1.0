@@ -3,6 +3,7 @@ package frc.robot.autos;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.TrackingSubsystem;
 import frc.robot.Robot;
 
 /*
@@ -25,11 +26,11 @@ public class PickAuto {
      * run that auto and returns it to run it.
      * </summary>
      */
-    public Command run(DriveSubsystem m_robotDrive, ArmSubsystem m_ArmMove){
+    public Command run(DriveSubsystem m_robotDrive, ArmSubsystem m_ArmMove, TrackingSubsystem m_TrackingSubsystem){
         String picked = Robot.m_chooser.getSelected();
         switch(picked){
             case Robot.kAuto1:
-                return AutoList.Auto1.auto1(m_robotDrive, m_ArmMove);
+                return AutoList.Auto1.auto1(m_robotDrive, m_ArmMove, m_TrackingSubsystem);
         }
         
         //default

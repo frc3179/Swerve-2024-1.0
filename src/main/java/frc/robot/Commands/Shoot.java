@@ -2,7 +2,6 @@ package frc.robot.Commands;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 
@@ -22,6 +21,7 @@ public class Shoot extends Command{
 
     @Override
     public void initialize(){
+        m_ArmSubsystem.armMove(0, speed,0);
         m_DriveSubsystem.drive(0, 0, 0, false, false, false, false, false);
         m_ArmSubsystem.armMove(0, 0, 0); //reset
         aTimer.restart();

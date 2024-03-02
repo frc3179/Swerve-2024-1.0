@@ -18,7 +18,7 @@ public class TrackRobot extends Command{
         this.m_DriveSubsystem = m_DirveSubsystem;
         this.m_ArmSubsystem = m_ArmSubsystem;
         this.done = done;
-        addRequirements(m_DirveSubsystem);
+        addRequirements(m_DirveSubsystem, m_ArmSubsystem);
     }
 
     @Override

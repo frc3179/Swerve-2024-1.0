@@ -28,6 +28,7 @@ import frc.robot.Commands.WaitSec;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.GetTrajectory;
+import frc.robot.subsystems.TrackingSubsystem;
 
 public class AutoList {
     // Create config for trajectory
@@ -88,10 +89,10 @@ public class AutoList {
 
     public static class Auto1{ //Auto1
 
-        public static Command auto1(DriveSubsystem m_robotDrive, ArmSubsystem m_ArmMove){
-            Trajectory drive1JSON = GetTrajectory.get("C:/Users/tamal/Swerve-2024-1.0/src/main/deploy/paths/output/Blue-Middle-1-2.wpilib.json");
-            Trajectory drive2JSON = GetTrajectory.get("C:/Users/tamal/Swerve-2024-1.0/src/main/deploy/paths/output/Blue-_-1-2-2-1.wpilib.json");
-            Trajectory drive2backJSON = GetTrajectory.get("C:/Users/tamal/Swerve-2024-1.0/src/main/deploy/paths/output/Blue-_-1-2-2-1-Back.wpilib.json");
+        public static Command auto1(DriveSubsystem m_robotDrive, ArmSubsystem m_ArmMove, TrackingSubsystem m_TrackingSubsystem){
+            Trajectory drive1JSON = GetTrajectory.get("/home/lvuser/deploy/paths/output/Blue-Middle-1-2.wpilib.json");
+            Trajectory drive2JSON = GetTrajectory.get("/home/lvuser/deploy/paths/output/Blue-_-1-2-2-1.wpilib.json");
+            Trajectory drive2backJSON = GetTrajectory.get("/home/lvuser/deploy/paths/output/Blue-_-1-2-2-1-Back.wpilib.json");
 
             var thetaController = new ProfiledPIDController(
             AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
@@ -137,7 +138,7 @@ public class AutoList {
                 new MoveArm(m_ArmMove,0,0),
                 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-                new TrackArm(m_ArmMove, m_robotDrive, ()->NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0), () -> ArmSubsystem.upDownEncoder.get()),
+                new TrackArm(m_ArmMove, m_robotDrive, m_TrackingSubsystem,()->NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0), () -> ArmSubsystem.upDownEncoder.get()),
                 new WaitSec(m_ArmMove, m_robotDrive, 0.5),
                 new ShootSpeedUp(m_ArmMove, m_robotDrive, 2, 1),
                 new Shoot(m_ArmMove, m_robotDrive , 1), //shoot preloaded note
@@ -149,7 +150,7 @@ public class AutoList {
                     
                 new MoveArm(m_ArmMove, 0, 1),
 
-                new TrackArm(m_ArmMove, m_robotDrive, () -> NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0), () -> ArmSubsystem.upDownEncoder.get()), //track for arm angle
+                new TrackArm(m_ArmMove, m_robotDrive, m_TrackingSubsystem, () -> NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0), () -> ArmSubsystem.upDownEncoder.get()), //track for arm angle
                 new ShootSpeedUp(m_ArmMove, m_robotDrive, 1, 1),
                 new Shoot(m_ArmMove, m_robotDrive, 1), //shoot
 
@@ -161,7 +162,7 @@ public class AutoList {
                 new MoveArm(m_ArmMove, 0, 1),
 
                 //drive2back, //drive back from course 2
-                new TrackArm(m_ArmMove, m_robotDrive, () -> NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0), () -> ArmSubsystem.upDownEncoder.get()),
+                new TrackArm(m_ArmMove, m_robotDrive, m_TrackingSubsystem, () -> NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0), () -> ArmSubsystem.upDownEncoder.get()),
                 new ShootSpeedUp(m_ArmMove, m_robotDrive, 1, 1),
                 new Shoot(m_ArmMove, m_robotDrive, 1),
 

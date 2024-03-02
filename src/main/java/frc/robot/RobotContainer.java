@@ -21,6 +21,7 @@ import frc.robot.autos.PickAuto;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimbingSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.TrackingSubsystem;
 import frc.robot.Commands.*;
 
 /*
@@ -34,6 +35,7 @@ public class RobotContainer {
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final ArmSubsystem m_ArmMove = new ArmSubsystem();
   private final ClimbingSubsystem m_climber = new ClimbingSubsystem();
+  private final TrackingSubsystem m_TrackingSubsystem = new TrackingSubsystem();
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -70,6 +72,21 @@ public class RobotContainer {
             m_robotDrive));
     
 
+            /* ArmSubsystem m_ArmSubsystem, 
+        ClimbingSubsystem m_climber, 
+        Supplier<Double> upDownSpeed, 
+        Supplier<Boolean> intakespeed, 
+        Supplier<Boolean> invertintake, 
+        Supplier<Boolean> climbSpeed, 
+        Supplier<Boolean> climbInvert,
+        Supplier<Boolean> OverRideIntakeCheck,
+        //Tracking
+        TrackingSubsystem m_TrackingSubsystem,
+        Supplier<Double> ty,
+        Supplier<Double> encoder,
+        double shootSpeed,
+        Supplier<Boolean> override */
+
     m_ArmMove.setDefaultCommand(
       new JoysticArm(
         m_ArmMove, 
@@ -78,9 +95,29 @@ public class RobotContainer {
         () ->  m_armController.getRawButton(2), 
         () -> m_armController.getRawButton(9), 
         () -> m_armController.getRawButton(7), 
-        () -> m_armController.getRawButton(8))
+        () -> m_armController.getRawButton(8),
+        () -> m_armController.getRawButton(4),
+        () -> m_armController.getRawButton(1),
+        m_TrackingSubsystem,
+        () -> NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0), 
+        () -> ArmSubsystem.upDownEncoder.get(), 
+        1,
+        () -> m_armController.getRawButton(12)
+        
+        )
     );
-
+   
+   /*  m_TrackingSubsystem.setDefaultCommand(
+      new DefaultTracking(
+        m_ArmMove, 
+        m_TrackingSubsystem, 
+        () -> NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0), 
+        () -> ArmSubsystem.upDownEncoder.get(), 
+        0.5,
+        () -> m_armController.getRawButton(12)
+        )
+        
+    ); */
     
   }
 
@@ -101,31 +138,26 @@ public class RobotContainer {
             () -> m_robotDrive.setX(),
             m_robotDrive));
     
-    // Path Weaver
-    new JoystickButton(m_driverController, 5) //left bumper
-        .whileTrue(new RunCommand(
-            () -> AutoList.Auto1.auto1(m_robotDrive, m_ArmMove), 
-            m_robotDrive));
-    
     // shoot
-    new JoystickButton(m_armController, 1).onTrue(
-      new SequentialCommandGroup(
-        new ShootSpeedUp(m_ArmMove, m_robotDrive, 1, 1),
-        new Shoot(m_ArmMove, m_robotDrive, 1)
-        )
-      ); //button placeholder
+    /* new JoystickButton(m_armController, 1).onTrue(
+      new Shoot(m_ArmMove, m_robotDrive, 1)
+      ); */
     
     // track arm
     new JoystickButton(m_armController, 11).onTrue(
       new SequentialCommandGroup(
-        new TrackArm(m_ArmMove, m_robotDrive, () -> NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0), () -> ArmSubsystem.upDownEncoder.get()),
-        new ShootSpeedUp(m_ArmMove, m_robotDrive, 1, 1), 
-        new Shoot(m_ArmMove, m_robotDrive, 1)
+        new TrackArm(m_ArmMove, m_robotDrive, m_TrackingSubsystem,() -> NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0), () -> ArmSubsystem.upDownEncoder.get()),
+        new ShootSpeedUp(m_ArmMove, m_robotDrive, 1, 1)
+        //new Shoot(m_ArmMove, m_robotDrive, 1)
         )
     );
 
     // move arm to auto start
     new JoystickButton(m_armController, 5).onTrue(new ArmMoveRotations(m_ArmMove, m_robotDrive, 0.177, ()->ArmSubsystem.upDownEncoder.getDistance()));
+    new JoystickButton(m_armController, 3).onTrue(new ArmMoveRotations(m_ArmMove, m_robotDrive, 0.15, ()->ArmSubsystem.upDownEncoder.getDistance()));
+
+    //Joystick button to rotate robot to 180 deg
+    new JoystickButton(m_driverController, 5).onTrue(new RotateRobot(m_robotDrive, 180, 0.2));
   }
 
   /**
@@ -134,6 +166,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return m_pickauto.run(m_robotDrive, m_ArmMove);
+    return m_pickauto.run(m_robotDrive, m_ArmMove, m_TrackingSubsystem);
   }
 }

@@ -134,8 +134,8 @@ public final class Constants {
     public static final int kLeftShootMotorPort = 11;
     public static final int kRightShootMotorPort = 12;
     public static final int kIntakeMotorPort = 0;
-
     public static final int kArmEncoderPort = 0;
+    public static final double kRestingArmEnc = 0.2; //TODO: Change this
   }
 
   public static final class ClimbingConstants {
