@@ -74,41 +74,28 @@ public class JoysticArm extends Command{
     }
 
     @Override
-    public void execute(){
-        //Tracking
-        if(this.Shoot.get() == true){
-            m_ArmSubsystem.armMove(0, this.shootSpeed, -1);
+    public void execute() {
+        if (Shoot.get()) {
+            m_ArmSubsystem.armMove(0, shootSpeed, -1);
         } else {
-            if(this.override.get() == true){
-                if(ty.get() > -4){
-                    double angle = m_TrackingSubsystem.limelightToAngle(this.ty.get());
-                    angle = m_TrackingSubsystem.angleToRotations(angle);
+            double intakeSpeed = intakespeed.get() ? 0.4 : 0;
+            if (OverRideIntakeCheck.get()) {
+                intakeSpeed = m_ArmSubsystem.intakeCheck(SmartDashboard.getNumber("IR", 0.0), intakeSpeed);
+            }
+            double invert = invertintake.get() ? 1 : -1;
+            m_ArmSubsystem.armMove(Math.abs(upDownSpeed.get()) > OIConstants.kArmDeadband ? upDownSpeed.get() : 0, 0, invert * intakeSpeed);
+    
+            double climbSpeed = climberInvert.get() ? -1 : 1;
+            climbSpeed *= climberSpeed.get() ? -1 : 0;
+            m_climber.climbMove(climbSpeed);
+        }
+    
+        if(this.override.get() == true) {
+            if (ty.get() > -4) {
+                double angle = m_TrackingSubsystem.limelightToAngle(this.ty.get());
+                angle = m_TrackingSubsystem.angleToRotations(angle);
 
-                    m_ArmSubsystem.armMove((this.encoder.get() - angle)*20, this.shootSpeed, 0);
-                    SmartDashboard.putNumber("goal speed", (this.encoder.get() - angle)*2);
-                } else{
-                    double intakeSpeed = intakespeed.get() ? 0.4:0;
-                    if(this.OverRideIntakeCheck.get() == false){
-                        intakeSpeed = m_ArmSubsystem.intakeCheck(SmartDashboard.getNumber("IR", 0.0), intakeSpeed);
-                    }
-                    double invert = invertintake.get() ? 1:-1;
-                    m_ArmSubsystem.armMove(Math.abs(upDownSpeed.get())>OIConstants.kArmDeadband? upDownSpeed.get() : 0, 0, invert*intakeSpeed);
-
-                    //climb
-                    double dClimbSpeed = ((climberInvert.get() ? -1:1)*(climberSpeed.get() ? -1:0));
-                    m_climber.climbMove(dClimbSpeed);
-                }
-            } else {
-                double intakeSpeed = intakespeed.get() ? 0.4:0;
-                if(this.OverRideIntakeCheck.get() == false){
-                    intakeSpeed = m_ArmSubsystem.intakeCheck(SmartDashboard.getNumber("IR", 0.0), intakeSpeed);
-                }
-                double invert = invertintake.get() ? 1:-1;
-                m_ArmSubsystem.armMove(Math.abs(upDownSpeed.get())>OIConstants.kArmDeadband? upDownSpeed.get() : 0, 0, invert*intakeSpeed);
-
-                //climb
-                double dClimbSpeed = ((climberInvert.get() ? -1:1)*(climberSpeed.get() ? -1:0));
-                m_climber.climbMove(dClimbSpeed);
+                m_ArmSubsystem.armMove((this.encoder.get() - angle)*20, limiter.calculate(this.shootSpeed), 0);
             }
         }
     }
