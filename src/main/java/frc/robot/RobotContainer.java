@@ -4,12 +4,17 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.revrobotics.ColorSensorV3;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -23,6 +28,12 @@ import frc.robot.subsystems.ClimbingSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.TrackingSubsystem;
 import frc.robot.Commands.*;
+import frc.robot.Commands.AutoCommands.*;
+import frc.robot.Commands.AutoCommands.ArmMoveRotations;
+import frc.robot.Commands.AutoCommands.RotateRobot;
+import frc.robot.Commands.AutoCommands.Shoot;
+import frc.robot.Commands.AutoCommands.ShootSpeedUp;
+import frc.robot.Commands.AutoCommands.TrackArm;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -47,11 +58,28 @@ public class RobotContainer {
   //colorsensor object
   final static ColorSensorV3 m_colorSensor = new ColorSensorV3(Constants.ColorSensorConstants.kColorSensorPort);
   
+private final SendableChooser<Command> autoChooser;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+
+     //?  JD added
+
+    // Build an auto chooser. This will use Commands.none() as the default option.
+    autoChooser = AutoBuilder.buildAutoChooser();
+
+    // Another option that allows you to specify the default auto by its name
+    // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
+
+    SmartDashboard.putData("Auto Chooser", autoChooser);
+
+  //! Register Named Commands for Path Planner 
+  NamedCommands.registerCommand("TrackArm", new TrackArm(m_ArmMove, m_robotDrive, m_TrackingSubsystem, null, null));
+  NamedCommands.registerCommand("RotateRobot", new RunCommand(()->m_robotDrive.drive(0, 0, 0, false, false, false, true, false),m_robotDrive)); //todo Benjy do this
+  NamedCommands.registerCommand("Shoot", new Shoot(m_ArmMove, m_robotDrive, 0));
+    
     // Configure the button bindings
     configureButtonBindings();
 
@@ -166,6 +194,11 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return m_pickauto.run(m_robotDrive, m_ArmMove, m_TrackingSubsystem);
+    //return m_pickauto.run(m_robotDrive, m_ArmMove, m_TrackingSubsystem);
+    //?   JD added
+    return autoChooser.getSelected();
   }
+
+
 }
+ 

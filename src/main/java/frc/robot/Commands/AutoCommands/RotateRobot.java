@@ -7,7 +7,7 @@
 // The command ends when the error is less than a certain threshold (5 degrees in this case).
 // This threshold can be adjusted to control the rotation precision.
 
-package frc.robot.Commands;
+package frc.robot.Commands.AutoCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.DriveSubsystem;

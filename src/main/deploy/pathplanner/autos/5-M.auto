@@ -1,0 +1,86 @@
+{
+  "version": 1.0,
+  "startingPose": null,
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "M-1.2"
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 1.0
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": null
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": null
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": null
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "M-2.1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Shoot-M-F2.1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "M-2.2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Shoot-M-F2.2-US"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "M-2.3-US"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Shoot-M-F2.3-US"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Only one level",
+  "choreoAuto": false
+}

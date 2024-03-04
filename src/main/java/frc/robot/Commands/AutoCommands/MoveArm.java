@@ -1,4 +1,4 @@
-package frc.robot.Commands;
+package frc.robot.Commands.AutoCommands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;

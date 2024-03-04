@@ -1,36 +1,39 @@
 
-package frc.robot.Commands;
+package frc.robot.Commands.AutoCommands;
 
-import java.util.function.Supplier;
-
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 
-public class TrackRobot extends Command{
+public class WaitSec extends Command{
 
-    DriveSubsystem m_DriveSubsystem;
     ArmSubsystem m_ArmSubsystem;
-    Supplier<Boolean> done;
+    DriveSubsystem m_DriveSubsystem;
+    double waitSec;
+    Timer wTimer = new Timer();
 
-    public TrackRobot(DriveSubsystem m_DirveSubsystem, ArmSubsystem m_ArmSubsystem, Supplier<Boolean> done){
-        this.m_DriveSubsystem = m_DirveSubsystem;
+    public WaitSec(ArmSubsystem m_ArmSubsystem, DriveSubsystem m_DirveSubsystem, double waitSec){
         this.m_ArmSubsystem = m_ArmSubsystem;
-        this.done = done;
-        addRequirements(m_DirveSubsystem, m_ArmSubsystem);
+        this.m_DriveSubsystem = m_DirveSubsystem;
+        this.waitSec = waitSec;
+        addRequirements(m_ArmSubsystem, m_DirveSubsystem);
     }
 
     @Override
     public void initialize(){
         m_ArmSubsystem.armMove(0, 0, 0);
         m_DriveSubsystem.drive(0, 0, 0, false, false, false, false, false);
-        SmartDashboard.putBoolean("Robot Track", false);
+        this.wTimer.restart();
+        SmartDashboard.putBoolean("Wait finsihed", false);
     }
 
     @Override
     public void execute(){
-        m_DriveSubsystem.drive(0, 0, 0, false, false, false, true, false);
+
+        SmartDashboard.putBoolean("Wait finsihed", false);
+        SmartDashboard.putBoolean("Wait finsihed", true);
     }
     
     @Override
@@ -41,7 +44,7 @@ public class TrackRobot extends Command{
 
     @Override
     public boolean isFinished(){
-        if(this.done.get()){
+        if(this.wTimer.get() >= this.waitSec){
             return true;
         }
         return false;
