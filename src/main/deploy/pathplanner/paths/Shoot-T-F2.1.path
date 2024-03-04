@@ -1,0 +1,52 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.7266945363573525,
+        "y": 7.407097292341747
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 4.616610195452308,
+        "y": 6.993920989935214
+      },
+      "isLocked": false,
+      "linkedName": "Shoot-T"
+    },
+    {
+      "anchor": {
+        "x": 3.4113243837431653,
+        "y": 6.749452641333831
+      },
+      "prevControl": {
+        "x": 4.480162745070142,
+        "y": 6.976865058637443
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 3.5,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 23.025492008528094,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Shooting Pos",
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": false
+}
