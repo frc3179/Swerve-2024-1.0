@@ -17,7 +17,7 @@ public class TrackingSubsystem extends SubsystemBase{
      */
     public double angleToRotations(double degAngle){
         double ans = (TrackingConstants.kEncoderTo90Deg/90)*degAngle;
-        return (TrackingConstants.kArmZeroEncoderValue-ans)+(SmartDashboard.getNumber("Distance", 0)/100);
+        return (TrackingConstants.kArmZeroEncoderValue-ans)+(SmartDashboard.getNumber("Distance", 0)/100)-0.01;
     }
 
     /*

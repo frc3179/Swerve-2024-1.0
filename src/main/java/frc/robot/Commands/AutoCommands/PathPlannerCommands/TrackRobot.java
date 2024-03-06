@@ -1,5 +1,5 @@
 
-package frc.robot.Commands.AutoCommands;
+package frc.robot.Commands.AutoCommands.PathPlannerCommands;
 
 import java.util.function.Supplier;
 
@@ -11,37 +11,31 @@ import frc.robot.subsystems.DriveSubsystem;
 public class TrackRobot extends Command{
 
     DriveSubsystem m_DriveSubsystem;
-    ArmSubsystem m_ArmSubsystem;
-    Supplier<Boolean> done;
+    Supplier<Double> tx;
 
-    public TrackRobot(DriveSubsystem m_DirveSubsystem, ArmSubsystem m_ArmSubsystem, Supplier<Boolean> done){
+    public TrackRobot(DriveSubsystem m_DirveSubsystem, Supplier<Double> tx){
         this.m_DriveSubsystem = m_DirveSubsystem;
-        this.m_ArmSubsystem = m_ArmSubsystem;
-        this.done = done;
-        addRequirements(m_DirveSubsystem, m_ArmSubsystem);
+        addRequirements(m_DirveSubsystem);
     }
 
     @Override
     public void initialize(){
-        m_ArmSubsystem.armMove(0, 0, 0);
         m_DriveSubsystem.drive(0, 0, 0, false, false, false, false, false);
-        SmartDashboard.putBoolean("Robot Track", false);
     }
 
     @Override
     public void execute(){
-        m_DriveSubsystem.drive(0, 0, 0, false, false, false, true, false);
+        m_DriveSubsystem.drive(0, 0, -tx.get()/75, false, false, false, false, false);
     }
     
     @Override
     public void end(boolean interrupted){
-        m_ArmSubsystem.armMove(0, 0, 0);
         m_DriveSubsystem.drive(0, 0, 0, false, false, false, false, false);
     }
 
     @Override
     public boolean isFinished(){
-        if(this.done.get()){
+        if (Math.abs(tx.get()) < 0.5){
             return true;
         }
         return false;

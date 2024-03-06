@@ -6,14 +6,14 @@
     "Bottom",
     "Middle",
     "N-N",
-    "Shooting Pos",
+    "Shoot",
     "Top"
   ],
   "autoFolders": [
-    "Only one level"
+    "Only One Level"
   ],
-  "defaultMaxVel": 3.0,
-  "defaultMaxAccel": 3.0,
+  "defaultMaxVel": 1.75,
+  "defaultMaxAccel": 1.75,
   "defaultMaxAngVel": 540.0,
   "defaultMaxAngAccel": 720.0,
   "maxModuleSpeed": 4.8

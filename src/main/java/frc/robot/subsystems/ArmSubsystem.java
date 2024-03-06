@@ -64,11 +64,16 @@ public class ArmSubsystem extends SubsystemBase{
      * all the inputed and updated speeds to motor speeds.
      * </summary>
      */
+    /**
+     * @param upDownSpeed  Speed of the Up/down part of the arm (-1 to 1)
+     * @param shootSpeed    Speed of the Shooting mechanism (-1 to 1)
+     * @param intakeSpeed    Speed of the Intake mechanism (-1 to 1)
+     */
     public void armMove(double upDownSpeed, double shootSpeed, double intakeSpeed){
         LupDown.follow(RupDown, true);
 
         //check if arm is in starting position
-        if(SmartDashboard.getNumber("Arm Encoder", 0.365) >= 0.365){
+        if(upDownEncoder.get() >= 0.365){
             upDownSpeed = upDownSpeed < 0 ? 0 : upDownSpeed;
         }
 
@@ -85,6 +90,11 @@ public class ArmSubsystem extends SubsystemBase{
      * to get if the note is in the intake far enough. It then returns the checked speed. 
      * In simple, if the note is in far enough the sensor sees it and returns the value "0"
      * </summary>
+     */
+    /**
+     * @param IR            The IR Value from the Color Sensor
+     * @param initSpeed      The initial speed of the intake when the
+     * @return                Returns the checked speed of the intake
      */
     public double intakeCheck(double IR, double initSpeed){
         if(IR > 20.0){

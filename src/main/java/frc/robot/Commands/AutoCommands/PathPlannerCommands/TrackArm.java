@@ -1,4 +1,4 @@
-package frc.robot.Commands.AutoCommands;
+package frc.robot.Commands.AutoCommands.PathPlannerCommands;
 
 import java.util.function.Supplier;
 

@@ -9,12 +9,13 @@
 
 package frc.robot.Commands.AutoCommands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.DriveSubsystem;
 
 public class RotateRobot extends Command {
     private final DriveSubsystem driveTrain;
-    private final double targetAngle;
+    private double targetAngle;
     private final double rotationSpeed;
 
     // The constructor takes in the DriveSubsystem, target angle, and rotation speed.
@@ -36,9 +37,9 @@ public class RotateRobot extends Command {
     // It then rotates the robot based on the sign of the error and the specified rotation speed.
     @Override
     public void execute() {
-        double currentAngle = driveTrain.getGyroAngle();
+        double currentAngle = (driveTrain.m_gyro.getAngle() % 360 + 360) % 360;
         double error = targetAngle - currentAngle;
-        driveTrain.drive(0, 0, rotationSpeed * Math.signum(error), false, false, false, false, false);
+        driveTrain.drive(0, 0, -1*(rotationSpeed * Math.signum(error)), false, false, false, false, false);
     }
 
     // The end method sets the robot's movement to 0,0,0.
@@ -51,8 +52,8 @@ public class RotateRobot extends Command {
     // It returns true if the error is less than the threshold, indicating that the command is finished.
     @Override
     public boolean isFinished() {
-        double currentAngle = driveTrain.getGyroAngle();
+        double currentAngle = driveTrain.m_gyro.getAngle();
         double error = Math.abs(targetAngle - currentAngle);
-        return error < 5; // Adjust this value to control the rotation precision
+        return error < 10; // Adjust this value to control the rotation precision
     }
 }
