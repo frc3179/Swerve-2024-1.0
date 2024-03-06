@@ -2,6 +2,7 @@ package frc.robot.Commands.AutoCommands;
 
 import java.util.function.Supplier;
 
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
@@ -18,6 +19,7 @@ public class DefaultTracking extends Command{
     double shootSpeed = 0;
     Supplier<Double> encoder;
     Supplier<Boolean> override;
+    SlewRateLimiter limiter;
 
     public DefaultTracking(
         ArmSubsystem m_ArmSubsystem, 
@@ -38,21 +40,20 @@ public class DefaultTracking extends Command{
 
     @Override
     public void initialize(){
-        
+        limiter = new SlewRateLimiter(1/0.75);
     }
 
     @Override
     public void execute(){
-        if(this.override.get() == false){
-            if(ty.get() > 0){
+        if(this.override.get() == true){
+            if (ty.get() > -4) {
                 double angle = m_TrackingSubsystem.limelightToAngle(this.ty.get());
                 angle = m_TrackingSubsystem.angleToRotations(angle);
 
-                m_ArmSubsystem.armMove((this.encoder.get() - angle)*20, this.shootSpeed, 0);
-                SmartDashboard.putNumber("goal speed", (this.encoder.get() - angle)*2);
-            } else{
-                m_ArmSubsystem.armMove(0, 0, 0);
+                m_ArmSubsystem.armMove((this.encoder.get() - angle)*20, limiter.calculate(this.shootSpeed), 0);
             }
+        } else{
+            m_ArmSubsystem.armMove(0, 0, 0);
         }
     }
     

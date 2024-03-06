@@ -6,6 +6,7 @@ import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.OIConstants;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimbingSubsystem;
 import frc.robot.subsystems.TrackingSubsystem;
@@ -75,12 +76,11 @@ public class JoysticArm extends Command{
 
     @Override
     public void execute() {
-        if (Shoot.get()) {
-            m_ArmSubsystem.armMove(0, shootSpeed, -1);
-        } else {
-            double intakeSpeed = intakespeed.get() ? 0.4 : 0;
+            double intakeSpeed = intakespeed.get() ? 0.4 : 0; 
             if (OverRideIntakeCheck.get()) {
-                intakeSpeed = m_ArmSubsystem.intakeCheck(SmartDashboard.getNumber("IR", 0.0), intakeSpeed);
+                intakeSpeed = intakeSpeed;
+            } else {
+                intakeSpeed = m_ArmSubsystem.intakeCheck(RobotContainer.m_colorSensor.getIR(), intakeSpeed);
             }
             double invert = invertintake.get() ? 1 : -1;
             m_ArmSubsystem.armMove(Math.abs(upDownSpeed.get()) > OIConstants.kArmDeadband ? upDownSpeed.get() : 0, 0, invert * intakeSpeed);
@@ -88,14 +88,14 @@ public class JoysticArm extends Command{
             double climbSpeed = climberInvert.get() ? -1 : 1;
             climbSpeed *= climberSpeed.get() ? -1 : 0;
             m_climber.climbMove(climbSpeed);
-        }
+        
     
         if(this.override.get() == true) {
             if (ty.get() > -4) {
                 double angle = m_TrackingSubsystem.limelightToAngle(this.ty.get());
                 angle = m_TrackingSubsystem.angleToRotations(angle);
 
-                m_ArmSubsystem.armMove((this.encoder.get() - angle)*20, limiter.calculate(this.shootSpeed), 0);
+                m_ArmSubsystem.armMove((this.encoder.get() - angle)*20, limiter.calculate(this.shootSpeed), Shoot.get()? -1:0);
             }
         }
     }

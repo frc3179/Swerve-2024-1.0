@@ -56,16 +56,20 @@ public class RobotContainer {
   PickAuto m_pickauto = new PickAuto();
 
   //colorsensor object
-  final static ColorSensorV3 m_colorSensor = new ColorSensorV3(Constants.ColorSensorConstants.kColorSensorPort);
+  public final static ColorSensorV3 m_colorSensor = new ColorSensorV3(Constants.ColorSensorConstants.kColorSensorPort);
   
-private final SendableChooser<Command> autoChooser;
+  private final SendableChooser<Command> autoChooser;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
 
-     //?  JD added
+    //?  JD added
+    //! Register Named Commands for Path Planner 
+    NamedCommands.registerCommand("TrackArm", new TrackArm(m_ArmMove, m_robotDrive, m_TrackingSubsystem, null, null));
+    NamedCommands.registerCommand("RotateRobot", new RunCommand(()->m_robotDrive.drive(0, 0, 0, false, false, false, true, false),m_robotDrive)); //todo Benjy do this
+    NamedCommands.registerCommand("Shoot", new Shoot(m_ArmMove, m_robotDrive, 0));
 
     // Build an auto chooser. This will use Commands.none() as the default option.
     autoChooser = AutoBuilder.buildAutoChooser();
@@ -75,10 +79,6 @@ private final SendableChooser<Command> autoChooser;
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
 
-  //! Register Named Commands for Path Planner 
-  NamedCommands.registerCommand("TrackArm", new TrackArm(m_ArmMove, m_robotDrive, m_TrackingSubsystem, null, null));
-  NamedCommands.registerCommand("RotateRobot", new RunCommand(()->m_robotDrive.drive(0, 0, 0, false, false, false, true, false),m_robotDrive)); //todo Benjy do this
-  NamedCommands.registerCommand("Shoot", new Shoot(m_ArmMove, m_robotDrive, 0));
     
     // Configure the button bindings
     configureButtonBindings();
@@ -167,9 +167,9 @@ private final SendableChooser<Command> autoChooser;
             m_robotDrive));
     
     // shoot
-    /* new JoystickButton(m_armController, 1).onTrue(
+    new JoystickButton(m_armController, 10).onTrue(
       new Shoot(m_ArmMove, m_robotDrive, 1)
-      ); */
+      );
     
     // track arm
     new JoystickButton(m_armController, 11).onTrue(

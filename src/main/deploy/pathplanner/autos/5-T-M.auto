@@ -8,7 +8,13 @@
         {
           "type": "named",
           "data": {
-            "name": null
+            "name": "RotateRobot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "TrackArm"
           }
         },
         {
