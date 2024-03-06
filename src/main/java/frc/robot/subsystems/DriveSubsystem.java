@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
+import com.pathplanner.lib.auto.AutoBuilder;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -15,36 +16,41 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.WPIUtilJNI;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
 import frc.utils.SwerveUtils;
+import com.pathplanner.lib.util.*;
 
 public class DriveSubsystem extends SubsystemBase {
-  // Create MAXSwerveModules
-  private final MAXSwerveModule m_frontLeft = new MAXSwerveModule(
+
+     
+
+  //Create MAXSwerveModules
+  public final MAXSwerveModule m_frontLeft = new MAXSwerveModule(
       DriveConstants.kFrontLeftDrivingCanId,
       DriveConstants.kFrontLeftTurningCanId,
       DriveConstants.kFrontLeftChassisAngularOffset);
 
-  private final MAXSwerveModule m_frontRight = new MAXSwerveModule(
+  public final MAXSwerveModule m_frontRight = new MAXSwerveModule(
       DriveConstants.kFrontRightDrivingCanId,
       DriveConstants.kFrontRightTurningCanId,
       DriveConstants.kFrontRightChassisAngularOffset);
 
-  private final MAXSwerveModule m_rearLeft = new MAXSwerveModule(
+  public final MAXSwerveModule m_rearLeft = new MAXSwerveModule(
       DriveConstants.kRearLeftDrivingCanId,
       DriveConstants.kRearLeftTurningCanId,
       DriveConstants.kBackLeftChassisAngularOffset);
 
-  private final MAXSwerveModule m_rearRight = new MAXSwerveModule(
+  public final MAXSwerveModule m_rearRight = new MAXSwerveModule(
       DriveConstants.kRearRightDrivingCanId,
       DriveConstants.kRearRightTurningCanId,
       DriveConstants.kBackRightChassisAngularOffset);
 
   // The gyro sensor
-  private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
+  public final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
 
   // Slew rate filter variables for controlling lateral acceleration
   private double m_currentRotation = 0.0;
@@ -67,7 +73,36 @@ public class DriveSubsystem extends SubsystemBase {
       });
 
   /** Creates a new DriveSubsystem. */
-  public DriveSubsystem() {
+  public DriveSubsystem() {    
+
+ //?  JD added
+  // Configure AutoBuilder last
+    AutoBuilder.configureHolonomic( 
+    this::getPose, // Robot pose supplier
+    this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
+    this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+    this::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+    new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
+            new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
+            new PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
+            4.8, // Max module speed, in m/s
+            0.4, // Drive base radius in meters. Distance from robot center to furthest module.
+            new ReplanningConfig() // Default path replanning config. See the API for the options here
+    ),
+    () -> {
+      // Boolean supplier that controls when the path will be mirrored for the red alliance
+      // This will flip the path being followed to the red side of the field.
+      // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+      var alliance = DriverStation.getAlliance();
+      if (alliance.isPresent()) {
+        return alliance.get() == DriverStation.Alliance.Red;
+      }
+      return false;
+    },
+    this // Reference to this subsystem to set requirements
+    );
+
   }
 
   @Override
@@ -119,7 +154,7 @@ public class DriveSubsystem extends SubsystemBase {
     //Math here
     if (Math.abs(tx) > 0.5){
       //* x robot Line up
-      res_speed = tx/50;
+      res_speed = -tx/75;
       return res_speed;
     }
     else{
@@ -127,18 +162,32 @@ public class DriveSubsystem extends SubsystemBase {
       return res_speed;
     }
   }
-
-
-  // Track math for arm angle
-  public Double[] track_arm(double ty, double ta){
-    // ty, ta
-    Double[] res = new Double[2];
     
 
-    return res;
+  public void driveRobotRelative(ChassisSpeeds speeds){
+    drive(speeds, false);
+}
+
+  public void drive(ChassisSpeeds speeds,boolean fieldRelative){
+      if(fieldRelative)
+          speeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds, getPose().getRotation());
+      var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(speeds);
+      SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
+      setModuleStates(swerveModuleStates);
+}
+
+  public ChassisSpeeds getRobotRelativeSpeeds(){
+      return DriveConstants.kDriveKinematics.toChassisSpeeds(getModuleStates());
+}
+
+  public SwerveModuleState[] getModuleStates(){
+     return new SwerveModuleState[]{
+         m_frontLeft.getState(),
+         m_frontRight.getState(),
+          m_rearLeft.getState(),
+         m_rearRight.getState()
+      };
   }
-
-
   /**
    * Method to drive the robot using joystick info.
    *
@@ -150,21 +199,32 @@ public class DriveSubsystem extends SubsystemBase {
    * @param rateLimit     Whether to enable rate limiting for smoother control.
    */
 
-  public void drive(double xSpeed, double ySpeed, double rot, boolean resetGyro, boolean fieldRelative, boolean rateLimit, boolean trackRobot) {
+  public void drive(double xSpeed, double ySpeed, double rot, boolean resetGyro, boolean fieldRelative, boolean rateLimit, boolean trackRobot, boolean slowForJD) {
 
     double xSpeedCommanded;
     double ySpeedCommanded;
 
     //Gryo reset
-    SmartDashboard.putNumber("GyroHeading", m_gyro.getAngle());
+    SmartDashboard.putNumber("GyroHeading", m_gyro.getAngle()); 
     if (resetGyro){
       m_gyro.reset();
     }
 
-    //Track method call
+    //Track method call this is for the x of the robot tracking
     if (trackRobot){
-      ySpeed = track_robot(SmartDashboard.getNumber("Limelight tx", 0));
+      rot = track_robot(SmartDashboard.getNumber("Limelight tx", 0));
+      if(Math.abs(SmartDashboard.getNumber("Limelight tx", 0)) < 1){
+        SmartDashboard.putBoolean("Robot Track", true);
+      }
     }
+
+    //half the input speed for each direction includding the turn 
+    if (slowForJD){
+      xSpeed /= 4;
+      ySpeed /= 4;
+      rot /= 4;
+    }
+
 
 
     if (rateLimit) {
@@ -276,6 +336,18 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public double getHeading() {
     return Rotation2d.fromDegrees(m_gyro.getAngle()).getDegrees();
+  }
+
+  /**
+   * <summary>
+   * Gets the gryo angle. 
+   * This is only for using gryo values in commands so m_gryo does not have to be public.
+   * </summary>
+   * 
+   * @return the gryo angle values in degrees
+  */
+  public double getGyroAngle() {
+    return m_gyro.getAngle();
   }
 
   /**

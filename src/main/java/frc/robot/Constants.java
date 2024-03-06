@@ -4,13 +4,14 @@
 
 package frc.robot;
 
-import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkBase.IdleMode;
 
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.I2C;
 
 
 /**
@@ -37,9 +38,9 @@ public final class Constants {
     public static final double kRotationalSlewRate = 2.0; // percent per second (1 = 100%)
 
     // Chassis configuration
-    public static final double kTrackWidth = Units.inchesToMeters(22.88);
+    public static final double kTrackWidth = Units.inchesToMeters(28.5);
     // Distance between centers of right and left wheels on robot
-    public static final double kWheelBase = Units.inchesToMeters(19.5);
+    public static final double kWheelBase = Units.inchesToMeters(24.5);
     // Distance between front and back wheels on robot
     public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
         new Translation2d(kWheelBase / 2, kTrackWidth / 2),
@@ -58,6 +59,7 @@ public final class Constants {
     public static final int kRearLeftDrivingCanId = 3;
     public static final int kFrontRightDrivingCanId = 5;
     public static final int kRearRightDrivingCanId = 7;
+
 
     public static final int kFrontLeftTurningCanId = 2;
     public static final int kRearLeftTurningCanId = 4;
@@ -123,7 +125,34 @@ public final class Constants {
     public static final double kDriveDeadband = 0.1;
 
     public static final int kArmControllerPort = 1;
-    public static final double kArmDeadband = 0.05;
+    public static final double kArmDeadband = 0.19;
+  }
+
+  public static final class ArmConstants {
+    public static final int kLUpDownMotorPort = 9;
+    public static final int kRUpDownMotorPort = 10;
+    public static final int kLeftShootMotorPort = 11;
+    public static final int kRightShootMotorPort = 12;
+    public static final int kIntakeMotorPort = 0;
+    public static final int kArmEncoderPort = 0;
+    public static final double kRestingArmEnc = 0.365;
+  }
+
+  public static final class ClimbingConstants {
+    public static final int kLeftClimbPort = 13;
+    public static final int kRightClimbPort = 14;
+  }
+  
+  public static final class TrackingConstants {
+    public static final double kRotationOffsetTrack = 0.0004;
+    public static final double kEncoderTo90Deg = 0.1334;
+    public static final double kCenterOfAprilTagMeters = 2; //*NOTE: Our mesurments could be incorrect.
+    public static final double kHeightOfLensOfLimeLight = 0.265;
+    public static final double kArmZeroEncoderValue = 0.37;
+  }
+
+  public static final class ColorSensorConstants {
+    public static final I2C.Port kColorSensorPort = I2C.Port.kOnboard;
   }
 
 

@@ -1,0 +1,52 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.741921726163711,
+        "y": 2.406710272124358
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 4.616933017451181,
+        "y": 0.5483590753110659
+      },
+      "isLocked": false,
+      "linkedName": "2.4"
+    },
+    {
+      "anchor": {
+        "x": 2.540491687094027,
+        "y": 3.544647353539133
+      },
+      "prevControl": {
+        "x": 2.7134144159623936,
+        "y": 3.4015326544682085
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Shoot-B"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 3.5,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -38.39516450324602,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Shoot",
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": false
+}
