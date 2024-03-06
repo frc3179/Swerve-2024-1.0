@@ -3,29 +3,45 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.713287205655309,
-        "y": 4.104460852895022
+        "x": 1.446441234748696,
+        "y": 5.511479627418379
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.679078552133237,
-        "y": 3.9303131770913065
+        "x": 4.652187180888912,
+        "y": 5.239344421350139
       },
       "isLocked": false,
-      "linkedName": "2.3"
+      "linkedName": "Middle"
     },
     {
       "anchor": {
-        "x": 3.75282047591393,
-        "y": 5.253741248424036
+        "x": 5.217568948759869,
+        "y": 4.275380177517597
       },
       "prevControl": {
-        "x": 4.282210764916379,
-        "y": 5.109577459107112
+        "x": 4.6756044702394215,
+        "y": 4.449832262878762
+      },
+      "nextControl": {
+        "x": 6.808790892561141,
+        "y": 3.7631842728590494
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.730743520942037,
+        "y": 5.749138527178788
+      },
+      "prevControl": {
+        "x": 7.28001112484471,
+        "y": 5.777821497839527
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Shoot-M"
+      "linkedName": "2.2"
     }
   ],
   "rotationTargets": [],
@@ -39,11 +55,11 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -6.554913157692257,
+    "rotation": 0.0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Shoot",
+  "folder": "Middle",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

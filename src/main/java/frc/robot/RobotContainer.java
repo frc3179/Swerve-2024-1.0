@@ -71,7 +71,8 @@ private final SendableChooser<Command> autoChooser;
       *[x] - Move arm down to intake Turn intake on, then drive forward slowly until note it deteced by color sensor
       *[x] - Track Arm
       *[x] - Shoot 
-
+      *[] - Move arm down to ground
+ 
     */
     //*DONE:
     //Track Arm
@@ -122,8 +123,6 @@ private final SendableChooser<Command> autoChooser;
     );
 
     
-    //?  JD added
-    //! Register Named Commands for Path Planner 
 
     // Build an auto chooser. This will use Commands.none() as the default option.
     autoChooser = AutoBuilder.buildAutoChooser();
