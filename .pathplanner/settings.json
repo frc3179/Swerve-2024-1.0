@@ -6,11 +6,11 @@
     "Bottom",
     "Middle",
     "N-N",
-    "Shooting Pos",
+    "Shoot",
     "Top"
   ],
   "autoFolders": [
-    "Only one level"
+    "Only One Level"
   ],
   "defaultMaxVel": 1.75,
   "defaultMaxAccel": 1.75,
