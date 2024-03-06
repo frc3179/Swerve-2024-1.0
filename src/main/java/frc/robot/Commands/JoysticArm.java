@@ -6,7 +6,6 @@ import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.OIConstants;
-import frc.robot.RobotContainer;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimbingSubsystem;
 import frc.robot.subsystems.TrackingSubsystem;
@@ -22,12 +21,6 @@ public class JoysticArm extends Command{
     private Supplier<Boolean> climberInvert;
     private Supplier<Boolean> OverRideIntakeCheck;
     Supplier<Boolean> Shoot;
-
-    TrackingSubsystem m_TrackingSubsystem;
-    Supplier<Double> ty;
-    Supplier<Double> encoder;
-    double shootSpeed;
-    Supplier<Boolean> override;
     
     SlewRateLimiter limiter;
 
@@ -39,14 +32,7 @@ public class JoysticArm extends Command{
         Supplier<Boolean> invertintake, 
         Supplier<Boolean> climbSpeed, 
         Supplier<Boolean> climbInvert,
-        Supplier<Boolean> OverRideIntakeCheck,
-        Supplier<Boolean> Shoot,
-        //Tracking
-        TrackingSubsystem m_TrackingSubsystem,
-        Supplier<Double> ty,
-        Supplier<Double> encoder,
-        double shootSpeed,
-        Supplier<Boolean> override){
+        Supplier<Boolean> OverRideIntakeCheck){
 
         this.m_ArmSubsystem = m_ArmSubsystem;
         this.intakespeed = intakespeed;
@@ -56,17 +42,8 @@ public class JoysticArm extends Command{
         this.climberSpeed = climbSpeed;
         this.climberInvert = climbInvert;
         this.OverRideIntakeCheck = OverRideIntakeCheck;
-        this.Shoot = Shoot;
 
-        this.m_TrackingSubsystem = m_TrackingSubsystem;
-        this.ty = ty;
-        this.encoder = encoder;
-        this.shootSpeed = shootSpeed;
-        this.override = override;
-
-        
-
-        addRequirements(m_ArmSubsystem, m_climber, m_TrackingSubsystem);
+        addRequirements(m_ArmSubsystem, m_climber);
     }
 
     @Override
@@ -76,28 +53,25 @@ public class JoysticArm extends Command{
 
     @Override
     public void execute() {
-            double intakeSpeed = intakespeed.get() ? 0.4 : 0; 
-            if (OverRideIntakeCheck.get()) {
-                intakeSpeed = intakeSpeed;
-            } else {
-                intakeSpeed = m_ArmSubsystem.intakeCheck(RobotContainer.m_colorSensor.getIR(), intakeSpeed);
-            }
-            double invert = invertintake.get() ? 1 : -1;
-            m_ArmSubsystem.armMove(Math.abs(upDownSpeed.get()) > OIConstants.kArmDeadband ? upDownSpeed.get() : 0, 0, invert * intakeSpeed);
+        double intakeSpeed = intakespeed.get() ? 0.4 : 0;
+        if (OverRideIntakeCheck.get()) {
+            intakeSpeed = m_ArmSubsystem.intakeCheck(SmartDashboard.getNumber("IR", 0.0), intakeSpeed);
+        }
+        double invert = invertintake.get() ? 1 : -1;
+        m_ArmSubsystem.armMove(Math.abs(upDownSpeed.get()) > OIConstants.kArmDeadband ? upDownSpeed.get() : 0, 0, invert * intakeSpeed);
+
+        double climbSpeed = climberInvert.get() ? -1 : 1;
+        climbSpeed *= climberSpeed.get() ? -1 : 0;
+        m_climber.climbMove(climbSpeed);
     
-            double climbSpeed = climberInvert.get() ? -1 : 1;
-            climbSpeed *= climberSpeed.get() ? -1 : 0;
-            m_climber.climbMove(climbSpeed);
-        
-    
-        if(this.override.get() == true) {
+        /* if(this.override.get() == true) {
             if (ty.get() > -4) {
                 double angle = m_TrackingSubsystem.limelightToAngle(this.ty.get());
                 angle = m_TrackingSubsystem.angleToRotations(angle);
 
-                m_ArmSubsystem.armMove((this.encoder.get() - angle)*20, limiter.calculate(this.shootSpeed), Shoot.get()? -1:0);
+                m_ArmSubsystem.armMove((this.encoder.get() - angle)*20, limiter.calculate(this.shootSpeed), Shoot.get()?-1:0);
             }
-        }
+        } */
     }
 
     @Override
