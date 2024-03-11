@@ -8,7 +8,38 @@
         {
           "type": "named",
           "data": {
-            "name": null
+            "name": "Track Arm"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "M-1.2"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Track Arm"
           }
         },
         {
@@ -20,25 +51,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "M-1.2"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": null
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "1.2-1.1"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": null
+            "pathName": "M-2.1"
           }
         },
         {
@@ -50,7 +63,7 @@
         {
           "type": "named",
           "data": {
-            "name": null
+            "name": "Track Arm"
           }
         },
         {
@@ -62,7 +75,7 @@
         {
           "type": "named",
           "data": {
-            "name": null
+            "name": "Shoot"
           }
         },
         {
@@ -74,7 +87,7 @@
         {
           "type": "named",
           "data": {
-            "name": null
+            "name": "Shoot"
           }
         },
         {
@@ -86,7 +99,7 @@
         {
           "type": "named",
           "data": {
-            "name": null
+            "name": "Shoot"
           }
         }
       ]

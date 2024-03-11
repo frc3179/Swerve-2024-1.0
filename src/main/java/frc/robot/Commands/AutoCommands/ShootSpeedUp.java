@@ -1,47 +1,43 @@
 package frc.robot.Commands.AutoCommands;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
+//import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.ShootingSubsystem;
 
 public class ShootSpeedUp extends Command{
-    private final ArmSubsystem m_ArmSubsystem;
-    private final DriveSubsystem m_DriveSubsystem;
     private final double speed;
     Timer aTimer = new Timer();
     private final double waitSeconds;
     private double speedUp;
+    ShootingSubsystem m_shoot;
+    SlewRateLimiter limiter;
 
-    public ShootSpeedUp(ArmSubsystem m_ArmSubsystem, DriveSubsystem m_DriveSubsystem, double speed, double waitSeconds){
-        this.m_ArmSubsystem = m_ArmSubsystem;
+    public ShootSpeedUp(ShootingSubsystem m_shoot, double speed, double waitSeconds){
         this.speed = speed;
         this.waitSeconds = waitSeconds;
-        this.m_DriveSubsystem = m_DriveSubsystem;
-        addRequirements(m_ArmSubsystem, m_DriveSubsystem);
+        this.m_shoot = m_shoot;
+        addRequirements(m_shoot);
     }
 
     @Override
     public void initialize(){
-        //m_DriveSubsystem.drive(0, 0, 0, false, false, false, false, false);
-        m_ArmSubsystem.armMove(0, 0, 0); //reset
         aTimer.restart();
+        limiter = new SlewRateLimiter(1/waitSeconds);
     }
 
     @Override
     public void execute(){
-        SlewRateLimiter limiter = new SlewRateLimiter(1.0 / this.waitSeconds);
+        //SlewRateLimiter limiter = new SlewRateLimiter(1.0 / this.waitSeconds);
         //speedUp = limiter.calculate(this.speed);
         speedUp = (this.aTimer.get()/waitSeconds)*this.speed+0.1;
-        m_ArmSubsystem.armMove(0, speedUp, 0);
+        m_shoot.ShootMove(speedUp, 0);
 
     }
     
     @Override
     public void end(boolean interrupted){
-        m_DriveSubsystem.drive(0, 0, 0, false, false, false, false, false);
-        m_ArmSubsystem.armMove(0, 0, 0);
     }
 
     @Override

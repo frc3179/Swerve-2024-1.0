@@ -2,43 +2,43 @@ package frc.robot.Commands.AutoCommands;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.ShootingSubsystem;
 
 public class Shoot extends Command{
-    
-    private final ArmSubsystem m_ArmSubsystem;
-    private final DriveSubsystem m_DriveSubsystem;
     private final double speed;
+    ShootingSubsystem m_shoot;
 
-    public Shoot(ArmSubsystem m_ArmSubsystem, DriveSubsystem m_DriveSubsystem, double speed){
-        this.m_ArmSubsystem = m_ArmSubsystem;
+    Timer sTimer = new Timer();
+
+    public Shoot(ShootingSubsystem m_shoot, double speed){
         this.speed = speed;
-        this.m_DriveSubsystem = m_DriveSubsystem;
-        addRequirements(m_ArmSubsystem, m_DriveSubsystem);
+        this.m_shoot = m_shoot;
+        addRequirements(m_shoot);
     }
 
     @Override
     public void initialize(){
-        m_ArmSubsystem.armMove(0, speed,0);
-        m_DriveSubsystem.drive(0, 0, 0, false, false, false, false, false);
-        m_ArmSubsystem.armMove(0, 0, 0); //reset
+        sTimer.restart();
+        m_shoot.ShootMove(speed, 0);
+        m_shoot.ShootMove(0, 0);
     }
 
     @Override
     public void execute(){
-        m_ArmSubsystem.armMove(0, speed, -1);
+        m_shoot.ShootMove(speed, -1);
 
     }
     
     @Override
     public void end(boolean interrupted){
-        m_DriveSubsystem.drive(0, 0, 0, false, false, false, false, false);
-        m_ArmSubsystem.armMove(0, 0, 0);
+        m_shoot.ShootMove(0,0);
     }
 
     @Override
     public boolean isFinished(){
-        return false;
+        if (sTimer.get() < 0.75){
+            return false;
+        }
+        return true;
     }
 }
