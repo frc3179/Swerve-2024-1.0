@@ -6,17 +6,15 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ShootingSubsystem;
 
-public class ShootSpeedUp extends Command{
+public class TrackingShootSpeedUp extends Command{
     private final double speed;
     Timer aTimer = new Timer();
-    private final double waitSeconds;
     private double speedUp;
     ShootingSubsystem m_shoot;
     SlewRateLimiter limiter;
 
-    public ShootSpeedUp(ShootingSubsystem m_shoot, double speed, double waitSeconds){
+    public TrackingShootSpeedUp(ShootingSubsystem m_shoot, double speed){
         this.speed = speed;
-        this.waitSeconds = waitSeconds;
         this.m_shoot = m_shoot;
         addRequirements(m_shoot);
     }
@@ -24,20 +22,14 @@ public class ShootSpeedUp extends Command{
     @Override
     public void initialize(){
         aTimer.restart();
-        limiter = new SlewRateLimiter(1/waitSeconds);
     }
 
     @Override
     public void execute(){
         //SlewRateLimiter limiter = new SlewRateLimiter(1.0 / this.waitSeconds);
         //speedUp = limiter.calculate(this.speed);
-        if(speed == 0){
-            speedUp = speed;
-        } else {
-            speedUp = (this.aTimer.get()/waitSeconds)*this.speed+0.1;
-        }
+        speedUp = (this.aTimer.get()/0.75)*this.speed+0.1;
         m_shoot.ShootMove(speedUp);
-
     }
     
     @Override
@@ -46,9 +38,6 @@ public class ShootSpeedUp extends Command{
 
     @Override
     public boolean isFinished(){
-        if(aTimer.get() < this.waitSeconds){
-            return false;
-        }
-        return true;
+        return false;
     }
 }

@@ -1,5 +1,6 @@
 package frc.robot.Commands.AutoCommands;
 
+import java.util.Timer;
 import java.util.function.Supplier;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
@@ -9,7 +10,7 @@ import frc.robot.subsystems.TrackingSubsystem;
 
 
 
-public class DefaultTracking extends Command{
+public class DefaultTrackingAuto extends Command{
     ArmSubsystem m_ArmSubsystem;
     TrackingSubsystem m_TrackingSubsystem;
     Supplier<Double> ty;
@@ -18,8 +19,10 @@ public class DefaultTracking extends Command{
     Supplier<Boolean> override;
     SlewRateLimiter limiter;
     Supplier<Boolean> Shoot;
+    double speed;
+    double angle;
 
-    public DefaultTracking(
+    public DefaultTrackingAuto(
         ArmSubsystem m_ArmSubsystem, 
         TrackingSubsystem m_TrackingSubsystem,
         Supplier<Double> ty,
@@ -39,29 +42,33 @@ public class DefaultTracking extends Command{
 
     @Override
     public void initialize(){
-        limiter = new SlewRateLimiter(1/0.75);
     }
 
     @Override
     public void execute(){
         double y = ty.get();
         if (y > -4) {
-            double angle = m_TrackingSubsystem.limelightToAngle(y);
+            angle = m_TrackingSubsystem.limelightToAngle(y);
             angle = m_TrackingSubsystem.angleToRotations(angle);
 
-            double speed = (this.encoder.get() - angle)*20;
-
-            m_ArmSubsystem.armMove(speed > 0? speed/2:speed/4);
+            speed = (this.encoder.get() - angle)*20;
+            
+            m_ArmSubsystem.armMove(speed > 0 ? speed/2 : speed/4);
         }
     }
     
     @Override
     public void end(boolean interrupted){
-        
+        m_ArmSubsystem.armMove(0);
     }
 
     @Override
     public boolean isFinished(){
+        
+        if(this.encoder.get() > angle-0.0008 && this.encoder.get() < angle+0.0008){
+            return true;
+
+        }
         return false;
     }
 }

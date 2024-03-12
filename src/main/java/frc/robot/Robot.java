@@ -4,20 +4,17 @@
 
 package frc.robot;
 
-import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.cscore.UsbCamera;
+// import edu.wpi.first.cameraserver.CameraServer;
+// import edu.wpi.first.cscore.UsbCamera;
 //import edu.wpi.first.cscore.VideoMode.PixelFormat;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.ClimbingSubsystem;
-import frc.robot.subsystems.TrackingSubsystem;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -52,7 +49,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Auto picker", m_chooser);
 
     //other camera
-    UsbCamera camera = CameraServer.startAutomaticCapture();
+    //UsbCamera camera = CameraServer.startAutomaticCapture();
     //camera.setVideoMode(PixelFormat.kMJPEG, 180, 180, 30);
 
     
@@ -84,12 +81,12 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Distance", (0.00425644*(limelightY*limelightY))-(0.188139*limelightY)+3.49207);
 
     //color sensor values
-    Color detectedColor = RobotContainer.m_colorSensor.getColor();
-    double IR = RobotContainer.m_colorSensor.getIR();
-    SmartDashboard.putNumber("Color Red", detectedColor.red);
-    SmartDashboard.putNumber("Color Green", detectedColor.green);
-    SmartDashboard.putNumber("Color Blue", detectedColor.blue);
-    SmartDashboard.putNumber("IR", IR);
+    // Color detectedColor = RobotContainer.m_colorSensor.getColor();
+    boolean IR = RobotContainer.m_IR.get();
+    // SmartDashboard.putNumber("Color Red", detectedColor.red);
+    // SmartDashboard.putNumber("Color Green", detectedColor.green);
+    // SmartDashboard.putNumber("Color Blue", detectedColor.blue);
+    SmartDashboard.putBoolean("IR new", IR);
 
     //Arm Encoder
     SmartDashboard.putNumber("Arm Encoder", ArmSubsystem.upDownEncoder.getDistance());

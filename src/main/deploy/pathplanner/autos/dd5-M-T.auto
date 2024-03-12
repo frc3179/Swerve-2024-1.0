@@ -8,79 +8,98 @@
         {
           "type": "named",
           "data": {
+            "name": "Track Arm"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "M-1.2"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Track Arm"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "Shoot"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "B-1.3"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": null
+            "pathName": "M-2.1"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "1.3-1.2"
+            "pathName": "T-2.1"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": null
+            "name": "Track Arm"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "M-2.3-US"
+            "pathName": "Shoot-T-F2.1"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": null
+            "name": "Shoot"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Shoot-M-F2.3-US"
+            "pathName": "T-2.2"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": null
+            "name": "Shoot"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "M-A2.4-US"
+            "pathName": "Shoot-T-F2.2"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": null
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Shoot-M-F2.4-US"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": null
+            "name": "Shoot"
           }
         }
       ]
