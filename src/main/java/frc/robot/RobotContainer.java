@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import com.fasterxml.jackson.databind.util.Named;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.MathUtil;
@@ -14,6 +15,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -22,17 +24,19 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimbingSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShootingSubsystem;
 import frc.robot.subsystems.TrackingSubsystem;
 import frc.robot.Commands.*;
 import frc.robot.Commands.AutoCommands.ArmMoveRotations;
 import frc.robot.Commands.AutoCommands.DefaultTracking;
 import frc.robot.Commands.AutoCommands.DefaultTrackingAuto;
+import frc.robot.Commands.AutoCommands.FeedShoot;
 import frc.robot.Commands.AutoCommands.MoveArm;
 import frc.robot.Commands.AutoCommands.RotateRobot;
 import frc.robot.Commands.AutoCommands.Shoot;
 import frc.robot.Commands.AutoCommands.ShootSpeedUp;
-import frc.robot.Commands.AutoCommands.PathPlannerCommands.PathIntake;
+import frc.robot.Commands.AutoCommands.TrackingShootSpeedUp;
 import frc.robot.Commands.AutoCommands.PathPlannerCommands.TrackRobot;
 
 /*
@@ -48,6 +52,7 @@ public class RobotContainer {
   private final ClimbingSubsystem m_climber = new ClimbingSubsystem();
   private final TrackingSubsystem m_TrackingSubsystem = new TrackingSubsystem();
   private final ShootingSubsystem m_shoot = new ShootingSubsystem();
+  private final IntakeSubsystem m_intake = new IntakeSubsystem();
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -74,30 +79,22 @@ public class RobotContainer {
  
     */
     //*DONE:
-    NamedCommands.registerCommand("new shoot", new MoveArm(m_ArmMove, m_shoot, 0.315).withTimeout(2.5));
+    NamedCommands.registerCommand("Move Arm", new MoveArm(m_ArmMove, m_shoot, 0.315).withTimeout(1.5));
+    NamedCommands.registerCommand("Reset Arm", new MoveArm(m_ArmMove, m_shoot, 0.365).withTimeout(1.5));
+    NamedCommands.registerCommand("Intake", new Intake(m_intake, () -> true, () -> false, () -> false).withTimeout(1));
     //Track Arm 
     NamedCommands.registerCommand(
       "Track Arm", 
       new DefaultTrackingAuto(m_ArmMove, m_TrackingSubsystem, () -> NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0),
-       () -> ArmSubsystem.upDownEncoder.get(), 1, null).withTimeout(2.5)
+      () -> ArmSubsystem.upDownEncoder.get(), 1, null).withTimeout(2.5)
     );
     //Shoot
     NamedCommands.registerCommand(
       "Shoot", 
       new SequentialCommandGroup(
         new ShootSpeedUp(m_shoot, 1, 1.5),
-        new Shoot(m_shoot, 1)
+        new Shoot(m_shoot, m_intake, 1)
       )
-    );
-    //Intake+Arm Move+Until Color Sensor
-    NamedCommands.registerCommand( 
-      "Intake",
-      new PathIntake(
-        m_ArmMove, 
-        m_shoot,
-        () -> m_IR.get(), 
-        () -> ArmSubsystem.upDownEncoder.get()
-        )
     );
     //Robot Rotate to 0 deg
     NamedCommands.registerCommand(
@@ -204,15 +201,23 @@ public class RobotContainer {
         Supplier<Boolean> climbSpeed, 
         Supplier<Boolean> climbInvert
          */
-    m_ArmMove.setDefaultCommand(
-      new JoysticArm(
-        m_ArmMove, 
-        m_climber,
-        () -> m_armController.getRawAxis(1), 
-        () -> m_armController.getRawButton(7), 
-        () -> m_armController.getRawButton(8)
+      m_ArmMove.setDefaultCommand(
+        new JoysticArm(
+          m_ArmMove, 
+          m_climber,
+          () -> m_armController.getRawAxis(1), 
+          () -> m_armController.getRawButton(7), 
+          () -> m_armController.getRawButton(8)
         )
-    );
+      );
+      
+      m_intake.setDefaultCommand(
+        new Intake(m_intake, () -> false,() -> false,() ->  false)
+      );
+
+      m_shoot.setDefaultCommand(
+        new ShootSpeedUp(m_shoot, 0, 0)
+      );
    
    /* m_TrackingSubsystem.setDefaultCommand(
       new DefaultTracking(
@@ -247,37 +252,37 @@ public class RobotContainer {
             m_robotDrive));
     
     // shoot
-    new JoystickButton(m_armController, 1).onTrue(
-      new SequentialCommandGroup(
-        new ShootSpeedUp(m_shoot, 1, 1.5),
-        new Shoot(m_shoot, 1)
-      )
+    new JoystickButton(m_armController, 1).whileTrue(
+        new FeedShoot(m_intake, -1)
     );
 
     new JoystickButton(m_armController, 6).onTrue(
       new SequentialCommandGroup(
         new ShootSpeedUp(m_shoot, 1, 0.75),
-        new Shoot(m_shoot, 0.5)
+        new Shoot(m_shoot, m_intake, 0.5)
       )
     );
 
     //Intake
     new JoystickButton(m_armController, 2)
       .whileTrue(
-        new Intake(m_shoot, () -> true,() -> m_armController.getRawButton(4), () -> m_armController.getRawButton(9))
+        new Intake(m_intake, () -> true,() -> m_armController.getRawButton(4), () -> m_armController.getRawButton(9))
     );
 
     // track arm
     new JoystickButton(m_armController, 11)
       .whileTrue(
-        new DefaultTracking(
+        new ParallelCommandGroup(
+          new DefaultTracking(
           m_ArmMove, 
           m_TrackingSubsystem, 
           () -> NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0),
           () -> ArmSubsystem.upDownEncoder.get(),
           1, 
           () -> m_armController.getRawButton(1)
-          )
+          ),
+          new TrackingShootSpeedUp(m_shoot, 1)
+        )
     );
 
     // move arm to auto start

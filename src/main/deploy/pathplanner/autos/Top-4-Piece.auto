@@ -14,7 +14,7 @@
         {
           "type": "named",
           "data": {
-            "name": "new shoot"
+            "name": "Move Arm"
           }
         },
         {
@@ -22,10 +22,16 @@
           "data": {
             "name": "Shoot"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Top-4-Piece"
+          }
         }
       ]
     }
   },
-  "folder": "Simple",
+  "folder": "Sub-Bump",
   "choreoAuto": false
 }
