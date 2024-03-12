@@ -11,7 +11,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.I2C;
 
 
 /**
@@ -152,7 +151,7 @@ public final class Constants {
   }
 
   public static final class ColorSensorConstants {
-    public static final I2C.Port kColorSensorPort = I2C.Port.kOnboard;
+    public static final int kColorSensorPort = 1;
   }
 
 

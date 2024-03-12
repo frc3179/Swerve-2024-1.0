@@ -25,22 +25,21 @@ public class ArmMoveRotations extends Command{
 
     @Override
     public void initialize(){
-        m_ArmSubsystem.armMove(0,0,0);
-        m_DriveSubsystem.drive(0, 0, 0, false, false, false, false, false);
+        
     }
 
     @Override
     public void execute(){
         if(this.encoder.get() > this.angle){
-            m_ArmSubsystem.armMove(0.15, 0, 0);
+            m_ArmSubsystem.armMove(0.15); 
         } else if(this.encoder.get() < this.angle){
-            m_ArmSubsystem.armMove(-0.15, 0, 0);
+            m_ArmSubsystem.armMove(-0.15); 
         }
     }
 
     @Override
     public void end(boolean interrupted){
-        m_ArmSubsystem.armMove(0,0,0);
+        m_ArmSubsystem.armMove(0); 
         m_DriveSubsystem.drive(0, 0, 0, false, false, false, false, false);
     }
 

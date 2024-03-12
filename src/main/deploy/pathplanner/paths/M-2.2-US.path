@@ -3,45 +3,45 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.741921726163711,
-        "y": 2.406710272124358
+        "x": 1.446441234748696,
+        "y": 5.511479627418379
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.453668398666277,
-        "y": 3.9065991261627446
+        "x": 4.652187180888912,
+        "y": 5.239344421350139
       },
       "isLocked": false,
-      "linkedName": "2.4"
+      "linkedName": "Middle"
     },
     {
       "anchor": {
-        "x": 4.835129339953148,
-        "y": 3.722208600486565
+        "x": 5.217568948759869,
+        "y": 4.275380177517597
       },
       "prevControl": {
-        "x": 5.360983802066697,
-        "y": 4.302697292430093
+        "x": 4.6756044702394215,
+        "y": 4.449832262878762
       },
       "nextControl": {
-        "x": 3.626982812830894,
-        "y": 2.3885403562607017
+        "x": 6.808790892561141,
+        "y": 3.7631842728590494
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.540491687094027,
-        "y": 3.544647353539133
+        "x": 7.730743520942037,
+        "y": 5.749138527178788
       },
       "prevControl": {
-        "x": 2.7134144159623936,
-        "y": 3.4015326544682085
+        "x": 7.28001112484471,
+        "y": 5.777821497839527
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Shoot-B"
+      "linkedName": "2.2"
     }
   ],
   "rotationTargets": [],
@@ -55,11 +55,11 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -38.39516450324602,
+    "rotation": 0.0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Shoot",
+  "folder": "Middle",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0
