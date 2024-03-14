@@ -1,0 +1,52 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.741921726163711,
+        "y": 2.406710272124358
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 4.832945454367666,
+        "y": 5.12219855716122
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.75282047591393,
+        "y": 5.253741248424036
+      },
+      "prevControl": {
+        "x": 4.055669647370397,
+        "y": 4.934111893533238
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Shoot-M"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 1.0,
+    "maxAcceleration": 1.0,
+    "maxAngularVelocity": 400.0,
+    "maxAngularAcceleration": 360.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -6.554913157692257,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Shoot",
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

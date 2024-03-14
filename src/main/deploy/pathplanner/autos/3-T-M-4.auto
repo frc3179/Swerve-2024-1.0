@@ -1,0 +1,154 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.2429287286320239,
+      "y": 6.938798881726583
+    },
+    "rotation": 0.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "Robot Rot 55"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Track April Tag"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Track Arm"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "T-1.1"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Robot Rot 55"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Track April Tag"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Track Arm"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "T-2.3-US"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Shoot-M-F2.3-US"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Track April Tag"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Track Arm"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "M-2.2-US"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "folder": "US",
+  "choreoAuto": false
+}
