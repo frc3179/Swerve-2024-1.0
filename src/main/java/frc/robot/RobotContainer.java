@@ -4,12 +4,11 @@
 
 package frc.robot;
 
-import com.fasterxml.jackson.databind.util.Named;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -19,290 +18,158 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.Constants.ColorSensorConstants;
+import frc.robot.Auto_Commands.ArmMoveToEncoder;
+import frc.robot.Auto_Commands.DefaultTracking;
+import frc.robot.Auto_Commands.FeedShooter;
+import frc.robot.Auto_Commands.ShootSpeedUp;
 import frc.robot.Constants.OIConstants;
-import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.ClimbingSubsystem;
-import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.ShootingSubsystem;
-import frc.robot.subsystems.TrackingSubsystem;
-import frc.robot.Commands.*;
-import frc.robot.Commands.AutoCommands.ArmMoveRotations;
-import frc.robot.Commands.AutoCommands.DefaultTracking;
-import frc.robot.Commands.AutoCommands.DefaultTrackingAuto;
-import frc.robot.Commands.AutoCommands.FeedShoot;
-import frc.robot.Commands.AutoCommands.MoveArm;
-import frc.robot.Commands.AutoCommands.RotateRobot;
-import frc.robot.Commands.AutoCommands.Shoot;
-import frc.robot.Commands.AutoCommands.ShootSpeedUp;
-import frc.robot.Commands.AutoCommands.TrackingShootSpeedUp;
-import frc.robot.Commands.AutoCommands.PathPlannerCommands.TrackRobot;
+import frc.robot.Joystick_Commands.JoystickArm;
+import frc.robot.Joystick_Commands.JoystickClimb;
+import frc.robot.Joystick_Commands.JoystickDrive;
+import frc.robot.Joystick_Commands.JoystickIntake;
+import frc.robot.Joystick_Commands.JoystickShoot;
+import frc.robot.PathPlanner_Commands.DefaultTrackingAuto;
+import frc.robot.PathPlanner_Commands.Intake;
+import frc.robot.PathPlanner_Commands.MoveArm;
+import frc.robot.Subsystems.ArmSubsystem;
+import frc.robot.Subsystems.ClimbSubsystem;
+import frc.robot.Subsystems.DriveSubsystem;
+import frc.robot.Subsystems.IntakeSubsystem;
+import frc.robot.Subsystems.ShootSubsystem;
 
-/*
- * This class is where the bulk of the robot should be declared.  Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls).  Instead, the structure of the robot
- * (including subsystems, commands, and button mappings) should be declared here.
- */
 public class RobotContainer {
-  // The robot's subsystems
-  private final DriveSubsystem m_robotDrive = new DriveSubsystem();
-  private final ArmSubsystem m_ArmMove = new ArmSubsystem();
-  private final ClimbingSubsystem m_climber = new ClimbingSubsystem();
-  private final TrackingSubsystem m_TrackingSubsystem = new TrackingSubsystem();
-  private final ShootingSubsystem m_shoot = new ShootingSubsystem();
-  private final IntakeSubsystem m_intake = new IntakeSubsystem();
+  private final ClimbSubsystem m_Climb = new ClimbSubsystem();
+  private final DriveSubsystem m_Drive = new DriveSubsystem();
+  private final IntakeSubsystem m_Intake = new IntakeSubsystem();
+  private final ArmSubsystem m_Arm = new ArmSubsystem();
+  private final ShootSubsystem m_Shoot = new ShootSubsystem();
 
-  // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   Joystick m_armController = new Joystick(OIConstants.kArmControllerPort);
 
-  //colorsensor object
-  public static DigitalInput m_IR = new DigitalInput(ColorSensorConstants.kColorSensorPort);
+  private SendableChooser<Command> autoChooser;
 
-  
- private final SendableChooser<Command> autoChooser;
-
-  /**
-   * The container for the robot. Contains subsystems, OI devices, and commands.
-   */
   public RobotContainer() {
-    /* 
-    TODO:Auto Commands
-      *[x] - Rotate robot to 0 deg
-      *[x] - Track April tag
-      *[x] - Move arm down to intake Turn intake on, then drive forward slowly until note it deteced by color sensor
-      *[x] - Track Arm
-      *[x] - Shoot 
-      *[] - Move arm down to ground
- 
-    */
-    //*DONE:
-    NamedCommands.registerCommand("Move Arm", new MoveArm(m_ArmMove, m_shoot, 0.315).withTimeout(1.5));
-    NamedCommands.registerCommand("Reset Arm", new MoveArm(m_ArmMove, m_shoot, 0.365).withTimeout(1.5));
-    NamedCommands.registerCommand("Intake", new Intake(m_intake, () -> true, () -> false, () -> false).withTimeout(1));
+    configureAutoBindings();
+
+    m_Drive.setDefaultCommand(
+      new JoystickDrive(
+        m_Drive, 
+        () -> -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
+        () -> -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
+        () -> -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
+        () -> m_driverController.getRawButton(4),
+        () -> !m_driverController.getRightBumper(), 
+        () -> !(Math.abs(m_driverController.getRightTriggerAxis())>=0.36), //rate limit
+        () -> m_driverController.getAButton(),
+        () -> (Math.abs(m_driverController.getLeftTriggerAxis())>=0.31)
+      )
+    );
+
+    m_Arm.setDefaultCommand(
+      new JoystickArm(
+        m_Arm, 
+        () -> m_armController.getRawAxis(1))
+    );
+
+    m_Climb.setDefaultCommand(
+      new JoystickClimb(
+        m_Climb, 
+        () -> m_armController.getRawButton(7)?1.0:0.0,
+        () -> m_armController.getRawButton(8)
+      )
+    );
+
+    m_Shoot.setDefaultCommand(
+      new JoystickShoot(
+        m_Shoot,
+        () -> m_armController.getRawButton(6)?1.0:0.0
+      )
+    );
+
+    m_Intake.setDefaultCommand(
+      new JoystickIntake(
+        m_Intake, 
+        () -> m_armController.getRawButton(2)?-0.4:0.0,
+        () -> m_armController.getRawButton(9),
+        () -> m_armController.getRawButton(4)
+        )
+    );
+
+    configureButtonBindings();
+  }
+
+  private void configureButtonBindings() {
+    //Tracking
+    new JoystickButton(m_armController, 11)
+      .whileTrue(
+        new ParallelCommandGroup(
+          new DefaultTracking(
+            m_Arm, 
+            () -> NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(ArmSubsystem.upDownEncoder.get()), 
+            () -> ArmSubsystem.upDownEncoder.get()
+          ),
+          new ShootSpeedUp(
+            m_Shoot, 
+            1)
+        )
+    );
+
+    //feed Shoot
+    new JoystickButton(m_armController, 1)
+      .whileTrue(
+        new FeedShooter(
+          m_Intake
+        )
+    );
+
+    //X wheels
+    new JoystickButton(m_driverController, 3)
+      .whileTrue(
+        new RunCommand(
+          () -> m_Drive.setX(), 
+          m_Drive
+        )
+      );
+    
+    //Arm Start Auto
+    new JoystickButton(m_armController, 5)
+      .onTrue(
+        new ArmMoveToEncoder(
+          m_Arm, 
+          () -> m_Arm.getArmEncoder(), 
+          0.177
+        )
+      );
+  }
+
+  private void configureAutoBindings() {
+    //*NOTE: KINDA OLD AUTO COMMANDS
+    //TODO: Make Newer and better
+    NamedCommands.registerCommand("Move Arm", new MoveArm(m_Arm, m_Shoot, 0.33).withTimeout(1.5));
+    NamedCommands.registerCommand("Reset Arm", new MoveArm(m_Arm, m_Shoot, 0.375).withTimeout(1));
+    NamedCommands.registerCommand("Intake", new Intake(m_Intake));
+
     //Track Arm 
     NamedCommands.registerCommand(
       "Track Arm", 
-      new DefaultTrackingAuto(m_ArmMove, m_TrackingSubsystem, () -> NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0),
-      () -> ArmSubsystem.upDownEncoder.get(), 1, null).withTimeout(2.5)
+      new DefaultTrackingAuto(m_Arm, () -> NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0),
+      () -> ArmSubsystem.upDownEncoder.get(), 1).withTimeout(1)
     );
     //Shoot
     NamedCommands.registerCommand(
       "Shoot", 
       new SequentialCommandGroup(
-        new ShootSpeedUp(m_shoot, 1, 1.5),
-        new Shoot(m_shoot, m_intake, 1)
-      )
-    );
-    //Robot Rotate to 0 deg
-    NamedCommands.registerCommand(
-      "Reset Robot Rot", 
-      new RotateRobot(
-        m_robotDrive, 
-        0, 
-        0.1
-      )
-    );
-    //Robot Rotate to 55 deg
-    NamedCommands.registerCommand(
-      "Robot Rot 55", 
-      new RotateRobot(
-        m_robotDrive, 
-        55, 
-        0.1
-      )
-    );
-    //Robot Rotate to 55 deg
-    NamedCommands.registerCommand(
-      "Robot Rot-45", 
-      new RotateRobot(
-        m_robotDrive, 
-        30, 
-        0.1
-      )
-    );
-    //Robot Rotate to 55 deg
-    NamedCommands.registerCommand(
-      "Robot Rot TOP", 
-      new RotateRobot(
-        m_robotDrive, 
-        -40, 
-        0.1
-      )
-    );
-    //Robot Rotate to 305 deg
-    NamedCommands.registerCommand(
-      "Robot Rot 305", 
-      new RotateRobot(
-        m_robotDrive, 
-        305, 
-        0.1
-      )
-    );
-    //Track April Tag
-    NamedCommands.registerCommand(
-      "Track April Tag", 
-      new TrackRobot(
-        m_robotDrive
+        new ShootSpeedUp(m_Shoot, 1),
+        new FeedShooter(m_Intake)
       )
     );
 
-    
-
-    // Build an auto chooser. This will use Commands.none() as the default option.
     autoChooser = AutoBuilder.buildAutoChooser();
-
-    // Another option that allows you to specify the default auto by its name
-    // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
-
-    SmartDashboard.putData("Auto Chooser", autoChooser);
-
-    // Configure the button bindings
-    configureButtonBindings();
-
-    // Configure default commands
-    m_robotDrive.setDefaultCommand(
-        // The left stick controls translation of the robot.
-        // Turning is controlled by the X axis of the right stick.
-        new RunCommand(
-            () -> m_robotDrive.drive(
-                -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
-                m_driverController.getRawButton(4),
-                !m_driverController.getRightBumper(), 
-                !(Math.abs(m_driverController.getRightTriggerAxis())>=0.36), //rate limit
-                m_driverController.getAButton(),
-                (Math.abs(m_driverController.getLeftTriggerAxis())>=0.31)), //half speed
-            m_robotDrive));
-    
-
-            /* ArmSubsystem m_ArmSubsystem, 
-        ClimbingSubsystem m_climber, 
-        Supplier<Double> upDownSpeed, 
-        Supplier<Boolean> intakespeed, 
-        Supplier<Boolean> invertintake, 
-        Supplier<Boolean> climbSpeed, 
-        Supplier<Boolean> climbInvert,
-        Supplier<Boolean> OverRideIntakeCheck,
-        //Tracking
-        TrackingSubsystem m_TrackingSubsystem,
-        Supplier<Double> ty,
-        Supplier<Double> encoder,
-        double shootSpeed,
-        Supplier<Boolean> override */
-
-        /*
-         * ArmSubsystem m_ArmSubsystem, 
-        ClimbingSubsystem m_climber,
-        Supplier<Double> upDownSpeed, 
-        Supplier<Boolean> climbSpeed, 
-        Supplier<Boolean> climbInvert
-         */
-      m_ArmMove.setDefaultCommand(
-        new JoysticArm(
-          m_ArmMove, 
-          m_climber,
-          () -> m_armController.getRawAxis(1), 
-          () -> m_armController.getRawButton(7), 
-          () -> m_armController.getRawButton(8)
-        )
-      );
-      
-      m_intake.setDefaultCommand(
-        new Intake(m_intake, () -> false,() -> false,() ->  false)
-      );
-
-      m_shoot.setDefaultCommand(
-        new ShootSpeedUp(m_shoot, 0, 0)
-      );
-   
-   /* m_TrackingSubsystem.setDefaultCommand(
-      new DefaultTracking(
-        m_ArmMove, 
-        m_TrackingSubsystem, 
-        () -> NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0), 
-        () -> ArmSubsystem.upDownEncoder.get(), 
-        1,
-        () -> m_armController.getRawButton(10),
-        () -> !m_armController.getRawButton(11)
-        )
-        
-    ); */
-    
+    SmartDashboard.putData("Auto Choosher", autoChooser);
   }
 
-  /**
-   * Use this method to define your button->command mappings. Buttons can be
-   * created by
-   * instantiating a {@link edu.wpi.first.wpilibj.GenericHID} or one of its
-   * subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then calling
-   * passing it to a
-   * {@link JoystickButton}.
-   */
-  private void configureButtonBindings() {
-
-    // X wheels
-    new JoystickButton(m_driverController, 3)
-        .whileTrue(new RunCommand(
-            () -> m_robotDrive.setX(),
-            m_robotDrive));
-    
-    // shoot
-    new JoystickButton(m_armController, 1).whileTrue(
-        new FeedShoot(m_intake, -1)
-    );
-
-    new JoystickButton(m_armController, 6).onTrue(
-      new SequentialCommandGroup(
-        new ShootSpeedUp(m_shoot, 1, 0.75),
-        new Shoot(m_shoot, m_intake, 0.5)
-      )
-    );
-
-    //Intake
-    new JoystickButton(m_armController, 2)
-      .whileTrue(
-        new Intake(m_intake, () -> true,() -> m_armController.getRawButton(4), () -> m_armController.getRawButton(9))
-    );
-
-    // track arm
-    new JoystickButton(m_armController, 11)
-      .whileTrue(
-        new ParallelCommandGroup(
-          new DefaultTracking(
-          m_ArmMove, 
-          m_TrackingSubsystem, 
-          () -> NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0),
-          () -> ArmSubsystem.upDownEncoder.get(),
-          1, 
-          () -> m_armController.getRawButton(1)
-          ),
-          new TrackingShootSpeedUp(m_shoot, 1)
-        )
-    );
-
-    // move arm to auto start
-    new JoystickButton(m_armController, 5).onTrue(new ArmMoveRotations(m_ArmMove, m_robotDrive, 0.177, ()->ArmSubsystem.upDownEncoder.getDistance()));
-    new JoystickButton(m_armController, 3).onTrue(new ArmMoveRotations(m_ArmMove, m_robotDrive, 0.15, ()->ArmSubsystem.upDownEncoder.getDistance()));
-
-    //Joystick button to rotate robot to 0 deg
-    new JoystickButton(m_driverController, 5).onTrue(new RotateRobot(m_robotDrive, 0, 0.2));
-  }
-
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
   public Command getAutonomousCommand() {
-    //?   JD added
     return autoChooser.getSelected();
   }
-
-
 }
- 
