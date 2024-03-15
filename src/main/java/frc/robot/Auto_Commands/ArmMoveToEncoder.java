@@ -4,7 +4,7 @@ import java.util.function.Supplier;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Subsystems.ArmSubsystem;
+import frc.robot.subsystems.ArmSubsystem;
 
 public class ArmMoveToEncoder extends Command{
     ArmSubsystem m_Arm;

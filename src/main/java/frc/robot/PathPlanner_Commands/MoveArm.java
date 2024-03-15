@@ -2,24 +2,31 @@ package frc.robot.PathPlanner_Commands;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Subsystems.ArmSubsystem;
-import frc.robot.Subsystems.ShootSubsystem;
+import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.ShootSubsystem;
 
 public class MoveArm extends Command{
     private final PIDController m_armPID = new PIDController(5, 0, 0);
     private final ArmSubsystem m_ArmSubsystem;
+    IntakeSubsystem m_Intake;
     private double position;
     ShootSubsystem m_shoot;
 
-    public MoveArm(ArmSubsystem m_ArmSubsystem, ShootSubsystem m_shoot, double position){
+    public MoveArm(ArmSubsystem m_ArmSubsystem, ShootSubsystem m_shoot, IntakeSubsystem m_Intake, double position){
         this.m_ArmSubsystem = m_ArmSubsystem;
         this.position = position;
-        addRequirements(m_ArmSubsystem, m_shoot);
+        this.m_shoot = m_shoot;
+        this.m_Intake = m_Intake;
+        addRequirements(m_ArmSubsystem, m_shoot, m_Intake);
     }
 
     @Override
     public void initialize(){
         m_ArmSubsystem.armMove(0); //reset
+        m_shoot.shootMove(0);
+        m_Intake.intakeMove(0);
+
         m_armPID.setSetpoint(position);
         m_armPID.setTolerance(0.0008);
     }

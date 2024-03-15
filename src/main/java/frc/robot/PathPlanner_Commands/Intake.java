@@ -1,7 +1,7 @@
 package frc.robot.PathPlanner_Commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Subsystems.IntakeSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 
 public class Intake extends Command{
     IntakeSubsystem m_intake;
@@ -17,7 +17,7 @@ public class Intake extends Command{
 
     @Override
     public void execute(){
-        m_intake.intakeMove(-1);
+        m_intake.intakeMove(m_intake.intakeCheck(IntakeSubsystem.m_IR.get(), -0.4));
     }
     
     @Override
@@ -27,6 +27,6 @@ public class Intake extends Command{
 
     @Override
     public boolean isFinished(){
-        return false;
+        return m_intake.intakeCheck(IntakeSubsystem.m_IR.get(), -1)<0?false:true;
     }
 }

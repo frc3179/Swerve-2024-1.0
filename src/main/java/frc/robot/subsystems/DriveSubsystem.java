@@ -1,4 +1,4 @@
-package frc.robot.Subsystems;
+package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -173,7 +173,7 @@ public class DriveSubsystem extends SubsystemBase{
    * @param rateLimit     Whether to enable rate limiting for smoother control.
    */
 
-  public void drive(double xSpeed, double ySpeed, double rot, boolean resetGyro, boolean fieldRelative, boolean rateLimit, boolean slowForJD) {
+  public void drive(double xSpeed, double ySpeed, double rot, boolean resetGyro, boolean fieldRelative, boolean rateLimit) {
 
     double xSpeedCommanded;
     double ySpeedCommanded;
@@ -182,13 +182,6 @@ public class DriveSubsystem extends SubsystemBase{
     SmartDashboard.putNumber("GyroHeading", m_gyro.getAngle()); 
     if (resetGyro){
       m_gyro.reset();
-    }
-
-    //half the input speed for each direction includding the turn 
-    if (slowForJD){
-      xSpeed /= 4;
-      ySpeed /= 4;
-      rot /= 4;
     }
 
     if (rateLimit) {

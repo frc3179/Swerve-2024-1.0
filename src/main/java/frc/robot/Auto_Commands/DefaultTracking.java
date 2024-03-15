@@ -5,8 +5,8 @@ import java.util.function.Supplier;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Subsystems.ArmSubsystem;
 import frc.robot.Utils.TrackingUtils;
+import frc.robot.subsystems.ArmSubsystem;
 
 public class DefaultTracking extends Command{
     ArmSubsystem m_Arm;

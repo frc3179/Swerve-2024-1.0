@@ -1,5 +1,6 @@
 package frc.robot.Utils;
 
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.TrackingConstants;
 
@@ -11,7 +12,15 @@ public class TrackingUtils {
      */
     public static double angleToRotations(double degAngle) {
         double ans = (TrackingConstants.kEncoderTo90Deg/90)*degAngle;
-        return (TrackingConstants.kArmZeroEncoderValue-ans)+(SmartDashboard.getNumber("Distance", 0)/100)-0.01;
+        double limelightY = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0);
+        double distance = (0.00425644*(limelightY*limelightY))-(0.188139*limelightY)+3.49207;
+        //Changed to make less relient on smart dashboard
+        return (TrackingConstants.kArmZeroEncoderValue-ans)+(distance/100)-0.01; 
+
+        /*
+         * (0.00425644*(limelightY*limelightY))-(0.188139*limelightY)+3.49207
+         * NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(ArmSubsystem.upDownEncoder.get())
+         */
     }
 
     /**
@@ -21,7 +30,8 @@ public class TrackingUtils {
      */
     public static double limelightToAngle(double limelightY) {
         double opposite = TrackingConstants.kCenterOfAprilTagMeters-TrackingConstants.kHeightOfLensOfLimeLight;
-        double ajacent = SmartDashboard.getNumber("Distance", 0); 
+        //Changed to make not relient on Smart Dashboard
+        double ajacent = (0.00425644*(limelightY*limelightY))-(0.188139*limelightY)+3.49207;
         ajacent += 0.1524;
 
         double result = Math.atan(opposite/ajacent);

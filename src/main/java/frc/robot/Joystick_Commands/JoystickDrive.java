@@ -5,8 +5,8 @@ import java.util.function.Supplier;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Subsystems.ArmSubsystem;
-import frc.robot.Subsystems.DriveSubsystem;
+import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.DriveSubsystem;
 
 public class JoystickDrive extends Command{
     DriveSubsystem m_RobotDrive;
@@ -17,10 +17,11 @@ public class JoystickDrive extends Command{
     Supplier<Boolean> fieldRelative;
     Supplier<Boolean> rateLimit;
     Supplier<Boolean> trackRobot;
-    Supplier<Boolean> slowForJD;
+    Supplier<Boolean> fastForJD;
+    PIDController Trackpid = new PIDController(0.01, 0, 999999999);
     double rotation;
-    //TODO: TUNE
-    PIDController Trackpid = new PIDController(.013, 0, 0);
+    double x;
+    double y;
 
     public JoystickDrive(
         DriveSubsystem m_RobotDrive,
@@ -31,7 +32,7 @@ public class JoystickDrive extends Command{
         Supplier<Boolean> fieldRelative,
         Supplier<Boolean> rateLimit,
         Supplier<Boolean> trackRobot,
-        Supplier<Boolean> slowForJD
+        Supplier<Boolean> fastForJD
         ) {
 
         this.m_RobotDrive = m_RobotDrive;
@@ -42,33 +43,43 @@ public class JoystickDrive extends Command{
         this.fieldRelative = fieldRelative;
         this.rateLimit = rateLimit;
         this.trackRobot = trackRobot;
-        this.slowForJD = slowForJD;
+        this.fastForJD = fastForJD;
 
         addRequirements(m_RobotDrive);
     }
 
     @Override
     public void initialize() { 
-        Trackpid.setTolerance(0.05);
+        Trackpid.setTolerance(0.1);
         Trackpid.setSetpoint(0);
     }
 
     @Override
     public void execute() {
-        if(trackRobot.get() == true) {
-            rotation = -1*Trackpid.calculate(NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(ArmSubsystem.upDownEncoder.get()));
-        } else {
+        //Default
+        x = xSpeed.get()/2;
+        y = ySpeed.get()/2;
+        rotation = rot.get()/2;
+
+        //Speed Change
+        if(fastForJD.get() == true) {
+            x = xSpeed.get();
+            y = ySpeed.get();
             rotation = rot.get();
         }
+        //Track robot
+        if(trackRobot.get() == true) {
+            rotation = Trackpid.calculate(NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(ArmSubsystem.upDownEncoder.get()));
+        }
 
+        //Put the values to Drive
         m_RobotDrive.drive(
-            xSpeed.get(),
-            ySpeed.get(), 
+            x,
+            y,
             rotation, 
             resetGyro.get(), 
             fieldRelative.get(), 
-            rateLimit.get(),  
-            slowForJD.get()
+            rateLimit.get()
         );
     } 
 

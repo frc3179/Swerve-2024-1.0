@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Auto_Commands.ArmMoveToEncoder;
 import frc.robot.Auto_Commands.DefaultTracking;
 import frc.robot.Auto_Commands.FeedShooter;
+import frc.robot.Auto_Commands.LightColor;
 import frc.robot.Auto_Commands.ShootSpeedUp;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Joystick_Commands.JoystickArm;
@@ -31,11 +32,13 @@ import frc.robot.Joystick_Commands.JoystickShoot;
 import frc.robot.PathPlanner_Commands.DefaultTrackingAuto;
 import frc.robot.PathPlanner_Commands.Intake;
 import frc.robot.PathPlanner_Commands.MoveArm;
-import frc.robot.Subsystems.ArmSubsystem;
-import frc.robot.Subsystems.ClimbSubsystem;
-import frc.robot.Subsystems.DriveSubsystem;
-import frc.robot.Subsystems.IntakeSubsystem;
-import frc.robot.Subsystems.ShootSubsystem;
+import frc.robot.PathPlanner_Commands.RobotTrack;
+import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ClimbSubsystem;
+import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.LightSubsystem;
+import frc.robot.subsystems.ShootSubsystem;
 
 public class RobotContainer {
   private final ClimbSubsystem m_Climb = new ClimbSubsystem();
@@ -43,6 +46,7 @@ public class RobotContainer {
   private final IntakeSubsystem m_Intake = new IntakeSubsystem();
   private final ArmSubsystem m_Arm = new ArmSubsystem();
   private final ShootSubsystem m_Shoot = new ShootSubsystem();
+  private final LightSubsystem m_Light = new LightSubsystem();
 
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   Joystick m_armController = new Joystick(OIConstants.kArmControllerPort);
@@ -96,6 +100,10 @@ public class RobotContainer {
         )
     );
 
+    m_Light.setDefaultCommand(
+      new LightColor(m_Light, () -> IntakeSubsystem.m_IR.get())
+    );
+
     configureButtonBindings();
   }
 
@@ -146,24 +154,27 @@ public class RobotContainer {
   private void configureAutoBindings() {
     //*NOTE: KINDA OLD AUTO COMMANDS
     //TODO: Make Newer and better
-    NamedCommands.registerCommand("Move Arm", new MoveArm(m_Arm, m_Shoot, 0.33).withTimeout(1.5));
-    NamedCommands.registerCommand("Reset Arm", new MoveArm(m_Arm, m_Shoot, 0.375).withTimeout(1));
-    NamedCommands.registerCommand("Intake", new Intake(m_Intake));
+    NamedCommands.registerCommand("Move Arm", new MoveArm(m_Arm, m_Shoot, m_Intake, 0.33).withTimeout(1.5));
+    NamedCommands.registerCommand("Reset Arm", new MoveArm(m_Arm, m_Shoot, m_Intake, 0.38).withTimeout(1));
+    NamedCommands.registerCommand("Intake", new Intake(m_Intake).withTimeout(3.5));
 
     //Track Arm 
     NamedCommands.registerCommand(
-      "Track Arm", 
-      new DefaultTrackingAuto(m_Arm, () -> NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0),
+      "Track Arm",
+      new DefaultTrackingAuto(m_Arm, m_Intake, m_Shoot, () -> NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0),
       () -> ArmSubsystem.upDownEncoder.get(), 1).withTimeout(1)
     );
     //Shoot
     NamedCommands.registerCommand(
       "Shoot", 
       new SequentialCommandGroup(
-        new ShootSpeedUp(m_Shoot, 1),
-        new FeedShooter(m_Intake)
-      )
+        new ShootSpeedUp(m_Shoot, 1).withTimeout(0.75),
+        new FeedShooter(m_Intake).withTimeout(0.3)
+      ).withTimeout(1.05)
     );
+
+    //TODO:
+    NamedCommands.registerCommand("Track April Tag", new RobotTrack(m_Drive));
 
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Choosher", autoChooser);

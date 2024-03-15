@@ -1,7 +1,7 @@
 package frc.robot.Auto_Commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Subsystems.IntakeSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 
 public class FeedShooter extends Command{
     IntakeSubsystem m_Intake;

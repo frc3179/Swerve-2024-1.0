@@ -2,7 +2,7 @@ package frc.robot.Auto_Commands;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Subsystems.ShootSubsystem;
+import frc.robot.subsystems.ShootSubsystem;
 
 public class ShootSpeedUp extends Command{
     ShootSubsystem m_Shoot;

@@ -153,6 +153,13 @@ public class Constants {
         kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
   }
 
+  public static final class LightConstants {
+    public static final int kLEDStripPort = 1;
+    public static final double kNoteColor = 0.75;
+    public static final double kRedColor = 0.61;
+    public static final double kBlueColor = 0.85;
+  }
+
   public static final class NeoMotorConstants {
     public static final double kFreeSpeedRpm = 5676;
   }
