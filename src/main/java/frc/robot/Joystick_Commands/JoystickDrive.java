@@ -18,6 +18,7 @@ public class JoystickDrive extends Command{
     Supplier<Boolean> rateLimit;
     Supplier<Boolean> trackRobot;
     Supplier<Boolean> fastForJD;
+    Supplier<Boolean> slowForJd;
     PIDController Trackpid = new PIDController(0.01, 0, 999999999);
     double rotation;
     double x;
@@ -32,7 +33,8 @@ public class JoystickDrive extends Command{
         Supplier<Boolean> fieldRelative,
         Supplier<Boolean> rateLimit,
         Supplier<Boolean> trackRobot,
-        Supplier<Boolean> fastForJD
+        Supplier<Boolean> fastForJD,
+        Supplier<Boolean> slowForJd
         ) {
 
         this.m_RobotDrive = m_RobotDrive;
@@ -44,6 +46,7 @@ public class JoystickDrive extends Command{
         this.rateLimit = rateLimit;
         this.trackRobot = trackRobot;
         this.fastForJD = fastForJD;
+        this.slowForJd = slowForJd;
 
         addRequirements(m_RobotDrive);
     }
@@ -67,6 +70,13 @@ public class JoystickDrive extends Command{
             y = ySpeed.get();
             rotation = rot.get();
         }
+
+        if(slowForJd.get() == true) {
+            x = xSpeed.get()/4;
+            y = ySpeed.get()/4;
+            rotation = rot.get()*0.3; //TODO: Tune
+        }
+
         //Track robot
         if(trackRobot.get() == true) {
             rotation = Trackpid.calculate(NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(ArmSubsystem.upDownEncoder.get()));

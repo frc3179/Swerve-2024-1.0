@@ -15,7 +15,7 @@ public class TrackingUtils {
         double limelightY = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0);
         double distance = (0.00425644*(limelightY*limelightY))-(0.188139*limelightY)+3.49207;
         //Changed to make less relient on smart dashboard
-        return (TrackingConstants.kArmZeroEncoderValue-ans)+(distance/100)-0.01; 
+        return (TrackingConstants.kArmZeroEncoderValue-ans)+(distance/100)+0.05; //TODO: REVERT TO ORGINAL (-0.01)
 
         /*
          * (0.00425644*(limelightY*limelightY))-(0.188139*limelightY)+3.49207
