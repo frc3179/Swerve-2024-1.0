@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -16,9 +12,8 @@ import com.revrobotics.SparkAbsoluteEncoder.Type;
 import frc.robot.Constants.ModuleConstants;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
-
 public class MAXSwerveModule {
-  private final CANSparkMax m_drivingSparkMax;
+    private final CANSparkMax m_drivingSparkMax;
   private final CANSparkMax m_turningSparkMax;
 
   private final RelativeEncoder m_drivingEncoder;
@@ -161,4 +156,5 @@ public class MAXSwerveModule {
   public void resetEncoders() {
     m_drivingEncoder.setPosition(0);
   }
+
 }

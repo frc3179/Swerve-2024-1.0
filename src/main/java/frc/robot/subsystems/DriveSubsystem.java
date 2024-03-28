@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
@@ -21,13 +17,11 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
-import frc.utils.SwerveUtils;
 import com.pathplanner.lib.util.*;
+import frc.robot.Utils.SwerveUtils;
 
-public class DriveSubsystem extends SubsystemBase {
-
-     
-
+public class DriveSubsystem extends SubsystemBase{
+    
   //Create MAXSwerveModules
   public final MAXSwerveModule m_frontLeft = new MAXSwerveModule(
       DriveConstants.kFrontLeftDrivingCanId,
@@ -83,10 +77,10 @@ public class DriveSubsystem extends SubsystemBase {
     this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
     this::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
     new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-            new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
-            new PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
+            new PIDConstants(0.5, 0.0, 0.0), // Translation PID constants
+            new PIDConstants(0.1, 0.1, 0.0), // Rotation PID constants
             4.8, // Max module speed, in m/s
-            0.4, // Drive base radius in meters. Distance from robot center to furthest module.
+            0.5, // Drive base radius in meters. Distance from robot center to furthest module.
             new ReplanningConfig() // Default path replanning config. See the API for the options here
     ),
     () -> {
@@ -144,26 +138,6 @@ public class DriveSubsystem extends SubsystemBase {
         pose);
   }
 
-
-
-  // Track method math for robot line up
-  public double track_robot(double tx){
-    //x speed, y speed, rot speed
-    double res_speed;
-
-    //Math here
-    if (Math.abs(tx) > 0.5){
-      //* x robot Line up
-      res_speed = -tx/75;
-      return res_speed;
-    }
-    else{
-      res_speed = 0.0;
-      return res_speed;
-    }
-  }
-    
-
   public void driveRobotRelative(ChassisSpeeds speeds){
     drive(speeds, false);
 }
@@ -199,7 +173,7 @@ public class DriveSubsystem extends SubsystemBase {
    * @param rateLimit     Whether to enable rate limiting for smoother control.
    */
 
-  public void drive(double xSpeed, double ySpeed, double rot, boolean resetGyro, boolean fieldRelative, boolean rateLimit, boolean trackRobot, boolean slowForJD) {
+  public void drive(double xSpeed, double ySpeed, double rot, boolean resetGyro, boolean fieldRelative, boolean rateLimit) {
 
     double xSpeedCommanded;
     double ySpeedCommanded;
@@ -209,23 +183,6 @@ public class DriveSubsystem extends SubsystemBase {
     if (resetGyro){
       m_gyro.reset();
     }
-
-    //Track method call this is for the x of the robot tracking
-    if (trackRobot){
-      rot = track_robot(SmartDashboard.getNumber("Limelight tx", 0));
-      if(Math.abs(SmartDashboard.getNumber("Limelight tx", 0)) < 1){
-        SmartDashboard.putBoolean("Robot Track", true);
-      }
-    }
-
-    //half the input speed for each direction includding the turn 
-    if (slowForJD){
-      xSpeed /= 4;
-      ySpeed /= 4;
-      rot /= 4;
-    }
-
-
 
     if (rateLimit) {
       // Convert XY to polar for rate limiting

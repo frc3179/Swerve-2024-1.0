@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.446441234748696,
-        "y": 5.511479627418379
+        "x": 1.3074487833435935,
+        "y": 5.531293435066112
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.842948743498033,
-        "y": 6.5328698574916535
+        "x": 4.70395629209293,
+        "y": 6.552683665139386
       },
       "isLocked": false,
       "linkedName": "Middle"
@@ -48,10 +48,10 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 1.75,
-    "maxAcceleration": 1.75,
-    "maxAngularVelocity": 540.0,
-    "maxAngularAcceleration": 720.0
+    "maxVelocity": 1.0,
+    "maxAcceleration": 1.0,
+    "maxAngularVelocity": 400.0,
+    "maxAngularAcceleration": 360.0
   },
   "goalEndState": {
     "velocity": 0,
