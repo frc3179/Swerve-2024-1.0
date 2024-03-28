@@ -3,7 +3,7 @@ package frc.robot.Joystick_Commands;
 import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Subsystems.IntakeSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 
 public class JoystickIntake extends Command{
     IntakeSubsystem m_Intake;

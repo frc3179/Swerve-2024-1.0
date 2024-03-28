@@ -1,4 +1,4 @@
-package frc.robot.Subsystems;
+package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -17,5 +17,5 @@ public class ShootSubsystem extends SubsystemBase{
     public void shootMove(double shootSpeed) {
         rShoot.set(shootSpeed);
         lShoot.set(shootSpeed);
-    }   
+    }
 }

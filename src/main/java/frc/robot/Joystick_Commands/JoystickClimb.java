@@ -3,7 +3,7 @@ package frc.robot.Joystick_Commands;
 import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Subsystems.ClimbSubsystem;
+import frc.robot.subsystems.ClimbSubsystem;
 
 public class JoystickClimb extends Command{
     ClimbSubsystem m_Climb;
@@ -31,9 +31,10 @@ public class JoystickClimb extends Command{
     @Override
     public void execute() {
         if (climbInvert.get() == true) {
-            m_Climb.climbMove(-climbSpeed.get());
+            m_Climb.climbMove(climbSpeed.get());
+        } else {
+            m_Climb.climbMove(-1*climbSpeed.get());
         }
-        m_Climb.climbMove(climbSpeed.get());
     }
 
     @Override

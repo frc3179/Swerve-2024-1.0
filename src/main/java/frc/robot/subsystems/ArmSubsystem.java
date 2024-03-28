@@ -1,4 +1,4 @@
-package frc.robot.Subsystems;
+package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -30,15 +30,16 @@ public class ArmSubsystem extends SubsystemBase{
      * @return           The new speed after the initSpeed is checked
      */
     public double armRestingCheck(double initSpeed) {
-        double ans;
+        return upDownEncoder.get() >= 0.365 ? Math.max(initSpeed, 0) : initSpeed;
+        // double ans;
 
-        if(upDownEncoder.get() >= 0.365){
-            ans = initSpeed < 0 ? 0 : initSpeed;
-        } else {
-            ans = initSpeed;
-        }
+        // if(upDownEncoder.get() >= 0.365){
+        //     ans = initSpeed < 0 ? 0 : initSpeed;
+        // } else {
+        //     ans = initSpeed;
+        // }
 
-        return ans;
+        // return ans;
     }
 
     /**

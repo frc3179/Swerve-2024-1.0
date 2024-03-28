@@ -3,17 +3,18 @@ package frc.robot.Auto_Commands;
 import java.util.function.Supplier;
 
 import edu.wpi.first.math.controller.PIDController;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Subsystems.ArmSubsystem;
 import frc.robot.Utils.TrackingUtils;
+import frc.robot.subsystems.ArmSubsystem;
 
 public class DefaultTracking extends Command{
     ArmSubsystem m_Arm;
     Supplier<Double> ty;
     Supplier<Double> encoder;
     //TODO: TUNE
-    PIDController  pid = new PIDController(10,0,0);
+    PIDController pid = new PIDController(15,4,0);
     
     public DefaultTracking(
         ArmSubsystem m_Arm,
@@ -36,15 +37,14 @@ public class DefaultTracking extends Command{
 
     @Override
     public void execute(){
-        double y = ty.get();
-        if (y > -4) {
-            double goalEncoder = TrackingUtils.limelightToAngle(y);
+        if (ty.get() > -4) {
+            double goalEncoder = TrackingUtils.limelightToAngle(ty.get());
             goalEncoder = TrackingUtils.angleToRotations(goalEncoder);
 
-            pid.setSetpoint(goalEncoder);
+            double speed = (this.encoder.get() - goalEncoder)*20;;
             SmartDashboard.putNumber("Goal Encoder", goalEncoder);
 
-            m_Arm.armMove(-pid.calculate(encoder.get()));
+            m_Arm.armMove(speed > 0 ? speed/2 : speed/4);
         }  else {
             m_Arm.armMove(0);
         }
@@ -56,6 +56,6 @@ public class DefaultTracking extends Command{
 
     @Override
     public boolean isFinished(){
-        return pid.atSetpoint();
+        return false;
     }
 }

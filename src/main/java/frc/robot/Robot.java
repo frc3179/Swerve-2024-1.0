@@ -10,7 +10,8 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.Subsystems.ArmSubsystem;
+import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
@@ -29,8 +30,12 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Limelight ty", NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0));
     SmartDashboard.putNumber("Limelight ta", NetworkTableInstance.getDefault().getTable("limelight").getEntry("ta").getDouble(0));
 
-    double limelightY = SmartDashboard.getNumber("Limelight ty", 0);
-    SmartDashboard.putNumber("Distance", (0.00425644*(limelightY*limelightY))-(0.188139*limelightY)+3.49207);
+    //double limelightY = SmartDashboard.getNumber("Limelight ty", 0);
+    //FIXED SMART DASHBOARD RELIENCE
+    //SmartDashboard.putNumber("Distance", (0.00425644*(limelightY*limelightY))-(0.188139*limelightY)+3.49207);
+
+    // Beam Sensor
+    SmartDashboard.putBoolean("Note In", !IntakeSubsystem.m_IR.get());
 
     //color sensor values
     // Color detectedColor = RobotContainer.m_colorSensor.getColor();
