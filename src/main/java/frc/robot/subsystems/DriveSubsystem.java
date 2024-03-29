@@ -307,6 +307,16 @@ public class DriveSubsystem extends SubsystemBase{
     return m_gyro.getAngle();
   }
 
+  //TODO:CHECK
+  /**
+   * Converts the continues degrees to 0-360 degrees.
+   * @param rawValue the Raw degree value (continues)
+   * @return the same degrees in the range 0-360
+   */
+  public double convertGyroRange(double rawValue) {
+    return Math.abs(rawValue % 360);
+  }
+
   /**
    * Returns the turn rate of the robot.
    *

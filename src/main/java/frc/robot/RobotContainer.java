@@ -148,12 +148,10 @@ public class RobotContainer {
     new JoystickButton(m_armController, 3)
       .onTrue(
         new ArmToEncoder(m_Arm, 0.34)
-      );
+    );
   }
 
   private void configureAutoBindings() {
-    //*NOTE: KINDA OLD AUTO COMMANDS
-    //TODO: Make Newer and better
     NamedCommands.registerCommand("Move Arm", new MoveArm(m_Arm, m_Shoot, m_Intake, 0.335));
     NamedCommands.registerCommand("Reset Arm", new MoveArm(m_Arm, m_Shoot, m_Intake, 0.38).withTimeout(1));
     NamedCommands.registerCommand("Intake", new Intake(m_Intake).withTimeout(3.5));
@@ -173,7 +171,6 @@ public class RobotContainer {
       ).withTimeout(1.05)
     );
 
-    //TODO:
     NamedCommands.registerCommand("Track April Tag", new RobotTrack(m_Drive));
 
     autoChooser = AutoBuilder.buildAutoChooser();
