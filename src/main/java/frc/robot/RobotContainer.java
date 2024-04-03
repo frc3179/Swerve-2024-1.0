@@ -92,7 +92,7 @@ public class RobotContainer {
     m_Intake.setDefaultCommand(
       new JoystickIntake(
         m_Intake, 
-        () -> m_armController.getRawButton(2)?-0.4:0.0,
+        () -> m_armController.getRawButton(2)?0.4:0.0,
         () -> m_armController.getRawButton(9),
         () -> m_armController.getRawButton(4)
         )
