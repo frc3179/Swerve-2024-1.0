@@ -117,7 +117,19 @@ public class Constants {
     public static final int kRightShootMotorPort = 12;
     public static final int kIntakeMotorPort = 0;
     public static final int kArmEncoderPort = 0;
-    public static final double kRestingArmEnc = 0.365;
+    public static final double kRestingArmEnc = 0.36;
+
+    public static final double kArmDeadband = 0.08;
+  }
+
+  public static final class PIDValues {
+    public static final double kArmP = 1;
+    public static final double kArmI = 0;
+    public static final double kArmD = 0;
+
+    public static final double kDriveP = 1;
+    public static final double kDriveI = 0;
+    public static final double kDriveD = 0;
   }
 
   public static final class ClimbingConstants {
@@ -128,7 +140,7 @@ public class Constants {
   public static final class TrackingConstants {
     public static final double kRotationOffsetTrack = 0.0004;
     public static final double kEncoderTo90Deg = 0.1334;
-    public static final double kCenterOfAprilTagMeters = 2; //*NOTE: Our mesurments could be incorrect.
+    public static final double kCenterOfAprilTagMeters = 2;
     public static final double kHeightOfLensOfLimeLight = 0.265;
     public static final double kArmZeroEncoderValue = 0.37;
   }

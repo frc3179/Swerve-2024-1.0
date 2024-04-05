@@ -2,12 +2,13 @@ package frc.robot.PathPlanner_Commands;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.PIDValues;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShootSubsystem;
 
 public class MoveArm extends Command{
-    private final PIDController m_armPID = new PIDController(5, 0, 0);
+    private final PIDController m_armPID = new PIDController(PIDValues.kArmP, PIDValues.kArmI, PIDValues.kArmD);
     private final ArmSubsystem m_ArmSubsystem;
     IntakeSubsystem m_Intake;
     private double position;

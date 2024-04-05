@@ -30,7 +30,7 @@ public class ArmSubsystem extends SubsystemBase{
      * @return           The new speed after the initSpeed is checked
      */
     public double armRestingCheck(double initSpeed) {
-        return upDownEncoder.get() >= 0.365 ? Math.max(initSpeed, 0) : initSpeed;
+        return upDownEncoder.get() >= ArmConstants.kRestingArmEnc ? Math.max(initSpeed, 0) : initSpeed;
         // double ans;
 
         // if(upDownEncoder.get() >= 0.365){

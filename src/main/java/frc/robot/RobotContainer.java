@@ -11,6 +11,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -18,11 +19,12 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.Constants.ArmConstants;
+import frc.robot.Constants.OIConstants;
 import frc.robot.Auto_Commands.ArmToEncoder;
 import frc.robot.Auto_Commands.DefaultTracking;
 import frc.robot.Auto_Commands.FeedShooter;
 import frc.robot.Auto_Commands.ShootSpeedUp;
-import frc.robot.Constants.OIConstants;
 import frc.robot.Joystick_Commands.JoystickArm;
 import frc.robot.Joystick_Commands.JoystickClimb;
 import frc.robot.Joystick_Commands.JoystickDrive;
@@ -53,6 +55,8 @@ public class RobotContainer {
   public RobotContainer() {
     configureAutoBindings();
 
+    m_driverController.setRumble(RumbleType.kRightRumble, 0.5); //TODO: When a note is in do this
+
     m_Drive.setDefaultCommand(
       new JoystickDrive(
         m_Drive, 
@@ -71,7 +75,8 @@ public class RobotContainer {
     m_Arm.setDefaultCommand(
       new JoystickArm(
         m_Arm, 
-        () -> m_armController.getRawAxis(1))
+        () -> MathUtil.applyDeadband(m_armController.getRawAxis(1), ArmConstants.kArmDeadband)
+      )
     );
 
     m_Climb.setDefaultCommand(
@@ -140,7 +145,7 @@ public class RobotContainer {
       .onTrue(
         new ArmToEncoder(
           m_Arm, 
-          0.177
+          0.163
         )
       );
 
