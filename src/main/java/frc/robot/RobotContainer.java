@@ -96,7 +96,7 @@ public class RobotContainer {
     m_Shoot.setDefaultCommand(
       new JoystickShoot(
         m_Shoot,
-        () -> m_armController.getRawButton(6)?1.0:0.0
+        () -> m_armController.getRawButton(11)?1.0:0.0
       )
     );
 
@@ -114,7 +114,7 @@ public class RobotContainer {
 
   private void configureButtonBindings() {
     //Tracking
-    new JoystickButton(m_armController, 11)
+    new JoystickButton(m_armController, 12)
       .whileTrue(
         new ParallelCommandGroup(
           new DefaultTracking(
@@ -151,15 +151,27 @@ public class RobotContainer {
       .onTrue(
         new ArmToEncoder(
           m_Arm, 
-          0.163
+          0.19
         )
       );
 
     //Arm to Speaker preset
     new JoystickButton(m_armController, 3)
       .onTrue(
-        new ArmToEncoder(m_Arm, 0.34)
+        new ArmToEncoder(m_Arm, 0.32)
     );
+
+    //Arm to note Preset
+    new JoystickButton(m_armController, 6)
+      .onTrue(
+        new ArmToEncoder(m_Arm, 0.265)
+      );
+
+    //Arm to start line preset
+    new JoystickButton(m_armController, 10)
+      .onTrue(
+        new ArmToEncoder(m_Arm, 0.29)
+      );
   }
 
   private void configureAutoBindings() {

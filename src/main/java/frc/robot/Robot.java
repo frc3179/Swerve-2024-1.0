@@ -27,6 +27,10 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
 
+    //!TESTING
+    SmartDashboard.putNumber("Goal Encoder", 0.32);
+    //!TESTING
+
     RobotContainer.m_driverController.setRumble(RumbleType.kRightRumble, !IntakeSubsystem.m_IR.get()?0.5:0);
 
     // limelight values

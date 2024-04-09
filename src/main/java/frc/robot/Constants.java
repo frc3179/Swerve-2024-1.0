@@ -119,14 +119,14 @@ public class Constants {
     public static final int kArmEncoderPort = 0;
     public static final double kRestingArmEnc = 0.36;
 
-    public static final double kArmDeadband = 0.08;
+    public static final double kArmDeadband = 0.1;
   }
 
   public static final class PIDValues {
-    public static final double kArmP = 1;
-    public static final double kArmI = 0;
+    public static final double kArmP = 7;
+    public static final double kArmI = 1;
     public static final double kArmD = 0;
-    public static final double kArmTolerance = 0.005;
+    public static final double kArmTolerance = 0.001;
 
     public static final double kDriveP = 1;
     public static final double kDriveI = 0;
