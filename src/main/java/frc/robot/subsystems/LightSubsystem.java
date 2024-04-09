@@ -12,7 +12,7 @@ public class LightSubsystem extends SubsystemBase{
      * @param color  The color value for the LED strip
      */
     private void setColor(double color) {
-        lightSpark.setVoltage(color);
+        lightSpark.set(color);
     }
 
     /**

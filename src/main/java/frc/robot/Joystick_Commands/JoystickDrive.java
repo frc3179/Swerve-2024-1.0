@@ -5,6 +5,7 @@ import java.util.function.Supplier;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.PIDValues;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 
@@ -19,7 +20,7 @@ public class JoystickDrive extends Command{
     Supplier<Boolean> trackRobot;
     Supplier<Boolean> fastForJD;
     Supplier<Boolean> slowForJd;
-    PIDController Trackpid = new PIDController(0.01, 0, 999999999);
+    PIDController Trackpid = new PIDController(PIDValues.kDriveP, PIDValues.kDriveI, PIDValues.kDriveD);
     double rotation;
     double x;
     double y;
@@ -53,7 +54,7 @@ public class JoystickDrive extends Command{
 
     @Override
     public void initialize() { 
-        Trackpid.setTolerance(0.1);
+        Trackpid.setTolerance(PIDValues.kDriveTolerance);
         Trackpid.setSetpoint(0);
     }
 
@@ -74,7 +75,7 @@ public class JoystickDrive extends Command{
         if(slowForJd.get() == true) {
             x = xSpeed.get()/4;
             y = ySpeed.get()/4;
-            rotation = rot.get()*0.3; //TODO: Tune
+            rotation = rot.get()*0.3;
         }
 
         //Track robot

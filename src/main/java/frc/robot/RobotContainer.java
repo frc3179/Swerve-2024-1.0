@@ -11,7 +11,6 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -24,6 +23,7 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.Auto_Commands.ArmToEncoder;
 import frc.robot.Auto_Commands.DefaultTracking;
 import frc.robot.Auto_Commands.FeedShooter;
+import frc.robot.Auto_Commands.LightColor;
 import frc.robot.Auto_Commands.ShootSpeedUp;
 import frc.robot.Joystick_Commands.JoystickArm;
 import frc.robot.Joystick_Commands.JoystickClimb;
@@ -38,6 +38,7 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.LightSubsystem;
 import frc.robot.subsystems.ShootSubsystem;
 
 public class RobotContainer {
@@ -46,8 +47,9 @@ public class RobotContainer {
   private final IntakeSubsystem m_Intake = new IntakeSubsystem();
   private final ArmSubsystem m_Arm = new ArmSubsystem();
   private final ShootSubsystem m_Shoot = new ShootSubsystem();
+  private final LightSubsystem m_light = new LightSubsystem();
 
-  XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+  static XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   Joystick m_armController = new Joystick(OIConstants.kArmControllerPort);
 
   private SendableChooser<Command> autoChooser;
@@ -55,7 +57,11 @@ public class RobotContainer {
   public RobotContainer() {
     configureAutoBindings();
 
-    m_driverController.setRumble(RumbleType.kRightRumble, 0.5); //TODO: When a note is in do this
+    //m_driverController.setRumble(RumbleType.kRightRumble, !IntakeSubsystem.m_IR.get()?0.5:0);
+    
+    m_light.setDefaultCommand(
+      new LightColor(m_light, () -> !IntakeSubsystem.m_IR.get())
+    );
 
     m_Drive.setDefaultCommand(
       new JoystickDrive(

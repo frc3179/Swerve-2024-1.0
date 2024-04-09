@@ -21,7 +21,7 @@ public class ArmToEncoder extends Command{
         m_ArmSubsystem.armMove(0); //reset
 
         m_armPID.setSetpoint(position);
-        m_armPID.setTolerance(0.01);
+        m_armPID.setTolerance(PIDValues.kArmTolerance);
     }
 
     @Override
