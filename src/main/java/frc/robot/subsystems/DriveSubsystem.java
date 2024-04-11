@@ -26,22 +26,26 @@ public class DriveSubsystem extends SubsystemBase{
   public final MAXSwerveModule m_frontLeft = new MAXSwerveModule(
       DriveConstants.kFrontLeftDrivingCanId,
       DriveConstants.kFrontLeftTurningCanId,
-      DriveConstants.kFrontLeftChassisAngularOffset);
+      DriveConstants.kFrontLeftChassisAngularOffset
+      );
 
   public final MAXSwerveModule m_frontRight = new MAXSwerveModule(
       DriveConstants.kFrontRightDrivingCanId,
       DriveConstants.kFrontRightTurningCanId,
-      DriveConstants.kFrontRightChassisAngularOffset);
+      DriveConstants.kFrontRightChassisAngularOffset
+      );
 
   public final MAXSwerveModule m_rearLeft = new MAXSwerveModule(
       DriveConstants.kRearLeftDrivingCanId,
       DriveConstants.kRearLeftTurningCanId,
-      DriveConstants.kBackLeftChassisAngularOffset);
+      DriveConstants.kBackLeftChassisAngularOffset
+      );
 
   public final MAXSwerveModule m_rearRight = new MAXSwerveModule(
       DriveConstants.kRearRightDrivingCanId,
       DriveConstants.kRearRightTurningCanId,
-      DriveConstants.kBackRightChassisAngularOffset);
+      DriveConstants.kBackRightChassisAngularOffset
+      );
 
   // The gyro sensor
   public final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
@@ -305,6 +309,16 @@ public class DriveSubsystem extends SubsystemBase{
   */
   public double getGyroAngle() {
     return m_gyro.getAngle();
+  }
+
+  //TODO:CHECK
+  /**
+   * Converts the continues degrees to 0-360 degrees.
+   * @param rawValue the Raw degree value (continues)
+   * @return the same degrees in the range 0-360
+   */
+  public double convertGyroRange(double rawValue) {
+    return Math.abs(rawValue % 360);
   }
 
   /**

@@ -55,7 +55,7 @@ public class Constants {
     // The MAXSwerve module can be configured with one of three pinion gears: 12T, 13T, or 14T.
     // This changes the drive speed of the module (a pinion gear with more teeth will result in a
     // robot that drives faster).
-    public static final int kDrivingMotorPinionTeeth = 13;
+    public static final int kDrivingMotorPinionTeeth = 14;
 
     // Invert the turning encoder, since the output shaft rotates in the opposite direction of
     // the steering motor in the MAXSwerve Module.
@@ -117,7 +117,21 @@ public class Constants {
     public static final int kRightShootMotorPort = 12;
     public static final int kIntakeMotorPort = 0;
     public static final int kArmEncoderPort = 0;
-    public static final double kRestingArmEnc = 0.365;
+    public static final double kRestingArmEnc = 0.36;
+
+    public static final double kArmDeadband = 0.1;
+  }
+
+  public static final class PIDValues {
+    public static final double kArmP = 7;
+    public static final double kArmI = 1;
+    public static final double kArmD = 0;
+    public static final double kArmTolerance = 0.001;
+
+    public static final double kDriveP = 1;
+    public static final double kDriveI = 0;
+    public static final double kDriveD = 0;
+    public static final double kDriveTolerance = 0.1;
   }
 
   public static final class ClimbingConstants {
@@ -128,7 +142,7 @@ public class Constants {
   public static final class TrackingConstants {
     public static final double kRotationOffsetTrack = 0.0004;
     public static final double kEncoderTo90Deg = 0.1334;
-    public static final double kCenterOfAprilTagMeters = 2; //*NOTE: Our mesurments could be incorrect.
+    public static final double kCenterOfAprilTagMeters = 2;
     public static final double kHeightOfLensOfLimeLight = 0.265;
     public static final double kArmZeroEncoderValue = 0.37;
   }

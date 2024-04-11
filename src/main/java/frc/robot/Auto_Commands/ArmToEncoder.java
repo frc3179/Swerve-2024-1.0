@@ -2,10 +2,11 @@ package frc.robot.Auto_Commands;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.PIDValues;
 import frc.robot.subsystems.ArmSubsystem;
 
 public class ArmToEncoder extends Command{
-    private final PIDController m_armPID = new PIDController(5, 0, 0);
+    private final PIDController m_armPID = new PIDController(PIDValues.kArmP, PIDValues.kArmI, PIDValues.kArmD);
     private final ArmSubsystem m_ArmSubsystem;
     private double position;
 
@@ -20,12 +21,12 @@ public class ArmToEncoder extends Command{
         m_ArmSubsystem.armMove(0); //reset
 
         m_armPID.setSetpoint(position);
-        m_armPID.setTolerance(0.01);
+        m_armPID.setTolerance(PIDValues.kArmTolerance);
     }
 
     @Override
     public void execute(){
-        m_ArmSubsystem.armMove(-m_armPID.calculate(ArmSubsystem.upDownEncoder.get()));
+        m_ArmSubsystem.armMove(m_ArmSubsystem.armRestingCheck(-m_armPID.calculate(ArmSubsystem.upDownEncoder.get())));
     }
 
     @Override

@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -25,6 +26,13 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
+
+    //!TESTING
+    SmartDashboard.putNumber("Goal Encoder", 0.32);
+    //!TESTING
+
+    RobotContainer.m_driverController.setRumble(RumbleType.kRightRumble, !IntakeSubsystem.m_IR.get()?0.5:0);
+
     // limelight values
     SmartDashboard.putNumber("Limelight tx", NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0));
     SmartDashboard.putNumber("Limelight ty", NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0));
@@ -34,8 +42,8 @@ public class Robot extends TimedRobot {
     //FIXED SMART DASHBOARD RELIENCE
     //SmartDashboard.putNumber("Distance", (0.00425644*(limelightY*limelightY))-(0.188139*limelightY)+3.49207);
 
-    // Beam Sensor
-    SmartDashboard.putBoolean("Note In", !IntakeSubsystem.m_IR.get());
+    // Sensor
+    SmartDashboard.putBoolean("Got Note", !IntakeSubsystem.m_IR.get());
 
     //color sensor values
     // Color detectedColor = RobotContainer.m_colorSensor.getColor();

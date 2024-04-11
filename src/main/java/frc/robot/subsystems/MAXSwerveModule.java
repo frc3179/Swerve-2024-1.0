@@ -13,8 +13,10 @@ import frc.robot.Constants.ModuleConstants;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 public class MAXSwerveModule {
-    private final CANSparkMax m_drivingSparkMax;
+  private final CANSparkMax m_drivingSparkMax;
   private final CANSparkMax m_turningSparkMax;
+
+  //!No Adapater fix
 
   private final RelativeEncoder m_drivingEncoder;
   private final AbsoluteEncoder m_turningEncoder;
@@ -42,7 +44,9 @@ public class MAXSwerveModule {
 
     // Setup encoders and PID controllers for the driving and turning SPARKS MAX.
     m_drivingEncoder = m_drivingSparkMax.getEncoder();
+
     m_turningEncoder = m_turningSparkMax.getAbsoluteEncoder(Type.kDutyCycle);
+
     m_drivingPIDController = m_drivingSparkMax.getPIDController();
     m_turningPIDController = m_turningSparkMax.getPIDController();
     m_drivingPIDController.setFeedbackDevice(m_drivingEncoder);

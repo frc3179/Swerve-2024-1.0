@@ -1,8 +1,23 @@
 {
   "HALProvider": {
+    "Other Devices": {
+      "SPARK MAX [2]": {
+        "header": {
+          "open": true
+        }
+      }
+    },
     "RoboRIO": {
+      "RoboRIO Input": {
+        "open": true
+      },
       "window": {
         "visible": true
+      }
+    },
+    "Timing": {
+      "window": {
+        "visible": false
       }
     }
   },
@@ -10,6 +25,14 @@
     "types": {
       "/FMSInfo": "FMSInfo",
       "/SmartDashboard/Auto Choosher": "String Chooser"
+    }
+  },
+  "NetworkTables": {
+    "Retained Values": {
+      "open": false
+    },
+    "Transitory Values": {
+      "open": false
     }
   },
   "NetworkTables Info": {

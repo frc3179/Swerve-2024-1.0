@@ -18,11 +18,13 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.Constants.ArmConstants;
+import frc.robot.Constants.OIConstants;
 import frc.robot.Auto_Commands.ArmToEncoder;
 import frc.robot.Auto_Commands.DefaultTracking;
 import frc.robot.Auto_Commands.FeedShooter;
+import frc.robot.Auto_Commands.LightColor;
 import frc.robot.Auto_Commands.ShootSpeedUp;
-import frc.robot.Constants.OIConstants;
 import frc.robot.Joystick_Commands.JoystickArm;
 import frc.robot.Joystick_Commands.JoystickClimb;
 import frc.robot.Joystick_Commands.JoystickDrive;
@@ -36,6 +38,7 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.LightSubsystem;
 import frc.robot.subsystems.ShootSubsystem;
 
 public class RobotContainer {
@@ -44,14 +47,21 @@ public class RobotContainer {
   private final IntakeSubsystem m_Intake = new IntakeSubsystem();
   private final ArmSubsystem m_Arm = new ArmSubsystem();
   private final ShootSubsystem m_Shoot = new ShootSubsystem();
+  private final LightSubsystem m_light = new LightSubsystem();
 
-  XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+  static XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   Joystick m_armController = new Joystick(OIConstants.kArmControllerPort);
 
   private SendableChooser<Command> autoChooser;
 
   public RobotContainer() {
     configureAutoBindings();
+
+    //m_driverController.setRumble(RumbleType.kRightRumble, !IntakeSubsystem.m_IR.get()?0.5:0);
+    
+    m_light.setDefaultCommand(
+      new LightColor(m_light, () -> !IntakeSubsystem.m_IR.get())
+    );
 
     m_Drive.setDefaultCommand(
       new JoystickDrive(
@@ -71,7 +81,8 @@ public class RobotContainer {
     m_Arm.setDefaultCommand(
       new JoystickArm(
         m_Arm, 
-        () -> m_armController.getRawAxis(1))
+        () -> MathUtil.applyDeadband(m_armController.getRawAxis(1), ArmConstants.kArmDeadband)
+      )
     );
 
     m_Climb.setDefaultCommand(
@@ -85,14 +96,14 @@ public class RobotContainer {
     m_Shoot.setDefaultCommand(
       new JoystickShoot(
         m_Shoot,
-        () -> m_armController.getRawButton(6)?1.0:0.0
+        () -> m_armController.getRawButton(11)?1.0:0.0
       )
     );
 
     m_Intake.setDefaultCommand(
       new JoystickIntake(
         m_Intake, 
-        () -> m_armController.getRawButton(2)?-0.4:0.0,
+        () -> m_armController.getRawButton(2)?0.4:0.0,
         () -> m_armController.getRawButton(9),
         () -> m_armController.getRawButton(4)
         )
@@ -103,7 +114,7 @@ public class RobotContainer {
 
   private void configureButtonBindings() {
     //Tracking
-    new JoystickButton(m_armController, 11)
+    new JoystickButton(m_armController, 12)
       .whileTrue(
         new ParallelCommandGroup(
           new DefaultTracking(
@@ -140,20 +151,30 @@ public class RobotContainer {
       .onTrue(
         new ArmToEncoder(
           m_Arm, 
-          0.177
+          0.19
         )
       );
 
     //Arm to Speaker preset
     new JoystickButton(m_armController, 3)
       .onTrue(
-        new ArmToEncoder(m_Arm, 0.34)
+        new ArmToEncoder(m_Arm, 0.32)
+    );
+
+    //Arm to note Preset
+    new JoystickButton(m_armController, 6)
+      .onTrue(
+        new ArmToEncoder(m_Arm, 0.265)
+      );
+
+    //Arm to start line preset
+    new JoystickButton(m_armController, 10)
+      .onTrue(
+        new ArmToEncoder(m_Arm, 0.29)
       );
   }
 
   private void configureAutoBindings() {
-    //*NOTE: KINDA OLD AUTO COMMANDS
-    //TODO: Make Newer and better
     NamedCommands.registerCommand("Move Arm", new MoveArm(m_Arm, m_Shoot, m_Intake, 0.335));
     NamedCommands.registerCommand("Reset Arm", new MoveArm(m_Arm, m_Shoot, m_Intake, 0.38).withTimeout(1));
     NamedCommands.registerCommand("Intake", new Intake(m_Intake).withTimeout(3.5));
@@ -173,7 +194,6 @@ public class RobotContainer {
       ).withTimeout(1.05)
     );
 
-    //TODO:
     NamedCommands.registerCommand("Track April Tag", new RobotTrack(m_Drive));
 
     autoChooser = AutoBuilder.buildAutoChooser();

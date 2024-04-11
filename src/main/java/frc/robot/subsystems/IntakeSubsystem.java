@@ -13,7 +13,7 @@ public class IntakeSubsystem extends SubsystemBase{
 
     /**
      * Sets the intake to the given speed
-     * @param intakeSpeed  The desired speed of the intake, from -
+     * @param intakeSpeed  The desired speed of the intake, from -1 to 1
      */
     public void intakeMove(double intakeSpeed) {
         intake.set(intakeSpeed);
