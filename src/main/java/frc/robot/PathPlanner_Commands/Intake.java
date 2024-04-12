@@ -17,7 +17,7 @@ public class Intake extends Command{
 
     @Override
     public void execute(){
-        m_intake.intakeMove(m_intake.intakeCheck(IntakeSubsystem.m_IR.get(), -0.4));
+        m_intake.intakeMove(m_intake.intakeCheck(IntakeSubsystem.m_IR.get(), 0.5));
     }
     
     @Override

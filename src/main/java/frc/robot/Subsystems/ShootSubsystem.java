@@ -15,7 +15,7 @@ public class ShootSubsystem extends SubsystemBase{
      * @param shootSpeed  The speed to move the shoot motors (-1 to 1)
      */
     public void shootMove(double shootSpeed) {
-        rShoot.set(shootSpeed);
+        rShoot.set(-shootSpeed);
         lShoot.set(shootSpeed);
     }
 }

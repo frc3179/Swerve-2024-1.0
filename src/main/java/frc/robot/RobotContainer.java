@@ -24,6 +24,7 @@ import frc.robot.Auto_Commands.ArmToEncoder;
 import frc.robot.Auto_Commands.DefaultTracking;
 import frc.robot.Auto_Commands.FeedShooter;
 import frc.robot.Auto_Commands.LightColor;
+import frc.robot.Auto_Commands.RotateRobot;
 import frc.robot.Auto_Commands.ShootSpeedUp;
 import frc.robot.Joystick_Commands.JoystickArm;
 import frc.robot.Joystick_Commands.JoystickClimb;
@@ -103,9 +104,9 @@ public class RobotContainer {
     m_Intake.setDefaultCommand(
       new JoystickIntake(
         m_Intake, 
-        () -> m_armController.getRawButton(2)?0.4:0.0,
+        () -> m_armController.getRawButton(2)?0.5:0.0,
         () -> m_armController.getRawButton(9),
-        () -> m_armController.getRawButton(4)
+        () -> m_armController.getRawButton(10)
         )
     );
 
@@ -113,6 +114,12 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
+
+    new JoystickButton(m_driverController, 7)
+      .onTrue(
+        new RotateRobot(m_Drive, m_driverController.getPOV())
+      );
+
     //Tracking
     new JoystickButton(m_armController, 12)
       .whileTrue(
@@ -156,28 +163,28 @@ public class RobotContainer {
       );
 
     //Arm to Speaker preset
-    new JoystickButton(m_armController, 3)
+    new JoystickButton(m_armController, 6)
       .onTrue(
         new ArmToEncoder(m_Arm, 0.32)
     );
 
     //Arm to note Preset
-    new JoystickButton(m_armController, 6)
+    new JoystickButton(m_armController, 3)
       .onTrue(
-        new ArmToEncoder(m_Arm, 0.265)
+        new ArmToEncoder(m_Arm, 0.262)
       );
-
     //Arm to start line preset
-    new JoystickButton(m_armController, 10)
+    new JoystickButton(m_armController, 4)
       .onTrue(
-        new ArmToEncoder(m_Arm, 0.29)
+        new ArmToEncoder(m_Arm, 0.275)
       );
   }
 
   private void configureAutoBindings() {
-    NamedCommands.registerCommand("Move Arm", new MoveArm(m_Arm, m_Shoot, m_Intake, 0.335));
-    NamedCommands.registerCommand("Reset Arm", new MoveArm(m_Arm, m_Shoot, m_Intake, 0.38).withTimeout(1));
+    NamedCommands.registerCommand("Move Arm", new MoveArm(m_Arm, m_Shoot, m_Intake, 0.32));
+    NamedCommands.registerCommand("Reset Arm", new MoveArm(m_Arm, m_Shoot, m_Intake, 0.367).withTimeout(1));
     NamedCommands.registerCommand("Intake", new Intake(m_Intake).withTimeout(3.5));
+    NamedCommands.registerCommand("Note Preset", new MoveArm(m_Arm, m_Shoot, m_Intake, 0.262));
 
     //Track Arm 
     NamedCommands.registerCommand(
@@ -189,9 +196,9 @@ public class RobotContainer {
     NamedCommands.registerCommand(
       "Shoot", 
       new SequentialCommandGroup(
-        new ShootSpeedUp(m_Shoot, 1).withTimeout(0.75),
+        new ShootSpeedUp(m_Shoot, 1).withTimeout(1),
         new FeedShooter(m_Intake).withTimeout(0.3)
-      ).withTimeout(1.05)
+      ).withTimeout(1.35)
     );
 
     NamedCommands.registerCommand("Track April Tag", new RobotTrack(m_Drive));

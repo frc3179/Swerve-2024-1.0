@@ -36,7 +36,7 @@ public class MoveArm extends Command{
     public void execute(){
         // intakeSpeed = m_shoot.intakeCheck(RobotContainer.m_IR.get(), intakeSpeed);
             
-        m_ArmSubsystem.armMove(-m_armPID.calculate(ArmSubsystem.upDownEncoder.get()));
+        m_ArmSubsystem.armMove(m_ArmSubsystem.armRestingCheck(-m_armPID.calculate(ArmSubsystem.upDownEncoder.get())));
     }
 
     @Override
